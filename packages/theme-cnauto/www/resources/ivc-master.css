@@ -15,10 +15,10 @@
    /* background:url("/resources/theme-cnauto/images/logo-ivc.jpg"); */
 }
 
+
 .newsletter_form {
-    margin-top: 0px;
-    margin-left: 400px; 
-    width: 500px;
+    margin: 0px;
+    width: 600px;
     float:right;
     
 }
@@ -34,15 +34,24 @@
     height: 20px;
 }
 
+
 .title {
-    margin-top: 30px;
+    margin-top: 0px;
     margin-left: 400px;
     position: relative;
     float: right;
 }
 
+.locale {
+    margin-left: 180px;
+ 
+}
 
-.title a:link, a:visited {
+
+.url {}
+
+
+.url a:link, a:visited {
     background-color: #ffffff;
     text-decoration: none;
     color:red;
@@ -51,7 +60,7 @@
     font-size: 24px;
 }
 
-.title a:link, a:hover {
+.url a:link, a:hover {
     background-color: #ffffff;
     text-decoration: none;
     color:red;
@@ -64,7 +73,7 @@
 
 .clear {
     clear:both;
-    padding-top:20px;
+    padding-top:5px;
 }
 
 
@@ -178,4 +187,11 @@
 .footer-image-right {
     margin:0px;
     float:right;
+}
+
+
+
+
+#myslideshow { /*sample CSS for demo*/
+    border:2px solid black;
 }

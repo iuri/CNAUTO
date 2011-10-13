@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="theme-cnauto" locale="pt_BR" charset="ISO-8859-1">
+
+  <msg key="Address">Endereco</msg>
+  <msg key="Admin">Admin</msg>
+  <msg key="Contact">Contact</msg>
+  <msg key="Company">Nossa Empresa</msg>
+  <msg key="Email">Termos de Uso</msg>
+  <msg key="Follow_us_on_twitter">Siga-nos no Twitter</msg>
+  <msg key="Home">Home</msg>
+  <msg key="Name">Nome</msg>
+  <msg key="Products">Produtos</msg>
+  <msg key="OK">OK</msg>
+  <msg key="Receive_our_newsletter">Receba nosso informativos</msg>
+  <msg key="Services">Service</msg>
+  <msg key="SiteMap">SiteMap</msg>
+  <msg key="Terms_of_Use">Termos de Uso</msg>
+
+</message_catalog>

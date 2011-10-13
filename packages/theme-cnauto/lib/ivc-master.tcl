@@ -15,12 +15,21 @@ set title [apm_instance_name_from_id $package_id]
 set context $title
 
 
+set return_url [ad_conn url]
 
 
 
 template::head::add_css -href "/resources/theme-cnauto/ivc-master.css"
 
-set return_url [ad_conn url]
+
+set en_locale_img "/resources/theme-cnauto/images/english.png"
+set en_locale_url [export_vars -base "/theme-cnauto/www/change-locale" {return_url {locale "en_US"}}]
+
+
+set pt_locale_img "/resources/theme-cnauto/images/portuguese.png"
+set pt_locale_url [export_vars -base "/theme-cnauto/www/change-locale" {return_url {locale "pt_BR"}}]
+
+
 
 
 if {$untrusted_user_id == 0} {
@@ -36,7 +45,6 @@ if {$untrusted_user_id == 0} {
     set sw_admin_p [acs_user::site_wide_admin_p -user_id $untrusted_user_id]
     if {$sw_admin_p} {
 	set admin_url "/acs-admin/"
-	set admin_name "Admin"
     } else {
 	set subsite_admin_p [permission::permission_p \
 				 -object_id [subsite::get_element -element object_id] \
@@ -45,7 +53,8 @@ if {$untrusted_user_id == 0} {
 				 ]
 	if {$subsite_admin_p} {
 	    set admin_url "[subsite::get_element -element url]admin/"
-	    set admin_name "Admin"
 	}
     }
 }
+
+
