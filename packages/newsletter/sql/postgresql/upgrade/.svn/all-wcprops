@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/paf/!svn/ver/9436/packages/newsletter/sql/postgresql/upgrade
+END
+upgrade-0.6d-0.7d.sql
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/paf/!svn/ver/9436/packages/newsletter/sql/postgresql/upgrade/upgrade-0.6d-0.7d.sql
+END
+upgrade-0.4d-0.5d.sql
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/paf/!svn/ver/9326/packages/newsletter/sql/postgresql/upgrade/upgrade-0.4d-0.5d.sql
+END
+upgrade-0.5d-0.6d.sql
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/paf/!svn/ver/9363/packages/newsletter/sql/postgresql/upgrade/upgrade-0.5d-0.6d.sql
+END

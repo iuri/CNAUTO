@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="newsletter" package_version="04d" locale="en_US" charset="ISO-8859-1">
+  <msg key="Add_User">Add User</msg>
+  <msg key="Choose_Option_to_delete">Choose Option to delete</msg>
+  <msg key="Confirm_users_delete">Do you really want to delete the users bellow?</msg>
+  <msg key="County">County</msg>
+  <msg key="Delete">Delete</msg>
+  <msg key="Delete_User">Delete User</msg>
+  <msg key="Delete_Users">Delete Users</msg>
+  <msg key="description">description</msg>
+  <msg key="Edit">Edit</msg>
+  <msg key="email">Email</msg>
+  <msg key="Export_emails">Export emails</msg>
+  <msg key="File">File</msg>
+  <msg key="name">name</msg>
+  <msg key="Name">Name</msg>
+  <msg key="New">New</msg>
+  <msg key="New_email">New email</msg>
+  <msg key="New_Item">New Item</msg>
+  <msg key="News_items">News items</msg>
+  <msg key="Newsletter_Users">Newsletter Users</msg>
+  <msg key="No">No</msg>
+  <msg key="Position">Position</msg>
+  <msg key="Region">Region</msg>
+  <msg key="Register_your_email">Register your email</msg>
+  <msg key="Send_news">Send news Items</msg>
+  <msg key="State">State</msg>
+  <msg key="Users">Users</msg>
+  <msg key="Yes">Yes</msg>
+</message_catalog>
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="newsletter" package_version="04d" locale="en_US" charset="ISO-8859-1">
+
+  <msg key="Choose_Option_to_delete">Choose Option to delete</msg>
+  <msg key="Delete">Delete</msg>
+  <msg key="description">description</msg>
+  <msg key="Edit">Edit</msg>
+  <msg key="email">Email</msg>
+  <msg key="Export_emails">Export emails</msg>
+  <msg key="File">File</msg>
+  <msg key="name">name</msg>
+  <msg key="New">New</msg>
+  <msg key="New_email">New email</msg>
+  <msg key="New_Item">New Item</msg>
+  <msg key="News_items">News items</msg>
+  <msg key="No">No</msg>
+  <msg key="Register_your_email">Register your email</msg>
+  <msg key="Send_news">Send news Items</msg>
+  <msg key="Yes">Yes</msg>
+</message_catalog>

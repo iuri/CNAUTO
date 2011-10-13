@@ -1,0 +1,440 @@
+--
+-- The News Letter Package
+--
+-- @author Iuri Sampaio (iuri.sampaio@iurix.com)
+-- @creation-date 2011-09-18
+--
+
+
+------------------------------------
+-- CN SpreadSheets
+------------------------------------
+
+SELECT acs_object_type__create_type (
+    'cn_spreadsheet',		    -- object_type
+    'CN SpreadSheets',              -- pretty_name
+    'CN SpreadSheets',         	    -- pretty_plural
+    'acs_object',           	    -- supertype
+    'cn_spreadsheets',              -- table_name
+    'spreadsheet_id',        	    -- id_column
+    'spreadhseet.name',      	    -- name_method
+    'f',
+    null,
+
+    null
+);
+
+CREATE TABLE cn_spreadsheets (
+	   spreadsheet_id     integer primary key
+                              constraint cn_spreadsheets_spreadsheet_id_fk 
+                              references acs_objects on delete cascade,
+	   name               varchar NOT NULL,
+	   description        text
+);
+
+
+
+CREATE OR REPLACE FUNCTION cn_spreadsheet__new (
+    integer, -- newsletter_id
+    varchar, -- name
+    varchar, -- description
+    integer, -- package_id
+    timestamp with time zone, -- creation_date
+    integer, -- creation_user
+    varchar, -- creation_ip
+    integer  -- context_id
+) RETURNS integer AS '
+DECLARE
+    p_spreadsheet_id        alias for $1;
+    p_name                  alias for $2;
+    p_description           alias for $3;
+    p_package_id            alias for $4;
+    p_creation_date         alias for $5;
+    p_creation_user         alias for $6;
+    p_creation_ip           alias for $7;
+    p_context_id            alias for $8;
+  
+    v_spreadsheet_id               integer;
+BEGIN
+
+	v_spreadsheet_id := acs_object__new (
+		p_spreadsheet_id,	 -- object_id
+		''cn_spreadsheet'',      -- object_type
+		p_creation_date,         -- creation_date
+		p_creation_user,         -- creation_user
+		p_creation_ip,           -- creation_ip
+		p_context_id,            -- context_id
+	        p_name,                  -- title
+	        p_package_id             -- package_id
+	);
+
+	insert into cn_spreadsheets
+	   (spreadsheet_id, name, description) 
+	values
+	   (v_spreadsheet_id, p_name, p_description);
+
+	RETURN v_spreadsheet_id;
+END;' language 'plpgsql';
+
+
+
+CREATE OR REPLACE FUNCTION spreadsheet__del (
+    integer -- spreadsheet_id
+) RETURNS integer AS '
+DECLARE
+    p_spreadsheet_id         ALIAS FOR $1;
+BEGIN
+
+    perform acs_object__delete(p_spreadsheet_id);
+
+    RETURN 0;
+END;' language 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION spreadsheet__edit (
+    integer, -- spreadsheet_id
+    varchar, -- name
+    varchar -- description
+) RETURNS integer AS '
+DECLARE
+    p_spreadsheet_id        alias for $1;
+    p_name                  alias for $2;
+    p_description           alias for $3;
+BEGIN
+
+	UPDATE cn_spreadsheets
+	SET 	name = p_name,
+		description = p_description
+	WHERE spreadsheet_id = p_spreadsheet_id;
+
+	RETURN 0;
+END;' language 'plpgsql';
+
+
+
+
+
+
+
+------------------------------------
+-- CN SpreadSheet Fields
+------------------------------------
+
+SELECT acs_object_type__create_type (
+    'cn_spreadsheet_field',	    -- object_type
+    'CN SpreadSheet Field',    	    -- pretty_name
+    'CN SpreadSheet Fields',   	    -- pretty_plural
+    'acs_object',            	    -- supertype
+    'cn_spreadsheet_fields',   	    -- table_name
+    'field_id',              	    -- id_column
+    'spreadsheet_fields.name', 	    -- name_method
+    'f',
+    null,
+    null
+);
+
+
+
+
+CREATE TABLE cn_spreadsheet_fields (
+           field_id		integer primary key
+                                constraint cn_spreadsheet_fields_field_id_fk 
+                                references acs_objects on delete cascade,
+	   spreadsheet_id	integer NOT NULL
+                                constraint cn_spreadsheet_fields_spreadsheet_id_fk
+				references cn_spreadsheets on delete cascade,
+	   name		        varchar NOT NULL
+);
+
+
+
+
+
+CREATE OR REPLACE FUNCTION cn_spreadsheet_fields__new (
+    integer, -- field_id
+    integer, -- spreadsheetsletter_id
+    varchar, -- name
+    integer, -- package_id
+    timestamp with time zone, -- creation_date
+    integer, -- creation_user
+    varchar, -- creation_ip
+    integer  -- context_id
+)
+returns integer as '
+declare
+    p_field_id         	    alias for $1;
+    p_newsletter_id         alias for $2;
+    p_name                  alias for $3;
+    p_package_id            alias for $4;
+    p_creation_date         alias for $5;
+    p_creation_user         alias for $6;
+    p_creation_ip           alias for $7;
+    p_context_id            alias for $8;
+  
+    v_field_id               integer;
+begin
+
+	v_field_id := acs_object__new (
+		p_field_id,		 -- object_id
+		''newsletter_field'',    -- object_type
+		p_creation_date,         -- creation_date
+		p_creation_user,         -- creation_user
+		p_creation_ip,           -- creation_ip
+		p_context_id,            -- context_id
+	        p_name,                  -- title
+	        p_package_id             -- package_id
+	);
+
+	insert into newsletters_fields
+	   (field_id, newsletter_id, name) 
+	values
+	   (v_field_id, p_newsletter_id, p_name);
+
+	return v_field_id;
+end;
+' language 'plpgsql';
+
+create or replace function newsletters_fields__edit (
+    integer, -- field_id
+    varchar, -- name
+    integer, -- sort_order
+    boolean  -- ignore
+)
+returns integer as '
+declare
+    p_field_id         alias for $1;
+    p_name             alias for $2;
+    p_sort_order       alias for $3;
+    p_ignore           alias for $4;
+begin
+
+
+    update newsletters_fields
+    set     name = p_name,
+            sort_order = p_sort_order,
+            ignore     = p_ignore
+    where field_id = p_field_id;
+
+    return 0;
+end;
+' language 'plpgsql';
+
+
+create or replace function newsletters_fields__del (
+    integer -- field_id
+)
+returns integer as '
+declare
+    p_field_id         alias for $1;
+begin
+
+    perform acs_object__delete(p_field_id);
+    return 0;
+end;
+' language 'plpgsql';
+
+
+
+
+------------------------------------
+-- CN SpreadSheet Items
+------------------------------------
+
+SELECT acs_object_type__create_type (
+    'cn_spreadsheet_item',	    -- object_type
+    'CN SpreadSheet Item',     	    -- pretty_name
+    'CN Spreadsheet Items',    	    -- pretty_plural
+    'acs_object',           	    -- supertype
+    'cn_spreadsheet_items',  	    -- table_name
+    'item_id', 	    		    -- id_column
+    'spreadsheet_item.name',	    -- name_method
+    'f',
+    null,
+    null
+);
+
+
+
+------------------------------------
+-- CN SpreadSheet Elements
+------------------------------------
+
+
+CREATE TABLE cn_spreadsheet_elements (
+           element	        varchar NOT NULL,
+	   spreadsheet_id	integer NOT NULL
+                                constraint spreadsheet_elements_spreadsheet_id_fk
+				references cn_spreadsheets on delete cascade,
+	   name		        varchar,
+	   valid		boolean NOT NULL default true,
+	   constraint cn_spreadsheet_elements_un
+	   unique (element, spreadsheet_id)
+);
+
+
+
+------------------------------------
+-- CN SpreadSheet Data
+------------------------------------
+
+CREATE TABLE cn_spreadsheet_data (
+           element		varchar NOT NULL,
+	   field_id		integer NOT NULL 
+                                constraint cn_spreadsheet_data_field_id_fk
+				references cn_spreadsheet_fields on delete cascade,
+	   data		        varchar,
+	   constraint cn_spreadsheet_data_un
+	   unique (field_id, element)
+);
+
+
+
+------------------------------------
+-- CN SpreadSheets Items
+------------------------------------
+
+CREATE TABLE cn_spreadsheet_items (
+       	   item_id	integer primary key
+                                constraint spreadsheet_item_id_fk 
+                                references acs_objects on delete cascade,
+       	   spreadsheet_id	integer NOT NULL
+                                constraint spreadsheet_items_spreadsheet_id_fk
+				references cn_spreadsheets on delete cascade,
+	   title	        varchar NOT NULL,
+	   content 		text,
+	   item_number 		integer,
+	   element_list 		varchar,
+	   constraint cn_spreadsheet_items_un
+	   unique (spreadsheet_id, item_number)
+);
+
+
+
+
+
+
+
+
+
+
+create or replace function newsletters_data__del (
+    integer -- newsletter_id
+)
+returns integer as '
+declare
+    p_newsletter_id         alias for $1;
+begin
+
+    delete from newsletters_data where field_id in (select field_id from newsletters_fields where newsletter_id = p_newsletter_id);
+    delete from newsletters_emails where newsletter_id = p_newsletter_id;
+    return 0;
+end;
+' language 'plpgsql';
+
+create or replace function newsletters_email__new (
+    integer, -- newsletter_id
+    varchar, -- name
+    varchar  -- email
+)
+returns integer as '
+declare
+    p_newsletter_id        alias for $1;
+    p_name                 alias for $2;
+    p_email                alias for $3;
+begin
+
+	insert into newsletters_emails
+	   (name, newsletter_id, email) 
+	values
+	   (p_name, p_newsletter_id, p_email);
+
+	return p_newsletter_id;
+end;
+' language 'plpgsql';
+
+create or replace function newsletters_data__new (
+    integer, -- field_id
+    varchar, -- email
+    varchar  -- data
+)
+returns integer as '
+declare
+    p_field_id        	   alias for $1;
+    p_email                alias for $2;
+    p_data                 alias for $3;
+begin
+
+	insert into newsletters_data
+	   (data, field_id, email) 
+	values
+	   (p_data, p_field_id, p_email);
+
+	return 0;
+end;
+' language 'plpgsql';
+
+create or replace function newsletters_items__new (
+    integer, -- newsletter_item_id
+    integer, -- newsletter_id
+    varchar, -- title
+    varchar, -- content
+    integer, -- item_number 
+    varchar, -- email_list
+    integer, -- package_id
+    timestamp with time zone, -- creation_date
+    integer, -- creation_user
+    varchar, -- creation_ip
+    integer  -- context_id
+)
+returns integer as '
+declare
+    p_newsletter_item_id    alias for $1;
+    p_newsletter_id         alias for $2;
+    p_title                 alias for $3;
+    p_content		    alias for $4;
+    p_item_number           alias for $5;
+    p_email_list            alias for $6;
+    p_package_id            alias for $7;
+    p_creation_date         alias for $8;
+    p_creation_user         alias for $9;
+    p_creation_ip           alias for $10;
+    p_context_id            alias for $11;
+  
+    v_newsletter_item_id    integer;
+begin
+
+	v_newsletter_item_id := acs_object__new (
+		p_newsletter_item_id,	 -- object_id
+		''newsletter_item'',     -- object_type
+		p_creation_date,         -- creation_date
+		p_creation_user,         -- creation_user
+		p_creation_ip,           -- creation_ip
+		p_context_id,            -- context_id
+	        p_title,                  -- title
+	        p_package_id             -- package_id
+	);
+
+	insert into newsletters_items
+	   (newsletter_item_id, newsletter_id, content, title, item_number, email_list) 
+	values
+	   (v_newsletter_item_id, p_newsletter_id, p_content, p_title, p_item_number, p_email_list);
+
+	return v_newsletter_item_id;
+end;
+' language 'plpgsql';
+
+create or replace function newsletters_items__del (
+    integer -- newsletter_item_id
+)
+returns integer as '
+declare
+    p_newsletter_item_id         alias for $1;
+begin
+
+    perform acs_object__delete(p_newsletter_item_id);
+
+    return 0;
+end;
+' language 'plpgsql';
+
+

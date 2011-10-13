@@ -1,0 +1,181 @@
+/* IVC Master CSS */
+
+
+.main {
+    margin:0 auto; 
+    background: #ffffff;
+    width:1024px; 
+    font-family: Arial, Verdana, sans-serif;
+    font-size:14px;   
+}
+
+.logo {
+    margin: 0px 0px auto;
+    float:left;
+   /* background:url("/resources/theme-cnauto/images/logo-ivc.jpg"); */
+}
+
+.newsletter_form {
+    margin-top: 0px;
+    margin-left: 400px; 
+    width: 500px;
+    float:right;
+    
+}
+
+.newsletter_form .input_text {
+    width: 90px;
+    height: 10px;
+    font: 10px verdana, arial, helvetica, sans-serif;
+}
+
+.newsletter_form .input_submit {
+    width: 30px;
+    height: 20px;
+}
+
+.title {
+    margin-top: 30px;
+    margin-left: 400px;
+    position: relative;
+    float: right;
+}
+
+
+.title a:link, a:visited {
+    background-color: #ffffff;
+    text-decoration: none;
+    color:red;
+    text-align: right;
+    font-family: Arial, Verdana, sans-serif;
+    font-size: 24px;
+}
+
+.title a:link, a:hover {
+    background-color: #ffffff;
+    text-decoration: none;
+    color:red;
+    text-align: right;
+    font-family: Arial, Verdana, sans-serif;
+    font-size: 24px;
+}
+
+
+
+.clear {
+    clear:both;
+    padding-top:20px;
+}
+
+
+
+.menu {
+    width: 1024px;
+    background: url("/resources/theme-cnauto/images/menu-center.png");
+    height:43px;
+    color: #ffffff;
+}
+
+
+.menu_content {
+    width: 960px;
+    padding:10px;
+    float:left;
+}
+
+.menu_content a:link, a:visited {
+    font-family: Arial, Verdana, sans-serif;
+    font-size: 14px;
+    font-weight:bold;
+    text-decoration:none;
+    color: #ffffff;
+    padding:15px;
+}
+
+.menu a:hover {
+    font-family: Arial, Verdana, sans-serif;
+    font-size: 12px;
+    font-weight:bold;
+    color: #ffffff;
+    text-decoration:none;
+    padding:15px;
+}
+
+.menu-image-right {
+    margin:0px;
+    float:right;
+}
+
+.search {
+    margin-left: 200px;
+    float: right;
+}
+
+.search .input_text {
+    width: 200px;
+    height: 15px;
+}
+
+.search .submit {
+    width: 20px;
+    height: 20px;
+}
+
+
+.content {
+    padding:5px;
+}
+
+
+
+
+
+.footer {
+    background: url("/resources/theme-cnauto/images/footer-center.png");
+    width: 1024px;
+    height: 123px;
+    color: #ffffff;
+}
+
+.footer-content {
+    margin: 0px;
+    width: 963px;
+    padding:10px;
+    float:left;
+}
+
+
+.footer-left {
+    width:512px;
+    float:left;
+}
+
+.footer-navigation  {
+    margin-left: 0px;
+    padding:0px;
+    float:right;
+}
+
+
+.footer-navigation ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+.footer-navigation ul li {
+    list-style: none;
+    display: inline;
+}
+
+.footer-navigation a {
+    text-decoration: none;
+    font-size: 14px;
+    color: #ffffff;
+    
+}
+
+
+.footer-image-right {
+    margin:0px;
+    float:right;
+}

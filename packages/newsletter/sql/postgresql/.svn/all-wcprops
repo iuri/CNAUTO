@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/paf/!svn/ver/9436/packages/newsletter/sql/postgresql
+END
+newsletter-create.sql
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/paf/!svn/ver/9436/packages/newsletter/sql/postgresql/newsletter-create.sql
+END
+newsletter-drop.sql
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/paf/!svn/ver/8438/packages/newsletter/sql/postgresql/newsletter-drop.sql
+END

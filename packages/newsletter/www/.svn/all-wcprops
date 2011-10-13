@@ -1,0 +1,299 @@
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/paf/!svn/ver/9590/packages/newsletter/www
+END
+newsletter-del.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/paf/!svn/ver/8451/packages/newsletter/www/newsletter-del.tcl
+END
+#index.adp#
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/paf/!svn/ver/9525/packages/newsletter/www/%23index.adp%23
+END
+newsletter-newsitems-send.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/paf/!svn/ver/9590/packages/newsletter/www/newsletter-newsitems-send.tcl
+END
+newsletter-fields.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/paf/!svn/ver/9363/packages/newsletter/www/newsletter-fields.tcl
+END
+newsletter-user-info.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/paf/!svn/ver/9525/packages/newsletter/www/newsletter-user-info.tcl
+END
+newsletter-newsitems-save.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/paf/!svn/ver/9449/packages/newsletter/www/newsletter-newsitems-save.tcl
+END
+newsletter-emails-export.adp
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/paf/!svn/ver/9048/packages/newsletter/www/newsletter-emails-export.adp
+END
+newsletter-emails-export-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/paf/!svn/ver/9363/packages/newsletter/www/newsletter-emails-export-postgresql.xql
+END
+confirm-button.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/paf/!svn/ver/9562/packages/newsletter/www/confirm-button.tcl
+END
+field-edit.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/paf/!svn/ver/9363/packages/newsletter/www/field-edit.tcl
+END
+index.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/paf/!svn/ver/9562/packages/newsletter/www/index.tcl
+END
+newsletter-image-save.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/paf/!svn/ver/9440/packages/newsletter/www/newsletter-image-save.tcl
+END
+newsletter-newsitems-del.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/paf/!svn/ver/9194/packages/newsletter/www/newsletter-newsitems-del.tcl
+END
+newsletter-save.adp
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/paf/!svn/ver/9310/packages/newsletter/www/newsletter-save.adp
+END
+newsletter-users-bulk-add.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/paf/!svn/ver/9425/packages/newsletter/www/newsletter-users-bulk-add.tcl
+END
+newsletter-users.xql
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/paf/!svn/ver/9546/packages/newsletter/www/newsletter-users.xql
+END
+newsletter-users.adp
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/paf/!svn/ver/9546/packages/newsletter/www/newsletter-users.adp
+END
+newsletter-cancel.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/paf/!svn/ver/9145/packages/newsletter/www/newsletter-cancel.tcl
+END
+newsletter-del.adp
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/paf/!svn/ver/8438/packages/newsletter/www/newsletter-del.adp
+END
+newsletter-newsitems-send.adp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/paf/!svn/ver/9453/packages/newsletter/www/newsletter-newsitems-send.adp
+END
+newsletter-newsitems-send-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/paf/!svn/ver/8438/packages/newsletter/www/newsletter-newsitems-send-postgresql.xql
+END
+newsletter-fields.adp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/paf/!svn/ver/9363/packages/newsletter/www/newsletter-fields.adp
+END
+newsletter-user-info.adp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/paf/!svn/ver/9525/packages/newsletter/www/newsletter-user-info.adp
+END
+newsletter-new.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/paf/!svn/ver/9436/packages/newsletter/www/newsletter-new.tcl
+END
+newsletter-newsitems-save.adp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/paf/!svn/ver/9194/packages/newsletter/www/newsletter-newsitems-save.adp
+END
+field-edit.adp
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/paf/!svn/ver/9363/packages/newsletter/www/field-edit.adp
+END
+confirm-button.adp
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/paf/!svn/ver/9562/packages/newsletter/www/confirm-button.adp
+END
+index.adp
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/paf/!svn/ver/9047/packages/newsletter/www/index.adp
+END
+newsletter-image-save.adp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/paf/!svn/ver/9414/packages/newsletter/www/newsletter-image-save.adp
+END
+newsletter-newsitems-edit.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/paf/!svn/ver/9363/packages/newsletter/www/newsletter-newsitems-edit.tcl
+END
+newsletter-users-del-2.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/paf/!svn/ver/9525/packages/newsletter/www/newsletter-users-del-2.tcl
+END
+newsletter-newsitems-del.adp
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/paf/!svn/ver/9194/packages/newsletter/www/newsletter-newsitems-del.adp
+END
+newsletter-users-del.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/paf/!svn/ver/9525/packages/newsletter/www/newsletter-users-del.tcl
+END
+newsletter-users-bulk-add.adp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/paf/!svn/ver/9425/packages/newsletter/www/newsletter-users-bulk-add.adp
+END
+newsletter-cancel.adp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/paf/!svn/ver/9145/packages/newsletter/www/newsletter-cancel.adp
+END
+image.vuh
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/paf/!svn/ver/9414/packages/newsletter/www/image.vuh
+END
+newsletter-new.xql
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/paf/!svn/ver/8438/packages/newsletter/www/newsletter-new.xql
+END
+newsletter-new.adp
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/paf/!svn/ver/8438/packages/newsletter/www/newsletter-new.adp
+END
+item-view.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/paf/!svn/ver/8756/packages/newsletter/www/item-view.tcl
+END
+newsletter-email-new.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/paf/!svn/ver/9048/packages/newsletter/www/newsletter-email-new.tcl
+END
+newsletter-items.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/paf/!svn/ver/9441/packages/newsletter/www/newsletter-items.tcl
+END
+newsletter-newsitems-edit.adp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/paf/!svn/ver/9215/packages/newsletter/www/newsletter-newsitems-edit.adp
+END
+newsletter-users-del.adp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/paf/!svn/ver/9525/packages/newsletter/www/newsletter-users-del.adp
+END
+newsletter-emails-export.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/paf/!svn/ver/9363/packages/newsletter/www/newsletter-emails-export.tcl
+END
+item-view.adp
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/paf/!svn/ver/8838/packages/newsletter/www/item-view.adp
+END
+newsletter-save.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/paf/!svn/ver/9449/packages/newsletter/www/newsletter-save.tcl
+END
+newsletter-email-new.adp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/paf/!svn/ver/9048/packages/newsletter/www/newsletter-email-new.adp
+END
+newsletter-users.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/paf/!svn/ver/9546/packages/newsletter/www/newsletter-users.tcl
+END
+newsletter-items.adp
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/paf/!svn/ver/9441/packages/newsletter/www/newsletter-items.adp
+END

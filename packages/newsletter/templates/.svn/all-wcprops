@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/paf/!svn/ver/9437/packages/newsletter/templates
+END
+newsletter-mda2.adp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/paf/!svn/ver/9397/packages/newsletter/templates/newsletter-mda2.adp
+END
+newsletter-mda2-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/paf/!svn/ver/9310/packages/newsletter/templates/newsletter-mda2-postgresql.xql
+END
+newsletter-default.adp
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/paf/!svn/ver/8438/packages/newsletter/templates/newsletter-default.adp
+END
+newsletter-nead.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/paf/!svn/ver/9215/packages/newsletter/templates/newsletter-nead.tcl
+END
+newsletter-default-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/paf/!svn/ver/8438/packages/newsletter/templates/newsletter-default-postgresql.xql
+END
+newsletter-conjur.adp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/paf/!svn/ver/8443/packages/newsletter/templates/newsletter-conjur.adp
+END
+newsletter-mda2.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/paf/!svn/ver/9310/packages/newsletter/templates/newsletter-mda2.tcl
+END
+newsletter-mda.adp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/paf/!svn/ver/9437/packages/newsletter/templates/newsletter-mda.adp
+END
+newsletter-conjur-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/paf/!svn/ver/8443/packages/newsletter/templates/newsletter-conjur-postgresql.xql
+END
+newsletter-mda-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/paf/!svn/ver/9305/packages/newsletter/templates/newsletter-mda-postgresql.xql
+END
+newsletter-default.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/paf/!svn/ver/8438/packages/newsletter/templates/newsletter-default.tcl
+END
+newsletter-nead.adp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/paf/!svn/ver/9215/packages/newsletter/templates/newsletter-nead.adp
+END
+newsletter-nead-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/paf/!svn/ver/8756/packages/newsletter/templates/newsletter-nead-postgresql.xql
+END
+newsletter-conjur.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/paf/!svn/ver/8443/packages/newsletter/templates/newsletter-conjur.tcl
+END
+newsletter-mda.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/paf/!svn/ver/9436/packages/newsletter/templates/newsletter-mda.tcl
+END

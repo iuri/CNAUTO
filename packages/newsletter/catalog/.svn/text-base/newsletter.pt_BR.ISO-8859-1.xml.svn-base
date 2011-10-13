@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="newsletter" package_version="04d" locale="pt_BR" charset="ISO-8859-1">
+  <msg key="Add_User">Adicionar Usuário</msg>
+  <msg key="Choose_Option_to_delete">Você tem certeza que quer excluir esse Newsletter</msg>
+  <msg key="County">Município</msg>
+  <msg key="Confirm_users_delete">Deseja realmente remover os usuários abaixo?</msg>
+  <msg key="Delete">Excluir</msg>
+  <msg key="Delete_User">Remover Usuário</msg>
+  <msg key="Delete_Users">Remover Usuários</msg>
+  <msg key="description">Pequena descrição </msg>
+  <msg key="Edit">Editar</msg>
+  <msg key="email">Email</msg>
+  <msg key="Export_emails">Exportar emails cadastrados</msg>
+  <msg key="File">Arquivo CSV contendo os contatos</msg>
+  <msg key="name">Título</msg>
+  <msg key="Name">Nome</msg>
+  <msg key="New">Novo Newsletter</msg>
+  <msg key="New_email">Cadastrar e-mail para receber este boletim</msg>
+  <msg key="New_Item">Criar novo item</msg>
+  <msg key="News_items">Items de notícias</msg>
+  <msg key="Newsletter_Users">Usuários do Newsletter</msg>
+  <msg key="No">Não</msg>
+  <msg key="Position">Cargo</msg>
+  <msg key="Region">Region</msg>
+  <msg key="Register_your_email">Cadastre seu e-mail para receber este boletim</msg>
+  <msg key="Send_news">Enviar Itens de notícias</msg> 
+  <msg key="State">Estado</msg>
+  <msg key="Users">Usuários</msg>
+ <msg key="Yes">Sim</msg>
+</message_catalog>
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="newsletter" package_version="04d" locale="pt_BR" charset="ISO-8859-1">
+
+  <msg key="Choose_Option_to_delete">Você tem certeza que quer excluir esse Newsletter</msg>
+  <msg key="Delete">Excluir</msg>
+  <msg key="description">Pequena descrição </msg>
+  <msg key="Edit">Editar</msg>
+  <msg key="email">Email</msg>
+  <msg key="Export_emails">Exportar emails cadastrados</msg>
+  <msg key="File">Arquivo CSV contendo os contatos</msg>
+  <msg key="name">Título</msg>
+  <msg key="New">Novo Newsletter</msg>
+  <msg key="New_email">Cadastrar e-mail para receber este boletim</msg>
+  <msg key="New_Item">Criar novo item</msg>
+  <msg key="News_items">Items de notícias</msg>
+  <msg key="No">Não</msg>
+  <msg key="Register_your_email">Cadastre seu e-mail para receber este boletim</msg>
+  <msg key="Send_news">Enviar Itens de notícias</msg>
+  <msg key="Yes">Sim</msg>
+</message_catalog>
