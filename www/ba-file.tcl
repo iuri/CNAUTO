@@ -1,51 +1,69 @@
-#set filepath "[acs_root_dir]/www/BRASIF1_071020112.txt"
-set filepath "[acs_root_dir]/www/brasilassistencia.csv"
+ad_page_contract {
+    Create file for Brasil Assistencia
+    
+    @author Iuri Sampaio (iuri.sampaio@iurix.com)
+    @creation-date 2011-10-14
+    
+}
 
 
-ns_log Notice $filepath
-
-set input_file [open $filepath r]
-set lines [split [read $input_file] \n]
-close $input_file
-set i 0
-
-foreach line $lines {
-    set record $line
+ad_proc -public format_input_line {
+    {-line} 
+} {
+    Format the output line to insert within the file
+} {
+    
+    #ns_log Notice "Running ad_proc format_input_line"
     set elements [split $line {;}]
-
-    	
-
-    ns_log Notice "$line"
+    
+    
+    set contrato "Omar"
+    set suplemento 0
+    set tipomov I
+    
+    
+    #    ns_log Notice "$line"
     set i 0
     foreach element $elements {
-	ns_log Notice "$element"
-
+	#ns_log Notice "$element"
 	
-	set contrato "Omar"
-	set suplemento 0
-	set tipomov I
-
 	# get Renavam from DESCVEIC
 	switch $i {
-	    3 { # vigencia
-		set vigencia [lindex $element 0]
+	    3 { 
+		# vigencia
+		set date [split [lindex $element 0] {/}]
+		set date1 "[lindex $date 2][lindex $date 1][lindex $date 0]"
+		
+		set date "[lindex $date 2]-[lindex $date 1]-[lindex $date 0]"
+
+		#set date_aux [string map {/ -} [lindex $element 0]]
+		
+		set date2 [clock format [clock scan "1 year" -base [clock scan $date]] -format %Y%m%d]
+		set vigencia "${date1}${date2}"
 	    }
 	    
-	    4 { #renavam -  desc veiculo
+	    4 { 
+		#renavam -  desc veiculo
 		set desc [lindex $element 0]
 		
-		set element [lindex $element 0]
 		#ns_log Notice "$element | [string length $element] | [llength $element]"
 		
-		set renavam [lindex $element [expr [llength $element] - 1]]
+		set renavam [lindex $desc [expr [llength $desc] - 1]]
+		
+		
+		set desc [lreplace $desc end-1 end]
+		set desc [lreplace $desc 0 1]
+		set desc [join $desc ""]
+		
 		#ns_log Notice "$renavam"
 	    }
 	    
 	    5 {
-		set chassi
+		set chassi [lindex $element 0]
 	    }
-	    #numero - chave do pedido
+	    
 	    6 {
+		#numero - chave do pedido
 		set numero [lindex $element 0]
 	    }
 	}
@@ -55,6 +73,64 @@ foreach line $lines {
 	
 	incr i
     }
+
+    #ns_log Notice "$contrato $suplemento $chassi $numero $tipomov $desc $vigencia $renavam"
+    
+    return "$contrato $suplemento $chassi $numero $tipomov $desc $vigencia $renavam"
+}
+
+ad_proc -public line_exists {
+    {-items}
+    {-line}
+} {
+    Checks if the record is  already in the list 
+} {
+    
+    #ns_log Notice "Running ad_proc line_exists"
+
+    foreach item $items {
+	#ns_log Notice "[lindex $line 2] - [lindex $item 2]"
+	if {[string equal [lindex $line 2] [lindex $item 2]]} {
+	    #ns_log Notice "ACHOU"
+	    return 1
+	}
+    }
+    
+    return 0
 }
 
 
+
+# Input File
+set filepath "[acs_root_dir]/www/brasilassistencia.csv"
+set input_file [open $filepath r]
+set lines [split [read $input_file] \n]
+close $input_file
+
+# Output file
+set filepath "[acs_root_dir]/www/BRASIF1_14102011.txt"
+set output_file [open $filepath w]
+
+set items [list]
+
+foreach line $lines {
+
+    set output_line [format_input_line -line $line]
+
+    #checks if the chassi already exists within the list "items"
+    set exists_p [line_exists -items $items -line $output_line]
+    #ns_log Notice "EXISTS $exists_p"
+    if {$exists_p == 0} {
+	
+	ns_log Notice "INSERT LINE: $output_line"
+	lappend items $output_line
+	
+	#inserts line within output file
+	puts $output_file $output_line    
+    }
+    
+    set output_line ""
+    
+}
+
+close $output_file
