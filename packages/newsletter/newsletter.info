@@ -13,6 +13,7 @@
         <maturity>0</maturity>
 
         <provides url="newsletter" version="0.8d"/>
+        <requires url="news" version="5.2.2d5"/>
 
         <callbacks>
         </callbacks>
