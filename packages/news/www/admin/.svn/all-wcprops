@@ -1,0 +1,299 @@
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/paf/!svn/ver/9553/packages/news/www/admin
+END
+news.adp
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/paf/!svn/ver/8000/packages/news/www/admin/news.adp
+END
+item.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/paf/!svn/ver/8000/packages/news/www/admin/item.tcl
+END
+revision.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/paf/!svn/ver/8000/packages/news/www/admin/revision.tcl
+END
+policy.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/paf/!svn/ver/8000/packages/news/www/admin/policy.tcl
+END
+approve-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/paf/!svn/ver/8000/packages/news/www/admin/approve-postgresql.xql
+END
+approve-2-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/paf/!svn/ver/8000/packages/news/www/admin/approve-2-oracle.xql
+END
+revision-set-active.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/paf/!svn/ver/8000/packages/news/www/admin/revision-set-active.tcl
+END
+process-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/paf/!svn/ver/8000/packages/news/www/admin/process-postgresql.xql
+END
+process-2-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/paf/!svn/ver/8000/packages/news/www/admin/process-2-oracle.xql
+END
+replicate-news.adp
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/paf/!svn/ver/9537/packages/news/www/admin/replicate-news.adp
+END
+revision-add.adp
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/paf/!svn/ver/8000/packages/news/www/admin/revision-add.adp
+END
+revision-add.xql
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/paf/!svn/ver/8000/packages/news/www/admin/revision-add.xql
+END
+index.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/paf/!svn/ver/8709/packages/news/www/admin/index.tcl
+END
+rss.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/paf/!svn/ver/8000/packages/news/www/admin/rss.tcl
+END
+revision-add-3-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/paf/!svn/ver/8000/packages/news/www/admin/revision-add-3-oracle.xql
+END
+revision-add-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/paf/!svn/ver/8000/packages/news/www/admin/revision-add-oracle.xql
+END
+approve-2.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/paf/!svn/ver/8000/packages/news/www/admin/approve-2.tcl
+END
+approve.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/paf/!svn/ver/9371/packages/news/www/admin/approve.tcl
+END
+items-order-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/paf/!svn/ver/8344/packages/news/www/admin/items-order-postgresql.xql
+END
+process-2.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/paf/!svn/ver/8699/packages/news/www/admin/process-2.tcl
+END
+revoke-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/paf/!svn/ver/8000/packages/news/www/admin/revoke-postgresql.xql
+END
+process.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/paf/!svn/ver/9553/packages/news/www/admin/process.tcl
+END
+revision.adp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/paf/!svn/ver/8000/packages/news/www/admin/revision.adp
+END
+item.xql
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/paf/!svn/ver/8000/packages/news/www/admin/item.xql
+END
+item.adp
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/paf/!svn/ver/8000/packages/news/www/admin/item.adp
+END
+revision-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/paf/!svn/ver/8000/packages/news/www/admin/revision-oracle.xql
+END
+revision-set-active-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/paf/!svn/ver/8000/packages/news/www/admin/revision-set-active-oracle.xql
+END
+index.adp
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/paf/!svn/ver/8596/packages/news/www/admin/index.adp
+END
+index-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/paf/!svn/ver/8596/packages/news/www/admin/index-postgresql.xql
+END
+items-order.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/paf/!svn/ver/8702/packages/news/www/admin/items-order.tcl
+END
+approve.adp
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/paf/!svn/ver/8000/packages/news/www/admin/approve.adp
+END
+approve-2-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/paf/!svn/ver/8000/packages/news/www/admin/approve-2-postgresql.xql
+END
+approve.xql
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/paf/!svn/ver/8000/packages/news/www/admin/approve.xql
+END
+process.xql
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/paf/!svn/ver/8000/packages/news/www/admin/process.xql
+END
+process.adp
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/paf/!svn/ver/8000/packages/news/www/admin/process.adp
+END
+process-2-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/paf/!svn/ver/8000/packages/news/www/admin/process-2-postgresql.xql
+END
+approve-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/paf/!svn/ver/8000/packages/news/www/admin/approve-oracle.xql
+END
+process-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/paf/!svn/ver/8000/packages/news/www/admin/process-oracle.xql
+END
+revision-add-3-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/paf/!svn/ver/8000/packages/news/www/admin/revision-add-3-postgresql.xql
+END
+revision-add-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/paf/!svn/ver/8000/packages/news/www/admin/revision-add-postgresql.xql
+END
+items-order.adp
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/paf/!svn/ver/8342/packages/news/www/admin/items-order.adp
+END
+revoke-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/paf/!svn/ver/8000/packages/news/www/admin/revoke-oracle.xql
+END
+revision-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/paf/!svn/ver/8000/packages/news/www/admin/revision-postgresql.xql
+END
+replicate-news.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/paf/!svn/ver/9553/packages/news/www/admin/replicate-news.tcl
+END
+revision-set-active-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/paf/!svn/ver/8000/packages/news/www/admin/revision-set-active-postgresql.xql
+END
+revision-add-3.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/paf/!svn/ver/8000/packages/news/www/admin/revision-add-3.tcl
+END
+revision-add.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/paf/!svn/ver/8000/packages/news/www/admin/revision-add.tcl
+END
+revoke.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/paf/!svn/ver/8000/packages/news/www/admin/revoke.tcl
+END
+index-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/paf/!svn/ver/8000/packages/news/www/admin/index-oracle.xql
+END

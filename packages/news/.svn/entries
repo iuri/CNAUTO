@@ -1,0 +1,80 @@
+10
+
+dir
+9593
+http://svn.mda.gov.br/paf/packages/news
+http://svn.mda.gov.br/paf
+
+
+
+2011-08-22T19:00:57.262754Z
+9564
+breno
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+fd8f0779-497c-49fd-bcbc-8c246a2f09fe
+
+sql
+dir
+
+tcl
+dir
+
+www
+dir
+
+lib
+dir
+
+news.info
+file
+
+
+
+
+2011-10-16T11:49:25.461868Z
+c2e062d88e67618df42d6297663ac624
+2011-07-26T20:25:10.774356Z
+9546
+iuri.sampaio
+has-props
+
+
+svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+5219
+
+catalog
+dir
+
+templates
+dir
+

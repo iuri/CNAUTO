@@ -1,0 +1,9 @@
+if {[regexp {^/([0-9]+)} [ad_conn path_info] match item_id]} {
+    if {[ns_set find [rp_getform] item_id] == -1} {
+        rp_form_put item_id $item_id
+    } else {
+        ns_set update [rp_getform] item_id $item_id
+    }
+}
+set package_url [ad_conn package_url]
+ad_returnredirect ${package_url}item?item_id=$item_id

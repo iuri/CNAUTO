@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 41
+/paf/!svn/ver/8000/packages/news/tcl/test
+END
+news-db-test-init.xql
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/paf/!svn/ver/8000/packages/news/tcl/test/news-db-test-init.xql
+END
+news-db-test-init-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/paf/!svn/ver/8000/packages/news/tcl/test/news-db-test-init-postgresql.xql
+END
+news-test-procs-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/paf/!svn/ver/8000/packages/news/tcl/test/news-test-procs-postgresql.xql
+END
+news-db-test-init-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/paf/!svn/ver/8000/packages/news/tcl/test/news-db-test-init-oracle.xql
+END
+news-test-procs-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/paf/!svn/ver/8000/packages/news/tcl/test/news-test-procs-oracle.xql
+END
+news-db-test-init.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/paf/!svn/ver/8000/packages/news/tcl/test/news-db-test-init.tcl
+END
+news-test-procs.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/paf/!svn/ver/8000/packages/news/tcl/test/news-test-procs.tcl
+END

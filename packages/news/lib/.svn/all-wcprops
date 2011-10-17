@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/paf/!svn/ver/8000/packages/news/lib
+END
+item.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/paf/!svn/ver/8000/packages/news/lib/item.tcl
+END
+item.adp
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/paf/!svn/ver/8000/packages/news/lib/item.adp
+END
+item-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/paf/!svn/ver/8000/packages/news/lib/item-postgresql.xql
+END
+item-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/paf/!svn/ver/8000/packages/news/lib/item-oracle.xql
+END
+latest-news.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/paf/!svn/ver/8000/packages/news/lib/latest-news.tcl
+END
+latest-news.adp
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/paf/!svn/ver/8000/packages/news/lib/latest-news.adp
+END
+latest-news-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/paf/!svn/ver/8000/packages/news/lib/latest-news-postgresql.xql
+END
+latest-news-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/paf/!svn/ver/8000/packages/news/lib/latest-news-oracle.xql
+END

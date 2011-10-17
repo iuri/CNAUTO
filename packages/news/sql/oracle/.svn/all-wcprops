@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/paf/!svn/ver/8000/packages/news/sql/oracle
+END
+news-package-create.sql
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/paf/!svn/ver/8000/packages/news/sql/oracle/news-package-create.sql
+END
+news-sws.sql
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/paf/!svn/ver/8000/packages/news/sql/oracle/news-sws.sql
+END
+news-sws-drop.sql
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/paf/!svn/ver/8000/packages/news/sql/oracle/news-sws-drop.sql
+END
+news-views-create.sql
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/paf/!svn/ver/8000/packages/news/sql/oracle/news-views-create.sql
+END
+news-views-drop.sql
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/paf/!svn/ver/8000/packages/news/sql/oracle/news-views-drop.sql
+END
+news-create.sql
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/paf/!svn/ver/8000/packages/news/sql/oracle/news-create.sql
+END
+news-drop.sql
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/paf/!svn/ver/8000/packages/news/sql/oracle/news-drop.sql
+END

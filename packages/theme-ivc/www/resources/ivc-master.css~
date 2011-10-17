@@ -1,0 +1,197 @@
+/* IVC Master CSS */
+
+
+.main {
+    margin:0 auto; 
+    background: #ffffff;
+    width:1024px; 
+}
+
+.main .logo {
+    margin: 0px 0px auto;
+    float:left;
+   /* background:url("/resources/theme-ivc/images/logo-ivc.jpg"); */
+}
+
+
+.main .newsletter_form {
+    margin: 0px;
+    width: 600px;
+    float:right;
+}
+
+.main .newsletter_form .input_text {
+    width: 90px;
+    height: 10px;
+    font: 10px verdana, arial, helvetica, sans-serif;
+}
+
+.main .newsletter_form .input_submit {
+    width: 30px;
+    height: 20px;
+}
+
+
+.main .title {
+    margin-top: 0px;
+    margin-left: 400px;
+    position: relative;
+    float: right;
+}
+
+.main .title .locale {
+    margin-left: 180px;
+ 
+}
+
+
+.main .title .url {}
+
+
+.url a:link, a:visited {
+    text-decoration: none;
+    text-align: right;
+    font-family: Arial, Verdana, sans-serif;
+    font-size: 24px;
+    color:red;
+}
+
+.url a:link, a:hover {
+    text-decoration: none;
+    color:red;
+    text-align: right;
+    font-family: Arial, Verdana, sans-serif;
+    font-size: 24px;
+}
+
+
+
+.clear {
+    clear:both;
+    padding-top:5px;
+}
+
+
+
+.main .menu {
+    width: 1024px;
+    background: url("/resources/theme-ivc/images/menu-center.png");
+    height:43px;
+}
+
+
+.main .menu .menu_content {
+    width: 960px;
+    padding:10px;
+    float:left;
+}
+
+.menu_content a:link, a:visited {
+    font-family: Arial, Verdana, sans-serif;
+    font-size: 14px;
+    font-weight:bold;
+    text-decoration:none;
+    color: #ffffff;
+    padding:15px;
+}
+
+.menu_content a:hover {
+    font-family: Arial, Verdana, sans-serif;
+    font-size: 14px;
+    font-weight:bold;
+    color: #ffffff;
+    text-decoration:none;
+    padding:15px;
+}
+
+.main .menu .menu-image-right {
+    margin:0px;
+    float:right;
+}
+
+.main .menu .menu_content .search {
+    margin-left: 200px;
+    float: right;
+}
+
+.main .menu .menu_content .search .input_text {
+    width: 200px;
+    height: 15px;
+}
+
+.main .menu .menu_content .search .submit {
+    width: 20px;
+    height: 20px;
+}
+
+
+.main .content {
+    padding:5px;
+    
+}
+
+.wikicmds a:link, a:hover, a:visited {
+    font-family: Arial, Verdana, sans-serif;
+    font-size: 12px;
+    font-weight:bold;
+    color: #ffffff;
+    text-decoration:none;
+    padding:0px;
+}
+
+
+.main .footer {
+    background: url("/resources/theme-ivc/images/footer-center.png");
+    width: 1024px;
+    height: 123px;
+}
+
+.main .footer .footer-content {
+    margin: 0px;
+    width: 963px;
+    padding:10px;
+    float:left;
+}
+
+
+.main .footer .footer-content .footer-left {
+    width:512px;
+    float:left;
+}
+
+.main .footer .footer-content .footer-navigation  {
+    margin-left: 0px;
+    float:right;
+    padding:0px;
+}
+
+
+.main .footer .footer-content .footer-navigation ul {
+    margin: 0px;
+    padding: 0px;
+}
+
+.main .footer .footer-content .footer-navigation ul li {
+    list-style: none;
+    display: inline;
+}
+
+.main .footer .footer-content .footer-navigation a {
+    text-decoration: none;
+    font-size: 14px;
+    color: #ffffff;
+    
+}
+
+
+.main .footer .footer-image-right {
+    margin:0px;
+    float:right;
+}
+
+
+
+
+#myslideshow { /*sample CSS for demo*/
+    border:0px solid black;
+}

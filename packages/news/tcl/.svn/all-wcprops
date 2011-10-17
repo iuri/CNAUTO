@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/paf/!svn/ver/9563/packages/news/tcl
+END
+news-procs.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/paf/!svn/ver/9563/packages/news/tcl/news-procs.tcl
+END
+news-procs.xql
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/paf/!svn/ver/8000/packages/news/tcl/news-procs.xql
+END
+news-procs-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/paf/!svn/ver/9553/packages/news/tcl/news-procs-postgresql.xql
+END
+news-apm-callback-procs.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/paf/!svn/ver/9546/packages/news/tcl/news-apm-callback-procs.tcl
+END
+news-procs-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/paf/!svn/ver/8000/packages/news/tcl/news-procs-oracle.xql
+END
+news-callback-procs.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/paf/!svn/ver/8000/packages/news/tcl/news-callback-procs.tcl
+END
+news-callback-procs.xql
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/paf/!svn/ver/8000/packages/news/tcl/news-callback-procs.xql
+END

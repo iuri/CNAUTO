@@ -1,0 +1,83 @@
+
+.main {
+    width: 1024px;
+    margin: 0px 0px;
+ 
+}
+
+.main .logo {
+    margin:0px 0px;
+    float:left:
+}
+
+
+.main .newsletter_form {
+    margin: 0px;
+    width: 600px;
+    float:right;
+}
+
+.main .newsletter_form .input_text {
+    width: 90px;
+    height: 10px;
+    font: 10px verdana, arial, helvetica, sans-serif;
+}
+
+.main .newsletter_form .input_submit {
+    width: 30px;
+    height: 20px;
+}
+
+
+.main .title {
+    margin-top: 0px;
+    margin-left: 400px;
+    float: right;
+}
+
+.main .title .locale {
+    margin-left: 180px;
+ 
+}
+
+
+.main .title .url {}
+
+
+.main .title .url a:link {
+    text-decoration: none;
+    text-align: right;
+    font-family: Arial, Verdana, sans-serif;
+    font-size: 24px;
+    color:red;
+}
+
+.main .title .url a:hover {
+    text-decoration: none;
+    color:red;
+    text-align: right;
+    font-family: Arial, Verdana, sans-serif;
+    font-size: 24px;
+}
+
+
+
+
+
+
+
+
+
+.column1 a:link, a:visited {
+    color: blue; 
+}
+.column1 a:hover {
+    color: #000000; 
+}
+
+.column2 a:link, a:visited {
+    color: red; 
+}
+.column2 a:hover {
+    color: #ffffff; 
+}

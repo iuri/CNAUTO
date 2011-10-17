@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/paf/!svn/ver/9341/packages/news/sql/postgresql
+END
+news-sc-drop.sql
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/paf/!svn/ver/8000/packages/news/sql/postgresql/news-sc-drop.sql
+END
+news-package-create.sql
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/paf/!svn/ver/8000/packages/news/sql/postgresql/news-package-create.sql
+END
+news-package-drop.sql
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/paf/!svn/ver/8000/packages/news/sql/postgresql/news-package-drop.sql
+END
+news-views-create.sql
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/paf/!svn/ver/8000/packages/news/sql/postgresql/news-views-create.sql
+END
+news-views-drop.sql
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/paf/!svn/ver/8000/packages/news/sql/postgresql/news-views-drop.sql
+END
+news-create.sql
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/paf/!svn/ver/8000/packages/news/sql/postgresql/news-create.sql
+END
+news-drop.sql
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/paf/!svn/ver/8000/packages/news/sql/postgresql/news-drop.sql
+END
+news-sc-create.sql
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/paf/!svn/ver/8000/packages/news/sql/postgresql/news-sc-create.sql
+END

@@ -1,0 +1,263 @@
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/paf/!svn/ver/9555/packages/news/www
+END
+item.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/paf/!svn/ver/9554/packages/news/www/item.tcl
+END
+news.adp
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/paf/!svn/ver/9145/packages/news/www/news.adp
+END
+item-create.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/paf/!svn/ver/9555/packages/news/www/item-create.tcl
+END
+item-create-3.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/paf/!svn/ver/8000/packages/news/www/item-create-3.tcl
+END
+item-attach-file.adp
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/paf/!svn/ver/8197/packages/news/www/item-attach-file.adp
+END
+image-choose.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/paf/!svn/ver/8000/packages/news/www/image-choose.tcl
+END
+item-attach-file-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/paf/!svn/ver/8197/packages/news/www/item-attach-file-postgresql.xql
+END
+item-publish.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/paf/!svn/ver/9538/packages/news/www/item-publish.tcl
+END
+item-edit.adp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/paf/!svn/ver/8000/packages/news/www/item-edit.adp
+END
+preview.adp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/paf/!svn/ver/9555/packages/news/www/preview.adp
+END
+preview.xql
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/paf/!svn/ver/8000/packages/news/www/preview.xql
+END
+item-edit-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/paf/!svn/ver/9371/packages/news/www/item-edit-postgresql.xql
+END
+preview-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/paf/!svn/ver/9538/packages/news/www/preview-postgresql.xql
+END
+image-edit.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/paf/!svn/ver/8729/packages/news/www/image-edit.tcl
+END
+item-export-pdf-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/paf/!svn/ver/9294/packages/news/www/item-export-pdf-postgresql.xql
+END
+index.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/paf/!svn/ver/9490/packages/news/www/index.tcl
+END
+needing-approval.adp
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/paf/!svn/ver/8000/packages/news/www/needing-approval.adp
+END
+item.vuh
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/paf/!svn/ver/8468/packages/news/www/item.vuh
+END
+item.adp
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/paf/!svn/ver/9537/packages/news/www/item.adp
+END
+item-create-thankyou.adp
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/paf/!svn/ver/8000/packages/news/www/item-create-thankyou.adp
+END
+item-create.adp
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/paf/!svn/ver/8000/packages/news/www/item-create.adp
+END
+image-choose.adp
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/paf/!svn/ver/8000/packages/news/www/image-choose.adp
+END
+item-create-3-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/paf/!svn/ver/8000/packages/news/www/item-create-3-postgresql.xql
+END
+item-create-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/paf/!svn/ver/9341/packages/news/www/item-create-postgresql.xql
+END
+item-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/paf/!svn/ver/8000/packages/news/www/item-oracle.xql
+END
+item-export-pdf.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/paf/!svn/ver/9294/packages/news/www/item-export-pdf.tcl
+END
+image-edit.adp
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/paf/!svn/ver/9145/packages/news/www/image-edit.adp
+END
+send.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/paf/!svn/ver/9415/packages/news/www/send.tcl
+END
+index.xql
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/paf/!svn/ver/9371/packages/news/www/index.xql
+END
+index.adp
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/paf/!svn/ver/9145/packages/news/www/index.adp
+END
+index-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/paf/!svn/ver/8000/packages/news/www/index-postgresql.xql
+END
+image.vuh
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/paf/!svn/ver/8000/packages/news/www/image.vuh
+END
+item-edit-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/paf/!svn/ver/8000/packages/news/www/item-edit-oracle.xql
+END
+image-view-tmpfile.vuh
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/paf/!svn/ver/8000/packages/news/www/image-view-tmpfile.vuh
+END
+send.adp
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/paf/!svn/ver/9415/packages/news/www/send.adp
+END
+send-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/paf/!svn/ver/9415/packages/news/www/send-postgresql.xql
+END
+item-attach-file.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/paf/!svn/ver/8290/packages/news/www/item-attach-file.tcl
+END
+item-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/paf/!svn/ver/9371/packages/news/www/item-postgresql.xql
+END
+item-edit.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/paf/!svn/ver/9555/packages/news/www/item-edit.tcl
+END
+preview.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/paf/!svn/ver/9555/packages/news/www/preview.tcl
+END
+item-create-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/paf/!svn/ver/8000/packages/news/www/item-create-oracle.xql
+END
+item-create-3-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/paf/!svn/ver/8000/packages/news/www/item-create-3-oracle.xql
+END
+index-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/paf/!svn/ver/8000/packages/news/www/index-oracle.xql
+END

@@ -1,0 +1,107 @@
+set package_id [ad_conn package_id]
+
+
+
+
+set xml {
+<?xml version="1.0" encoding="utf-8" ?>
+	<cu3er>
+		<settings>
+			<auto_play>
+				<defaults symbol="circular" time="15"/>
+				<tweenIn x="500" y="45" width="30" height="30" tint="0xFFFFFF" alpha="0.5"/>
+				<tweenOver alpha="1"/>
+			</auto_play>
+	
+			<general slide_panel_width="570" ui_visibility_time="14" />
+		
+			<prev_button>
+				<defaults round_corners="5,5,5,5"/>
+				<tweenOver tint="0xFFFFFF" scaleX="1.1" scaleY="1.1"/>
+				<tweenOut tint="0x000000"/>
+			</prev_button>
+	
+			<prev_symbol>
+				<tweenOver tint="0x000000"/>
+			</prev_symbol>
+		
+			<next_button>
+				<defaults round_corners="5,5,5,5"/>
+				<tweenOver tint="0xFFFFFF" scaleX="1.1" scaleY="1.1"/>
+				<tweenOut tint="0x000000"/>
+			</next_button>
+		
+			<next_symbol>
+				<tweenOver tint="0x000000"/>
+			</next_symbol>
+			<description>
+				<defaults heading_text_margin="0,10,0,10" paragraph_text_margin="0,0,0,10"  />
+			</description>
+		</settings>
+
+		<slides>
+	
+}
+
+
+db_multirow news_items item_list "
+            select news_items_approved.package_id,
+                   acs_object__name(apm_package__parent_id(news_items_approved.package_id)) as parent_name,
+                   (select site_node__url(site_nodes.node_id)
+                    from site_nodes
+                    where site_nodes.object_id = news_items_approved.package_id) as url,
+                   news_items_approved.item_id,
+                   news_items_approved.publish_title,
+                   to_char(news_items_approved.publish_date, 'YYYY-MM-DD HH24:MI:SS') as publish_date_ansi,
+                   item_creator,
+                   creation_user,
+		   news_items_approved.publish_body
+            from news_items_approved
+            where news_items_approved.publish_date < current_timestamp
+            and (news_items_approved.archive_date >= current_timestamp or news_items_approved.archive_date is null)
+            and news_items_approved.package_id = $package_id
+            order by package_id,
+		     news_items_approved.priority asc,
+                     news_items_approved.publish_date desc
+	    limit 3	
+" {
+    
+	if {[string length $publish_body] > 200} {
+		set publish_body [string_truncate -len 200 -ellipsis "..."  $publish_body]
+	}
+	set publish_body [ad_html_to_text $publish_body]
+	regsub -all {\n} $publish_body {} publish_body
+	
+	set publish_date [lc_time_fmt $publish_date_ansi "%x"]
+	set image_id [ImageMagick::util::get_image_id -item_id $item_id -name_null 1]
+
+
+	append xml "<slide>
+			<url>${url}image/$image_id</url>
+			<description>
+				<link target=\"_parent\">${url}item?item_id=$item_id</link>
+				<heading>$publish_title</heading>
+				<paragraph>
+					$publish_body
+				</paragraph>
+			</description>
+           	    </slide>
+		    <transition duration=\"0.6\" delay=\".2\" direction=\"down\"/>
+		   "
+}
+
+
+append xml {
+		</slides>
+	</cu3er>
+}
+
+set xmlfile [ns_mktemp /tmp/xml-XXXXXX]
+set fd [open $xmlfile w]
+puts $fd $xml
+close $fd
+
+ns_returnfile 200 pplication/xml $xmlfile
+file delete $xmlfile
+ad_script_abort
+

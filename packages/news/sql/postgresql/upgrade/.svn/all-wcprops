@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/paf/!svn/ver/9341/packages/news/sql/postgresql/upgrade
+END
+upgrade-4.6-5.0d1.sql
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/paf/!svn/ver/8000/packages/news/sql/postgresql/upgrade/upgrade-4.6-5.0d1.sql
+END
+upgrade-5.2.0d1-5.2.0d2.sql
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/paf/!svn/ver/8000/packages/news/sql/postgresql/upgrade/upgrade-5.2.0d1-5.2.0d2.sql
+END
+upgrade-5.2.0d2-5.2.0d3.sql
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/paf/!svn/ver/8000/packages/news/sql/postgresql/upgrade/upgrade-5.2.0d2-5.2.0d3.sql
+END
+upgrade-5.2.2d3-5.2.2d4.sql
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/paf/!svn/ver/9341/packages/news/sql/postgresql/upgrade/upgrade-5.2.2d3-5.2.2d4.sql
+END
+upgrade-4.1.0b-4.6.sql
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/paf/!svn/ver/8000/packages/news/sql/postgresql/upgrade/upgrade-4.1.0b-4.6.sql
+END
+upgrade-5.2.0d6-5.2.0d7.sql
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/paf/!svn/ver/8000/packages/news/sql/postgresql/upgrade/upgrade-5.2.0d6-5.2.0d7.sql
+END
+upgrade-5.2.0d7-5.2.0d8.sql
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/paf/!svn/ver/8000/packages/news/sql/postgresql/upgrade/upgrade-5.2.0d7-5.2.0d8.sql
+END
