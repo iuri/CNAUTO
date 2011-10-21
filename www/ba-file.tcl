@@ -25,58 +25,60 @@ ad_proc -public format_input_line {
     #    ns_log Notice "$line"
     set i 0
     foreach element $elements {
-	#ns_log Notice "$element"
-	
-	# get Renavam from DESCVEIC
+	#ns_log Notice "$element $i"
 	switch $i {
 	    3 { 
 		# vigencia
 		set date [split [lindex $element 0] {/}]
-		set date1 "[lindex $date 2][lindex $date 1][lindex $date 0]"
-		
-		set date "[lindex $date 2]-[lindex $date 1]-[lindex $date 0]"
+                set date1 "[lindex $date 2][lindex $date 1][lindex $date 0]"
 
-		#set date_aux [string map {/ -} [lindex $element 0]]
-		
-		set date2 [clock format [clock scan "1 year" -base [clock scan $date]] -format %Y%m%d]
-		set vigencia "${date1}${date2}"
+                set date "[lindex $date 2]-[lindex $date 1]-[lindex $date 0]"
+                set date2 [clock format [clock scan "1 year" -base [clock scan $date]] -format %Y%m%d]
+                set vigencia "${date1}${date2}"
+
+		#ns_log Notice "$vigencia"
 	    }
-	    
-	    4 { 
-		#renavam -  desc veiculo
-		set desc [lindex $element 0]
+
+	    4 {
+		set desc $element
 		
-		#ns_log Notice "$element | [string length $element] | [llength $element]"
+                #ns_log Notice "$element | [string length $element] | [llength $element]"
 		
-		set renavam [lindex $desc [expr [llength $desc] - 1]]
+                set renavam [lindex $desc [expr [llength $desc] - 1]]
 		
-		
-		set desc [lreplace $desc end-1 end]
-		set desc [lreplace $desc 0 1]
-		set desc [join $desc ""]
-		
-		#ns_log Notice "$renavam"
+                set desc [lreplace $desc end-1 end]
+                set desc [lreplace $desc 0 1]
+                set desc [join $desc ""]
+                #ns_log Notice "DESC: $desc | $renavam"
+
+                #ns_log Notice "$renavam"
+
 	    }
-	    
+
 	    5 {
-		set chassi [lindex $element 0]
+                set chassi [lindex $element 0]
 	    }
-	    
-	    6 {
-		#numero - chave do pedido
-		set numero [lindex $element 0]
-	    }
-	}
+
+            6 {
+                #numero - chave do pedido
+                set numero [lindex $element 0]
+            }
+
+
 	
+	}
+	# get Renavam from DESCVEIC
 	# 8 columns
 	#1 CONTRATO - 2 SUPLEMENTO - 3 CHASSI - 4 NUMERO - 5 TIPO MOV - 6 DESC VEIC - 7 VIGENCIA - 8 RENAVAN
 	
 	incr i
     }
 
-    #ns_log Notice "$contrato $suplemento $chassi $numero $tipomov $desc $vigencia $renavam"
+    # ns_log Notice "$contrato $suplemento $chassi $numero $tipomov $desc $vigencia $renavam"
+    #set output_line "$contrato $suplemento"
+    set output_line "$contrato $suplemento $chassi $numero $tipomov $desc $vigencia $renavam\r"
     
-    return "$contrato $suplemento $chassi $numero $tipomov $desc $vigencia $renavam"
+    return $output_line
 }
 
 ad_proc -public line_exists {
@@ -102,6 +104,7 @@ ad_proc -public line_exists {
 
 
 # Input File
+#set filepath "[acs_root_dir]/www/test.csv"
 set filepath "[acs_root_dir]/www/brasilassistencia.csv"
 set input_file [open $filepath r]
 set lines [split [read $input_file] \n]
@@ -109,6 +112,7 @@ close $input_file
 
 # Output file
 set filepath "[acs_root_dir]/www/BRASIF1_14102011.txt"
+#set filepath "[acs_root_dir]/www/teste.txt"
 set output_file [open $filepath w]
 
 set items [list]
@@ -122,7 +126,7 @@ foreach line $lines {
     #ns_log Notice "EXISTS $exists_p"
     if {$exists_p == 0} {
 	
-	ns_log Notice "INSERT LINE: $output_line"
+	#ns_log Notice "INSERT LINE: $output_line"
 	lappend items $output_line
 	
 	#inserts line within output file
