@@ -44,7 +44,9 @@ ad_proc -public cn_spreadsheet::import_csv {
     foreach line $lines {
 	if {$num == 0} {
 	    # FIELDS
-	    set fields [split $line ";"]
+#	    ns_log Notice "ELEM $line"
+            set fields [split $line ";"]
+	    ns_log Notice "FIELDS $fields"
 	    set i 0
 	    foreach field_name $fields {
 		set field_name [cn_spreadsheet::treat_chars -str $field_name] 
@@ -58,31 +60,40 @@ ad_proc -public cn_spreadsheet::import_csv {
 		incr i
 		
 	    }
+	    #ns_log Notice "ARRAY [parray field_id]"
+	    #set field_names [array names field_id]
+	    #ns_log Notice "FIELDS: $field_names"
 	   	    
 	} else {
-	    # DATA
-	    set values [split $line ";"]
+	    set data [split $line ";"]
+	    #ns_log Notice "DATA $data"
+	    #set field_names [array names field_id]
+	    #ns_log Notice "FIELDS: $field_names"
 	    set i 0
-	    foreach value $values {
+	    #ns_log Notice "DATA $data"
+	    foreach value $data {
 		set row($i) $value
+		
 		incr i
 		
 	    }
 	    	    
-	    set aux $row($key)
-	    if {[exists_and_not_null aux]} {
-		
-		cn_spreadsheet::element::new -name $row($key) -element $row($key) -spreadsheet_id $spreadsheet_id
+	    cn_spreadsheet::element::new -name $row($key) -element $row($key) -spreadsheet_id $spreadsheet_id
 	    
-		for {set j 0} {$j<$num_fields} {incr j} {
-		    if {[exists_and_not_null aux]} {
-			cn_spreadsheet::data::new -field_id $field_id($j) -data $row($j) -element $row($key)
-		    }
+	    for {set j 0} {$j<$num_fields} {incr j} {
+		ns_log Notice "$num_fields"
+		set aux $row($j)
+		if {[exists_and_not_null aux]} {
+		    ns_log Notice "$field_id($j) $row($j) $row($key)"
+		    cn_spreadsheet::data::new -field_id $field_id($j) -data $row($j) -element $row($key)
 		}
 	    }
 	}
+	
+	
 	incr num
     }    
+    
 }	
 
 

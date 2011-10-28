@@ -13,6 +13,7 @@ set admin_p [permission::permission_p -party_id [ad_conn user_id] -object_id [ad
 set site_wide [acs_user::site_wide_admin_p]
 set action_list ""
 
+set return_url [ad_conn url]
 
 set spreadsheet_ids [db_list get {
     SELECT spreadsheet_id
@@ -26,48 +27,62 @@ if {$admin_p eq 1} {
 }
 
 if {[llength $spreadsheet_ids] == 1} {
-	ad_returnredirect spreadsheet-items?spreadsheet_id=$spreadsheet_ids
+#	ad_returnredirect spreadsheet-items?spreadsheet_id=$spreadsheet_ids
 }
 
 
 template::head::add_css -href "/resources/cn-spreadsheet/cn-spreadsheet.css"
 
-template::list::create -name spreadsheet_list -multirow spreadsheet_list -key spreadsheet_id -actions $action_list -pass_properties {
-} -elements {
-    name {
-        label ""
-        display_template {
-	    <a href="spreadsheet-items?spreadsheet_id=@spreadsheet_list.spreadsheet_id@">
-	    @spreadsheet_list.name@
-	    </a>
-        }
-    }
-    atd {
-        label ""
-        display_template {
-	    @spreadsheet_list.qtd@ emails cadastrados 
+
+set bulk_actions [list]
+
+
+set bulk_actions {"#cn-spreadsheet.Delete#" "spreadsheet-del" "#cn-spreadsheet.Delete_selected_spreadsheets#"}
+
+
+template::list::create \
+    -name spreadsheet_list \
+    -multirow spreadsheet_list \
+    -key spreadsheet_id \
+    -actions $action_list \
+    -bulk_actions $bulk_actions \
+    -bulk_action_export_vars { return_url } \
+    -pass_properties {
+    } -elements {
+	name {
+	    label ""
+	    display_template {
+		<a href="spreadsheet-items?spreadsheet_id=@spreadsheet_list.spreadsheet_id@">
+		@spreadsheet_list.name@
+		</a>
+	    }
+	}
+	atd {
+	    label ""
+	    display_template {
+		@spreadsheet_list.qtd@ emails cadastrados 
+	    }
+	}
+	actions {
+	    label ""
+	    display_template {
+		<div class="options_list">
+		<ul>
+		<if $site_wide>
+		<li><a class="button" href="spreadsheet-del?spreadsheet_id=@spreadsheet_list.spreadsheet_id@">
+		#cn-spreadsheet.Delete#
+		</a></li> 
+		<li><a class="button" href="spreadsheet-new?spreadsheet_id=@spreadsheet_list.spreadsheet_id@">
+		#cn-spreadsheet.Edit#
+		</a></li>
+		
+		</if>
+		</ul>
+		</div>
+		
+	    }
 	}
     }
-    actions {
-        label ""
-        display_template {
-	    <div class="options_list">
-	    <ul>
-	    <if $site_wide>
-	    <li><a class="button" href="spreadsheet-del?spreadsheet_id=@spreadsheet_list.spreadsheet_id@">
-	    #cn-spreadsheet.Delete#
-	    </a></li> 
-	    <li><a class="button" href="spreadsheet-new?spreadsheet_id=@spreadsheet_list.spreadsheet_id@">
-	    #cn-spreadsheet.Edit#
-	    </a></li>
-	    
-	    </if>
-	    </ul>
-	    </div>
-	    
-        }
-    }
-}
 
 db_multirow -extend {qtd} spreadsheet_list select_spreadsheet {
     SELECT spreadsheet_id, name, description,

@@ -13,7 +13,6 @@ ad_proc -public format_input_line {
     Format the output line to insert within the file
 } {
     
-    #ns_log Notice "Running ad_proc format_input_line"
     set elements [split $line {;}]
     
     
@@ -22,10 +21,8 @@ ad_proc -public format_input_line {
     set tipomov I
     
     
-    #    ns_log Notice "$line"
     set i 0
     foreach element $elements {
-	#ns_log Notice "$element $i"
 	switch $i {
 	    3 { 
 		# vigencia
@@ -35,24 +32,16 @@ ad_proc -public format_input_line {
                 set date "[lindex $date 2]-[lindex $date 1]-[lindex $date 0]"
                 set date2 [clock format [clock scan "1 year" -base [clock scan $date]] -format %Y%m%d]
                 set vigencia "${date1}${date2}"
-
-		#ns_log Notice "$vigencia"
 	    }
 
 	    4 {
 		set desc $element
-		
-                #ns_log Notice "$element | [string length $element] | [llength $element]"
-		
+				
                 set renavam [lindex $desc [expr [llength $desc] - 1]]
 		
                 set desc [lreplace $desc end-1 end]
                 set desc [lreplace $desc 0 1]
                 set desc [join $desc ""]
-                #ns_log Notice "DESC: $desc | $renavam"
-
-                #ns_log Notice "$renavam"
-
 	    }
 
 	    5 {
@@ -74,8 +63,7 @@ ad_proc -public format_input_line {
 	incr i
     }
 
-    # ns_log Notice "$contrato $suplemento $chassi $numero $tipomov $desc $vigencia $renavam"
-    #set output_line "$contrato $suplemento"
+    ns_log Notice "$contrato $suplemento $chassi $numero $tipomov $desc $vigencia $renavam"
     set output_line "$contrato $suplemento $chassi $numero $tipomov $desc $vigencia $renavam\r"
     
     return $output_line
@@ -87,13 +75,9 @@ ad_proc -public line_exists {
 } {
     Checks if the record is  already in the list 
 } {
-    
-    #ns_log Notice "Running ad_proc line_exists"
 
     foreach item $items {
-	#ns_log Notice "[lindex $line 2] - [lindex $item 2]"
 	if {[string equal [lindex $line 2] [lindex $item 2]]} {
-	    #ns_log Notice "ACHOU"
 	    return 1
 	}
     }
@@ -102,39 +86,96 @@ ad_proc -public line_exists {
 }
 
 
+ad_proc -public export_csv_to_csv {
+    {-input_file}
+    {-output_file}
+} {
+    Export CSV file to CSV
+} {
 
-# Input File
-#set filepath "[acs_root_dir]/www/test.csv"
-set filepath "[acs_root_dir]/www/brasilassistencia.csv"
-set input_file [open $filepath r]
-set lines [split [read $input_file] \n]
-close $input_file
-
-# Output file
-set filepath "[acs_root_dir]/www/BRASIF1_14102011.txt"
-#set filepath "[acs_root_dir]/www/teste.txt"
-set output_file [open $filepath w]
-
-set items [list]
-
-foreach line $lines {
-
-    set output_line [format_input_line -line $line]
-
-    #checks if the chassi already exists within the list "items"
-    set exists_p [line_exists -items $items -line $output_line]
-    #ns_log Notice "EXISTS $exists_p"
-    if {$exists_p == 0} {
+    # Input File
+    set input_file [open $filepath r]
+    set lines [split [read $input_file] \n]
+    close $input_file
+    
+    # Output file
+    set output_file [open $filepath w]
+    
+    set items [list]
+    
+    foreach line $lines {
 	
-	#ns_log Notice "INSERT LINE: $output_line"
-	lappend items $output_line
+	set output_line [format_input_line -line $line]
 	
-	#inserts line within output file
-	puts $output_file $output_line    
+	#checks if the chassi already exists within the list "items"
+	set exists_p [line_exists -items $items -line $output_line]
+
+	if {$exists_p == 0} {
+	    
+	    lappend items $output_line
+	    
+	    set output_line [string map {" " ;} $output_line]
+	    #inserts line within output file
+	    puts $output_file $output_line    
+	}
+	
+	set output_line ""
+	
     }
     
-    set output_line ""
+    close $output_file
     
 }
 
-close $output_file
+ad_proc -public export_csv_to_txt {
+    {-input_file}
+    {-output_file}
+} {
+    Export CSV file to TXT
+} {
+
+    # Input File
+    set input_file [open "[acs_root_dir]/www/${input_file}" r]
+    set lines [split [read $input_file] \n]
+    close $input_file
+    
+    # Output file
+    set output_file [open "[acs_root_dir]/www/${output_file}" w]
+    
+    set items [list]
+    
+    foreach line $lines {
+	
+	set output_line [format_input_line -line $line]
+	
+	#checks if the chassi already exists within the list "items"
+	set exists_p [line_exists -items $items -line $output_line]
+	if {$exists_p == 0} {
+	    
+	    lappend items $output_line
+	    
+	    #inserts line within output file
+	    puts $output_file $output_line    
+	}
+	set output_line ""
+    }
+    close $output_file
+}
+
+
+#set input_file "brasilassistencia.csv"
+#set output_file "BRASIF1_14102011.txt"
+
+
+
+
+ad_form -html { enctype multipart/form-data } -name export_file -form {
+    {input_file:file {label "#cn-auto.Input_file#"} {html "size 30"}}
+    {output_file:text {label "#cn-auto.Output_file#"} {html "size 30"}}
+} -on_submit {
+
+
+    
+    export_csv_to_txt -input_file $input_file -output_file $output_file
+    
+}
