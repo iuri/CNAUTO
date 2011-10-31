@@ -17,18 +17,17 @@ permission::require_permission -party_id $user_id -object_id $spreadsheet_id -pr
 set admin_p [permission::permission_p -party_id [ad_conn user_id] -object_id [ad_conn package_id] -privilege admin]
 set action_list ""
 set title [db_string get_spreadsheet_title {}]
-   
+
 template::head::add_css -href "/resources/cn-spreadsheet/cn-spreadsheet.css"
 
 set n_items [db_string get_number_of_items {}] 
 
 set return_url [export_vars -base [ad_conn url] {spreadsheet_id}]
 
-
-
-
+set item_ae_url [export_vars -base "item-ae" {return_url spreadsheet_id}]
+		 
 ad_form -name search -export {spreadsheet_id} -form {
-    {email:text(text) {label "[_ cn-spreadsheet.Search_item]"}}
+    {element:text(text) {label "[_ cn-spreadsheet.Search_item]"}}
 } 
 
 
@@ -41,7 +40,7 @@ lappend extend_list element_url
 
 set elements [list element [list label [_ cn-spreadsheet.Item] \
                               display_template {
-                                  <a href="@items.element_url;noquote@">@items.element;noquote@</a>
+                                  <a href="@items.element_url@">@items.element;noquote@</a>
                               }]]
 
 set orderbys {
@@ -56,7 +55,9 @@ set list_elems [db_list select_elems {}]
 
 foreach field_id $list_elems {
     lappend extend_list ${field_id}
-    set name [db_string select_name {} -default ""]
+    set name [encoding convertto iso8859-1 [db_string select_name {} -default ""]]
+    set name [lang::message::lookup "" cn-spreadsheet.${field_id} "${name}"]
+
     lappend elements ${field_id} [list label $name]
     lappend orderbys ${field_id} [list label "$name" orderby "lower($field_id)"]
 }
@@ -90,7 +91,7 @@ template::list::create \
 
 db_multirow -extend $extend_list items select_items {} {
 
-    set email_url "spreadsheet-item-info?element=$element"
+    set element_url [export_vars -base "item-ae" {return_url element spreadsheet_id}]
 
     db_foreach select_field {} {
 	set ${field_id} ${data}

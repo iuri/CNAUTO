@@ -307,6 +307,7 @@ ad_proc -public cn_spreadsheet::data::new {
 }
 
 
+
 ad_proc -public cn_spreadsheet::data::delete {
     {-spreadsheet_id:required}
 } {

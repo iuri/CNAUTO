@@ -142,7 +142,9 @@ CREATE TABLE cn_spreadsheet_fields (
                                 constraint cn_spreadsheet_fields_spreadsheet_id_fk
 				references cn_spreadsheets on delete cascade,
 	   name			varchar(40) NOT NULL,
-	   label		varchar(40)
+	   label		varchar(40),
+	   sort_order		integer,
+	   required_p		boolean,
 );
 
 
@@ -193,21 +195,21 @@ CREATE OR REPLACE FUNCTION cn_spreadsheet_fields__edit (
     varchar, -- name
     varchar, -- label
     integer, -- sort_order
-    boolean  -- ignore
+    boolean  -- required_p
 ) RETURNS integer AS '
 DECLARE
     p_field_id         alias for $1;
     p_name             alias for $2;
     p_label            alias for $3;
     p_sort_order       alias for $4;
-    p_ignore           alias for $5;
+    p_required_p       alias for $5;
 BEGIN
 
     UPDATE cn_spreadsheet_fields
     SET     name = p_name,
     	    label = p_label,
             sort_order = p_sort_order,
-            ignore     = p_ignore
+            required_p = p_required_p
     WHERE field_id = p_field_id;
 
     RETURN 0;
@@ -349,9 +351,9 @@ CREATE TABLE cn_spreadsheet_elements (
 
 
 CREATE OR REPLACE FUNCTION cn_spreadsheet_element__new (
-    integer, -- _spreadsheet_id
+    integer, -- spreadsheet_id
     varchar, -- name
-    varchar  -- email
+    varchar  -- element
 ) RETURNS integer AS '
 DECLARE
     p_spreadsheet_id      alias for $1;
@@ -365,7 +367,7 @@ BEGIN
 	   (p_name, p_spreadsheet_id, p_element);
 
 
-	RETURN p_spreadsheet_id;
+	RETURN p_element;
 END;' language 'plpgsql';
 
 
