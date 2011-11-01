@@ -28,12 +28,14 @@ ad_proc -private ivc::after_instantiate {
     set subsite_node_id [site_node::get_node_id_from_object_id -object_id $subsite_package_id]
     
     if {[apm_package_installed_p "xowiki"]} {
-	set xowiki_package_id [site_node::instantiate_and_mount -node_name "content" \
+	set xowiki_package_id [site_node::instantiate_and_mount \
+				   -node_name "content" \
 				   -package_key "xowiki" \
 				   -package_name "content" \
 				   -context_id $subsite_package_id \
 				   -parent_node_id $subsite_node_id \
 				  ]
+
     }
     
     if {[apm_package_installed_p "news"]} {
