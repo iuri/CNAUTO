@@ -1,13 +1,17 @@
-ad_page_contract {
-    Create file for Brasil Assistencia
-    
+# /packages/cnauto-core/tcl/cnauto-core-procs.tcl
+
+ad_library {
+
+    CNAuto Core core package procs
+
     @author Iuri Sampaio (iuri.sampaio@iurix.com)
-    @creation-date 2011-10-14
-    
+    @creation-date 2011-11-04
+
 }
 
+namespace eval cnauto_core {}
 
-ad_proc -public format_input_line {
+ad_proc -public cnauto_core::format_input_line {
     {-line} 
 } {
     Format the output line to insert within the file
@@ -16,60 +20,59 @@ ad_proc -public format_input_line {
     set elements [split $line {;}]
     
     
-    set contrato "Omar"
-    set suplemento 0
-    set tipomov I
+    set contrato [format "%18s" "0"]
+    set suplemento [format "%15d" 0]
+    set tipomov [format "%1s" "I"]
     
     
     set i 0
     foreach element $elements {
 	switch $i {
-	    3 { 
+            0 {
+                #numero - chave do pedido( chave principal e unica do registro do cliente)
+                set numero [format "%15s" [lindex $element 0]]
+            }
+
+	    1 { 
 		# vigencia
 		set date [split [lindex $element 0] {/}]
                 set date1 "[lindex $date 2][lindex $date 1][lindex $date 0]"
 
                 set date "[lindex $date 2]-[lindex $date 1]-[lindex $date 0]"
                 set date2 [clock format [clock scan "1 year" -base [clock scan $date]] -format %Y%m%d]
-                set vigencia "${date1}${date2}"
+                set vigencia [format "%16s" "${date1}${date2}"]
 	    }
 
-	    4 {
+	    2 {
+		#desc veic(Nome do usuario da assitencia) - renavam(sub-chave principal e unica do registro do cliente)
 		set desc $element
 				
                 set renavam [lindex $desc [expr [llength $desc] - 1]]
-		
+		set renavam [format "%30s" $renavam] 
                 set desc [lreplace $desc end-1 end]
                 set desc [lreplace $desc 0 1]
-                set desc [join $desc ""]
+                set desc [format "%80s" [join $desc ""]]
 	    }
 
-	    5 {
-                set chassi [lindex $element 0]
+	    3 {
+                set chassi [format "%20s" [lindex $element 0]]
 	    }
 
-            6 {
-                #numero - chave do pedido
-                set numero [lindex $element 0]
-            }
-
+ 
 
 	
 	}
-	# get Renavam from DESCVEIC
-	# 8 columns
-	#1 CONTRATO - 2 SUPLEMENTO - 3 CHASSI - 4 NUMERO - 5 TIPO MOV - 6 DESC VEIC - 7 VIGENCIA - 8 RENAVAN
 	
 	incr i
     }
 
-    ns_log Notice "$contrato $suplemento $chassi $numero $tipomov $desc $vigencia $renavam"
-    set output_line "$contrato $suplemento $chassi $numero $tipomov $desc $vigencia $renavam\r"
+    ns_log Notice "$contrato $suplemento $numero $renavam $tipomov $desc $vigencia $chassi\r"
+    set output_line "$contrato $suplemento $numero $renavam $tipomov $desc $vigencia $chassi\r"
     
     return $output_line
 }
 
-ad_proc -public line_exists {
+ad_proc -public cnauto_core::line_exists {
     {-items}
     {-line}
 } {
@@ -86,7 +89,47 @@ ad_proc -public line_exists {
 }
 
 
-ad_proc -public export_csv_to_csv {
+
+ad_proc -public cnauto_core::export_csv_to_txt {
+    {-input_file}
+    {-output_file}
+} {
+    Export CSV file to TXT
+} {
+
+    ns_log Notice "Running ad_proc export_csv_to_txt"
+    # Input File
+    set input_file [open "${input_file}" r]
+    set lines [split [read $input_file] \n]
+    close $input_file
+    
+    # Output file
+    set output_file [open "[acs_root_dir]/www/${output_file}" w]
+    
+    set items [list]
+    
+    foreach line $lines {
+	
+	set output_line [format_input_line -line $line]
+	
+	#checks if the chassi already exists within the list "items"
+	set exists_p [line_exists -items $items -line $output_line]
+	if {$exists_p == 0} {
+	    
+	    lappend items $output_line
+	    
+	    #inserts line within output file
+	    puts $output_file $output_line    
+	}
+	set output_line ""
+    }
+    close $output_file
+}
+
+
+
+
+ad_proc -public cnauto_core::export_csv_to_csv {
     {-input_file}
     {-output_file}
 } {
@@ -124,58 +167,5 @@ ad_proc -public export_csv_to_csv {
     }
     
     close $output_file
-    
-}
-
-ad_proc -public export_csv_to_txt {
-    {-input_file}
-    {-output_file}
-} {
-    Export CSV file to TXT
-} {
-
-    # Input File
-    set input_file [open "[acs_root_dir]/www/${input_file}" r]
-    set lines [split [read $input_file] \n]
-    close $input_file
-    
-    # Output file
-    set output_file [open "[acs_root_dir]/www/${output_file}" w]
-    
-    set items [list]
-    
-    foreach line $lines {
-	
-	set output_line [format_input_line -line $line]
-	
-	#checks if the chassi already exists within the list "items"
-	set exists_p [line_exists -items $items -line $output_line]
-	if {$exists_p == 0} {
-	    
-	    lappend items $output_line
-	    
-	    #inserts line within output file
-	    puts $output_file $output_line    
-	}
-	set output_line ""
-    }
-    close $output_file
-}
-
-
-#set input_file "brasilassistencia.csv"
-#set output_file "BRASIF1_14102011.txt"
-
-
-
-
-ad_form -html { enctype multipart/form-data } -name export_file -form {
-    {input_file:file {label "#cn-auto.Input_file#"} {html "size 30"}}
-    {output_file:text {label "#cn-auto.Output_file#"} {html "size 30"}}
-} -on_submit {
-
-
-    
-    export_csv_to_txt -input_file $input_file -output_file $output_file
     
 }
