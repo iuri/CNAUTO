@@ -13,7 +13,7 @@ aa_register_case \
 	
 
 		ns_log Notice "Running callback theme_ivc::after_instantiate"
-		set subsite_package_id 1014
+		set subsite_package_id 1069
 		set name [ad_generate_random_string]
 		set subsite_node_id [site_node::get_node_id_from_object_id -object_id $subsite_package_id]
 		
@@ -58,17 +58,6 @@ aa_register_case \
                     if {[set package_id $info(package_id)]} {
 			ns_log Notice "package_id right value"
                     }
-		    
-		    ::xotcl::Object isobject ::$package_id
- 
-		    if {[string equal [$package_id package_url] $instance_name]} {
-			ns_log Notice "pac kage_url"
-		    }
-                    #? {$package_id url} /$instance_name/
-                    #? {$package_id id} $package_id "the id of the package object = package_id"
-
-
-
 		}
 	    }
     }

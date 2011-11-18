@@ -1,3 +1,5 @@
+
+	
 # /packages/cnauto-core/tcl/cnauto-core-procs.tcl
 
 ad_library {
@@ -11,76 +13,21 @@ ad_library {
 
 namespace eval cnauto_core {}
 
-ad_proc -public cnauto_core::format_input_line {
-    {-line} 
-} {
-    Format the output line to insert within the file
-} {
-    
-    set elements [split $line {;}]
-    
-    
-    set contrato [format "%18s" "0"]
-    set suplemento [format "%15d" 0]
-    set tipomov [format "%1s" "I"]
-    
-    
-    set i 0
-    foreach element $elements {
-	switch $i {
-            0 {
-                #numero - chave do pedido( chave principal e unica do registro do cliente)
-                set numero [format "%15s" [lindex $element 0]]
-            }
 
-	    1 { 
-		# vigencia
-		set date [split [lindex $element 0] {/}]
-                set date1 "[lindex $date 2][lindex $date 1][lindex $date 0]"
-
-                set date "[lindex $date 2]-[lindex $date 1]-[lindex $date 0]"
-                set date2 [clock format [clock scan "1 year" -base [clock scan $date]] -format %Y%m%d]
-                set vigencia [format "%16s" "${date1}${date2}"]
-	    }
-
-	    2 {
-		#desc veic(Nome do usuario da assitencia) - renavam(sub-chave principal e unica do registro do cliente)
-		set desc $element
-				
-                set renavam [lindex $desc [expr [llength $desc] - 1]]
-		set renavam [format "%30s" $renavam] 
-                set desc [lreplace $desc end-1 end]
-                set desc [lreplace $desc 0 1]
-                set desc [format "%80s" [join $desc ""]]
-	    }
-
-	    3 {
-                set chassi [format "%20s" [lindex $element 0]]
-	    }
-
- 
-
-	
-	}
-	
-	incr i
-    }
-
-    ns_log Notice "$contrato $suplemento $numero $renavam $tipomov $desc $vigencia $chassi\r"
-    set output_line "$contrato $suplemento $numero $renavam $tipomov $desc $vigencia $chassi\r"
-    
-    return $output_line
-}
-
-ad_proc -public cnauto_core::line_exists {
+ad_proc -public cnauto_core::item_exists {
     {-items}
-    {-line}
+    {-chassi}
 } {
     Checks if the record is  already in the list 
 } {
-
+    
+    if {![exists_and_not_null chassi]} {
+	return 1
+    }
+    
     foreach item $items {
-	if {[string equal [lindex $line 2] [lindex $item 2]]} {
+	#ns_log Notice "$chassi | $item"
+	if {[string equal $chassi $item]} {
 	    return 1
 	}
     }
@@ -88,6 +35,112 @@ ad_proc -public cnauto_core::line_exists {
     return 0
 }
 
+
+ad_proc -public cnauto_core::format_output_line {
+    {-line}
+} {
+    Format output line to BA standards
+} {
+    ns_log Notice "FORMAT LINE: $line"
+
+    set suplemento [format "%15d" 0]
+    set tipomov [format "%1s" "I"]
+
+    set numero [format "%-15s" [lindex $line 0]]
+    set vigencia [format "%-16s" [lindex $line 1]]
+    set renavam [format "%-30s" [lindex $line 2]]    	
+    set desc [format "%-80s" [lindex $line 3]]
+    set contrato [format "%-18s" [lindex $line 4]]
+    set chassi [format "%-17s" [lindex $line 5]]
+        
+    return "${contrato}${suplemento}${chassi}${numero}${tipomov}${desc}${vigencia}${renavam}\r"
+
+}
+
+
+
+
+ad_proc -public cnauto_core::mount_output_line {
+    {-line} 
+} {
+    Prepare input line to output
+} {
+    
+    set elements [split $line {;}]
+    #ns_log Notice "ELEMENTS: $elements"
+    set i 0
+
+    foreach element $elements {
+	switch $i {
+            0 {
+		#numero - chave do pedido( chave principal e unica do registro do cliente)
+		#ns_log Notice "ELEMENT $element"
+                lappend output_line [lindex $element 0]
+		#ns_log Notice "APPEND LINE $output_line"
+	    }
+
+	    1 { 
+		# vigencia
+		#ns_log Notice "ELEMENT $element"
+		set date [split [lindex $element 0] {/}]
+                set date1 "[lindex $date 2][lindex $date 1][lindex $date 0]"
+
+                set date "[lindex $date 2]-[lindex $date 1]-[lindex $date 0]"
+                set date2 [clock format [clock scan "1 year" -base [clock scan $date]] -format %Y%m%d]
+
+		lappend output_line "${date1}${date2}"
+		#ns_log Notice "APPEND LINE $output_line"
+	   	
+	    }
+
+	    2 {
+	       
+		#ns_log Notice "ELEMENT $element"
+                # renavam 
+		set renavam [lindex $element [expr [llength $element] - 1]]
+		lappend output_line $renavam 
+
+		#ns_log Notice "APPEND LINE $output_line"
+		#desc veic(Nome do usuario da assitencia) - renavam(sub-chave principal e unica do registro do cliente)
+	        set desc [lreplace $element end-1 end]
+                set desc [lreplace $desc 0 1]
+		set desc [join $desc ""]
+
+                lappend output_line $desc
+		#ns_log Notice "APPEND LINE $output_line"
+
+		ns_log Notice "DESC $desc"
+		
+		if {[regexp -all "opic" $desc]} {
+		    ns_log Notice "Topic" 
+		    set contrato 40000162449
+		    ns_log Notice "$contrato"
+		    lappend output_line $contrato
+		}
+		if {[regexp -all "owner" $desc]} {
+		    ns_log Notice "Towner" 
+		    set contrato 40000162448
+		    ns_log Notice "$contrato"
+		    lappend output_line $contrato
+		}
+		
+
+            }
+
+	    3 {
+		#ns_log Notice "ELEMENT $element"
+		
+		#chassi
+		lappend output_line [lindex $element 0]
+		#ns_log Notice "APPEND LINE $output_line"
+            }
+	}
+	
+	incr i
+    }
+    
+    return $output_line
+}
 
 
 ad_proc -public cnauto_core::export_csv_to_txt {
@@ -104,68 +157,49 @@ ad_proc -public cnauto_core::export_csv_to_txt {
     close $input_file
     
     # Output file
+    set filename "[acs_root_dir]/www/${output_file}"
     set output_file [open "[acs_root_dir]/www/${output_file}" w]
     
     set items [list]
-    
+    set i 0
+    set duplicated 0
     foreach line $lines {
-	
-	set output_line [format_input_line -line $line]
-	
+	#ns_log Notice "LINE: $line"
+	set output_line [mount_output_line -line $line]
+
+	#ns_log Notice "MOUNTED LINE: $output_line"
 	#checks if the chassi already exists within the list "items"
-	set exists_p [line_exists -items $items -line $output_line]
+
+	set exists_p [item_exists -items $items -chassi [lindex $output_line 5]]
+
+	#ns_log Notice "EXISTS $exists_p"
+	if {$exists_p == 1} {
+	    incr duplicated
+	}
 	if {$exists_p == 0} {
 	    
-	    lappend items $output_line
+	    lappend items [lindex $output_line 5]
+	    
+	    # format output to BA standards 
+	    set output_line [cnauto_core::format_output_line -line $output_line]
 	    
 	    #inserts line within output file
 	    puts $output_file $output_line    
+	    incr i
+	    ns_log Notice "Added $i"
+
 	}
 	set output_line ""
     }
     close $output_file
-}
 
-
-
-
-ad_proc -public cnauto_core::export_csv_to_csv {
-    {-input_file}
-    {-output_file}
-} {
-    Export CSV file to CSV
-} {
-
-    # Input File
-    set input_file [open $filepath r]
-    set lines [split [read $input_file] \n]
-    close $input_file
+    ns_log Notice "$filename"
+    ns_log Notice "Duplciated $duplicated"
+    ns_returnfile 200 "text/plain; charset=iso-8859-2" "$filename"
     
-    # Output file
-    set output_file [open $filepath w]
-    
-    set items [list]
-    
-    foreach line $lines {
-	
-	set output_line [format_input_line -line $line]
-	
-	#checks if the chassi already exists within the list "items"
-	set exists_p [line_exists -items $items -line $output_line]
-
-	if {$exists_p == 0} {
-	    
-	    lappend items $output_line
-	    
-	    set output_line [string map {" " ;} $output_line]
-	    #inserts line within output file
-	    puts $output_file $output_line    
-	}
-	
-	set output_line ""
-	
-    }
-    
-    close $output_file
+    return
+    #ns_return 200 text/plain "$output_file" return
     
 }
+
+

@@ -11,5 +11,5 @@ ad_page_contract {
 set title [apm_instance_name_from_id [ad_conn package_id]]
 set context [list]
 
-
-set export_url [export_vars -base "ba-file" {}]
+set return_url [ad_conn url]
+set export_url [export_vars -base "ba-file" {return_url}]

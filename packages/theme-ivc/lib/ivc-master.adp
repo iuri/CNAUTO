@@ -59,8 +59,11 @@
 
 
   <div class="content">
-    <slave> 
-  </div>
+       <div class="content-left">&nbsp;</div>
+       <div class="content-right">
+         <h1>#theme-ivc.under_construction#</h1>
+        <img src="/resources/theme-ivc/images/under-construction.jpg" width="300px"></div>
+   </div>
 
   <div class="clear"></div>
 
