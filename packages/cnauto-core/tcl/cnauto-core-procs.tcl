@@ -38,7 +38,7 @@ ad_proc -public cnauto_core::format_output_line {
 } {
     Format output line to BA standards
 } {
-    ns_log Notice "FORMAT LINE: $line"
+    #ns_log Notice "FORMAT LINE: $line"
 
     set suplemento [format "%15d" 0]
     set tipomov [format "%1s" "I"]
@@ -107,18 +107,18 @@ ad_proc -public cnauto_core::mount_output_line {
                 lappend output_line $desc
 		#ns_log Notice "APPEND LINE $output_line"
 
-		ns_log Notice "DESC $desc"
+		#ns_log Notice "DESC $desc"
 		
 		if {[regexp -all "opic" $desc]} {
 		    ns_log Notice "Topic" 
 		    set contrato 40000162449
-		    ns_log Notice "$contrato"
+		    #ns_log Notice "$contrato"
 		    lappend output_line $contrato
 		}
 		if {[regexp -all "owner" $desc]} {
 		    ns_log Notice "Towner" 
 		    set contrato 40000162448
-		    ns_log Notice "$contrato"
+		    #ns_log Notice "$contrato"
 		    lappend output_line $contrato
 		}
 		
@@ -161,6 +161,10 @@ ad_proc -public cnauto_core::export_csv_to_txt {
     set items [list]
     set i 0
     set duplicated 0
+
+    set count_towner 0
+    set count_topic 0
+
     foreach line $lines {
 	#ns_log Notice "LINE: $line"
 	set output_line [mount_output_line -line $line]
@@ -187,12 +191,24 @@ ad_proc -public cnauto_core::export_csv_to_txt {
 	    ns_log Notice "Added $i"
 
 	}
+	#ns_log Notice "OUTPUT LINE [lindex $output_line 2]"
+	if {[regexp -all "opic" [lindex $output_line 2]]} {
+	    #ns_log Notice "Topic" 
+	    incr count_topic 
+	}
+	if {[regexp -all "owner" [lindex $output_line 2]]} {
+	    incr count_towner 
+	}
+
 	set output_line ""
+
+
     }
     close $output_file
 
     ns_log Notice "$filename"
     ns_log Notice "Duplciated $duplicated"
+    ns_log Notice "Added  $count_towner Towners | $count_topic Topics"
     ns_returnfile 200 "text/plain; charset=iso-8859-2" "$filename"
     
     return
