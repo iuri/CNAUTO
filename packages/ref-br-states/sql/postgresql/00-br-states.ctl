@@ -1,1 +1,1 @@
-COPY br_states FROM '/var/www/cif/packages/ref-br-states/sql/common/br-states.dat' WITH DELIMITER ','
+COPY br_states FROM '[acs_root_dir]/packages/ref-br-states/sql/common/br-states.dat' WITH DELIMITER ','
