@@ -34,23 +34,41 @@ set municipality_options [db_list_of_lists select_municipality "
 
 set state_options [db_list_of_lists select_states { SELECT state_name, abbrev FROM br_states }]
 
-set year_options [db_list select_years {
-    SELECT EXTRACT(YEAR FROM TIMESTAMP 'now');    
-}]
+set year_options {"2000 2000" "2001 2001" "2002 2002" "2003 2003" "2004 2004" "2005 2005" "2006 2006" "2007 2007" "2008 2008" "2009 2009" "2010 2010" "2011 2011"}
+#set year_options [db_list_of_lists select_years { SELECT EXTRACT(YEAR FROM INTERVAL ('now' + '10 years')); }]
 
 ns_log Notice "$year_options"
 
 ad_form -name assurance_ae -form {
     {assurance_id:key}
     {inform1:text(inform)
-        {label "<h2>[_ cnauto-assurance.Assurance_info]</h2>"}
+        {label "<h2>[_ cnauto-assurance.Vehicle_info]</h2>"}
         {value ""}
     }
     {chassis:text(text)
 	{label "[_ cnauto-asssurance.Chassis]"}
     }
     {model:text(text)
-	{label "[_ cnauto-asssurance.Chassis]"}
+	{label "[_ cnauto-asssurance.Model]"}
+    }
+    {engine:text(text)
+	{label "[_ cnauto-assurance.Engine]"}
+    }	
+    {color:text(select)
+	{label "[_ cnauto-assurance.Color]"}
+	{options $color_options}
+    }
+    {year_of_model:integer(select)
+	{label "[_ cnauto-assurance.Year_of_model]"}
+	{options $year_options}
+    } 
+    {year_of_fabrication:integer(select)
+	{label "[_ cnauto-assurance.Year_of_fabricant]"}
+	{options $year_options}
+    } 
+    {inform2:text(inform)
+        {label "<h2>[_ cnauto-assurance.Assurance_info]</h2>"}
+        {value ""}
     }
     {purchase_date:date
 	{label "[_ cnauto-assurance.Purchase_date]"}
@@ -58,11 +76,23 @@ ad_form -name assurance_ae -form {
 	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('purchase_date', 'y-m-d');" > \[<b>[_ calendar.y-m-d]</b>\]} 
 	} 
     }
+    {arrival_date:date
+	{label "[_ cnauto-assurance.Arrival_date]"}
+	{format "YYYY MM DD"}
+	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('arrival_date', 'y-m-d');" > \[<b>[_ calendar.y-m-d]</b>\]} 
+	} 
+    }
+    {billing_date:date
+	{label "[_ cnauto-assurance.Billing_date]"}
+	{format "YYYY MM DD"}
+	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('billing_date', 'y-m-d');" > \[<b>[_ calendar.y-m-d]</b>\]} 
+	} 
+    }
     {duration:text(text)
 	{label "[_ cnauto-assurance.Duration]"}
     }
-    {distribution:integer
-	{label "[_ cnauto-assurance.Distribution]"}
+    {distributor_code:text(text)
+	{label "[_ cnauto-assurance.Distributor]"}
     }
     {owner:text(text)
 	{label "[_ cnauto-assurance.Owner]"}
@@ -99,27 +129,34 @@ ad_form -name assurance_ae -form {
     {notes:text(textarea)
 	{label "[_ cnauto-assurance.Notes]"}
     }
-    {inform2:text(inform)
-        {label "<h2>[_ cnauto-assurance.Vehicle_info]</h2>"}
-        {value ""}
-    }
-    {year_of_model:text(select)
-	{label "[_ cnauto-assurance.Year_of_model]"}
-	{options $year_options}
-    } 
-    {year_of_fabrication:text(select)
-	{label "[_ cnauto-assurance.Year_of_fabricant]"}
-	{options $year_options}
-    } 
-    {engine:text(text)
-	{label "[_ cnauto-assurance.Engine]"}
-    }	
-    {color:integer(select)
-	{label "[_ cnauto-assurance.Color]"}
-	{options $color_options}
-    }
 } -on_submit {
 } -new_data {
+    
+    set assurance_id [cn_assurance::new \
+			  -chassis $chassis \
+			  -model $model \
+			  -engine $engine \
+			  -color $color \
+			  -year_of_model $year_of_model \
+			  -year_of_fabrication $year_of_fabrication \
+			  -purchase_date $purchase_date \
+			  -arrival_date $arrival_date \
+			  -billing_date $billing_date \
+			  -duration $duration \
+			  -distributor_code $distributor_code \
+			  -owner $owner \
+			  -phone $phone \
+			  -postal_address $postal_address \
+			  -postal_address2 $postal_address2 \
+			  -postal_code $postal_code \
+			  -state $state \
+			  -country_code $country_code \
+			  -notes $notes \
+			  -creation_ip [ad_conn peeraddr] \
+			  -creation_user [ad_conn user_id] \
+			  -context_id [ad_conn package_id] \
+			 ]
+
 } -edit_data {
 } -after_submit {
     ad_returnredirect $return_url

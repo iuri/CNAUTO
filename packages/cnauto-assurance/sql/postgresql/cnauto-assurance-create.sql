@@ -35,11 +35,11 @@ CREATE TABLE cn_vehicles (
 				CONSTRAINT cn_vehicles_vin_un UNIQUE,
        engine			varchar(100),
        model			varchar(100),
-       year_of_model		varchar(4),
-       year_of_fabrication 	varchar(4),
-       color			varchar(4)
+       year_of_model		integer,
+       year_of_fabrication 	integer,
+       color			varchar(10)
        				CONSTRAINT cn_vehicles_color_fk
-				REFERENCES cn_colors       
+				REFERENCES cn_colors
 );
 
 
@@ -54,7 +54,7 @@ SELECT acs_object_type__create_type (
     'acs_object',     	    -- supertype
     'cn_vehicles',          -- table_name
     'vehicle_id',     	    -- id_column
-    'vehicle.name',	    -- name_method
+    null,		    -- name_method
     'f',
     null,
     null
@@ -66,47 +66,48 @@ SELECT acs_object_type__create_type (
 -- cn_vehicles PL/SQL Functions
 ------------------------------------
 CREATE OR REPLACE FUNCTION cn_vehicle__new (
-      integer, 	  	   -- vin - vehicle identification number
-      integer, 		   -- engine
+      integer, 	  	   -- vehicle_id 
+      varchar,		   -- chassis vin - vehicle identification number
+      varchar, 		   -- engine
       varchar,		   -- model
-      varchar, 	   	   -- year of model
-      varchar,	   	   -- year of fabrication
+      integer, 	   	   -- year of model
+      integer,	   	   -- year of fabrication
       varchar,		   -- color
-      integer,             -- creation_user
       varchar,             -- creation_ip
+      integer,             -- creation_user
       integer		   -- context_id
 ) RETURNS integer AS '
   DECLARE
-	     
-       p_vin			ALIAS FOR $1; 
-       p_engine		      	ALIAS FOR $2;
+       p_vehicle_id		ALIAS FOR $1;
+       p_vin			ALIAS FOR $2; 
        p_model		      	ALIAS FOR $3;
-       p_year_of_model	      	ALIAS FOR $4;		
-       p_year_of_fabrication 	ALIAS FOR $5;
-       p_color			ALIAS FOR $6;
-       p_creation_ip		ALIAS FOR $7;
-       p_creation_user		ALIAS FOR $8;
-       p_context_id		ALIAS FOR $9;
+       p_engine		      	ALIAS FOR $4;
+       p_year_of_model	      	ALIAS FOR $5;		
+       p_year_of_fabrication 	ALIAS FOR $6;
+       p_color			ALIAS FOR $7;
+       p_creation_ip		ALIAS FOR $8;
+       p_creation_user		ALIAS FOR $9;
+       p_context_id		ALIAS FOR $10;
 
        v_id	integer;		
        v_type	varchar;
 
   BEGIN
 
-       v_type := "cn_vehicle";
+       -- v_type := "cn_vehicle";
 
        v_id := acs_object__new (
-       		  null,
-		  v_type,
-		  now(),
-		  p_creation_user,
-		  p_creation_ip,
-		  p_context_id,
-		  true
+       		  null,			-- object_id
+		  ''cn_vehicle'',	-- object_type
+		  now(),		-- creation_date
+		  p_creation_user,	-- creation_user
+		  p_creation_ip,	-- cretion_ip
+		  p_context_id,		-- context_id
+		  true			-- 
        );
 
        INSERT INTO cn_vehicles (
-       	      vechicle_id,
+       	      vehicle_id,
 	      vin,
 	      engine,
 	      model,
@@ -169,7 +170,7 @@ CREATE TABLE cn_assurances (
        billing_date	   timestamptz,
        duration	   	   varchar(10),
        owner		   varchar(255),
-       distributor	   varchar(10),
+       distributor_code	   varchar(10),
        notes		   text,
        postal_address 	   varchar(255),
        postal_address2 	   varchar(255),
@@ -185,84 +186,124 @@ CREATE TABLE cn_assurances (
 );
 
 
+
+------------------------------------
+-- Object Type: cn_vehicles
+------------------------------------
+
+SELECT acs_object_type__create_type (
+    'cn_assurance',	    -- object_type
+    'CN Assurance',         -- pretty_name
+    'CN Assurances',   	    -- pretty_plural
+    'acs_object',     	    -- supertype
+    'cn_assurance',         -- table_name
+    'assurance_id',    	    -- id_column
+    null,		    -- name_method
+    'f',
+    null,
+    null
+);
+
+
+
 ------------------------------------
 -- cn_vehicles PL/SQL Functions
 ------------------------------------
 
 CREATE OR REPLACE FUNCTION cn_assurance__new (
        integer,	  	   -- assurance_id
-       varchar,	  	   -- vin - vehicle identification number
+       integer,	  	   -- vehicle_id
        timestamptz,	   -- purchase_date
        timestamptz,	   -- arrival_date
-       timestamptz,	   -- billin_date
+       timestamptz,	   -- billing_date
        varchar,		   -- duration
        varchar,		   -- owner *
        varchar,		   -- distributor_code
-       text,		   -- notes
        varchar,		   -- postal_address
        varchar,		   -- postal_address2
        varchar,		   -- postal_code
        varchar,		   -- state_abbrev
        varchar,		   -- municipality
        varchar,		   -- country
-       varchar		   -- phone
+       varchar,		   -- phone
+       text,		   -- notes
+       varchar,		   -- creation_ip
+       integer,		   -- creation_user
+       integer		   -- context_id
 ) RETURNS integer AS '
   DECLARE
 
        p_assurance_id	   ALIAS FOR $1;
-       p_vin		   ALIAS FOR $2;
+       p_vehicle_id	   ALIAS FOR $2;
        p_purchase_date	   ALIAS FOR $3;
        p_arrival_date	   ALIAS FOR $4;
        p_billing_date	   ALIAS FOR $5;
        p_duration	   ALIAS FOR $6;
-       p_owner		   ALIAS FOR $7;
-       p_distributor	   ALIAS FOR $8;
-       p_notes		   ALIAS FOR $9;
+       p_distributor_code  ALIAS FOR $7;
+       p_owner		   ALIAS FOR $8;
+       p_phone		   ALIAS FOR $9;
        p_postal_address    ALIAS FOR $10;
        p_postal_address2   ALIAS FOR $11;
        p_postal_code 	   ALIAS FOR $12;
        p_state_abbrev 	   ALIAS FOR $13;    		    	 
        p_municipality 	   ALIAS FOR $14;
        p_country_code 	   ALIAS FOR $15;
-       p_phone		   ALIAS FOR $16;
+       p_notes		   ALIAS FOR $16;
+       p_creation_ip	   ALIAS FOR $17;
+       p_creation_user	   ALIAS FOR $18;
+       p_context_id	   ALIAS FOR $19;
   
+       v_id	integer;		
+       v_type	varchar;
 
   BEGIN
 
+       v_type := "cn_assurance";
+
+       v_id := acs_object__new (
+       		  null,
+		  v_type,
+		  now(),
+		  p_creation_user,
+		  p_creation_ip,
+		  p_context_id,
+		  true
+       );
+
 	INSERT INTO cn_assurances (
 	       assurance_id, 
-	       vin, 
+	       vehicle_id, 
 	       purchase_date, 
 	       arrival_date, 
 	       billing_date, 
 	       duration, 
 	       owner, 
-	       distributor,
-	       notes,
+	       distributor_code,
 	       postal_address,
 	       postal_address2,
 	       postal_code,
 	       state_abbrev,
 	       municipality,
 	       country_code,
-	       phone
+	       phone,
+	       notes
 	) VALUES (
-	       p_assurance_id,
-       	       p_vin,
+	       v_id,
+       	       p_vehicle_id,
 	       p_purchase_date,
                p_arrival_date,
 	       p_billing_date,
        	       p_duration,
        	       p_owner,
-	       p_distributor,
-	       p_notes,
+	       p_distributor_code,
 	       p_postal_address, 
 	       p_postal_address2,
 	       p_postal_code,
 	       p_state_abbrev,    		    	 
 	       p_municipality,
 	       p_country_code,
-	       p_phone
+	       p_phone,
+	       p_notes
 	 );
 	 
 	 RETURN 0;
@@ -279,7 +320,9 @@ RETURNS integer AS '
 
   BEGIN
 
-	DELETE FROM cn_assurances WHERE assurance_id = p_assurance_i;
+	DELETE FROM cn_assurances WHERE assurance_id = p_assurance_id;
+
+	PERFORM acs_object__delete(p_assurance_id); 
 
 	RETURN 0;
 
