@@ -1730,7 +1730,7 @@ function showCalendarWithDateWidget(id,fmt) {
     // first-time call, create the calendar
     var cal = new Calendar(true, null, selectwidget, closeHandler);
     calendar = cal;             // remember the calendar in the global
-    cal.setRange(2000, 2010);   // min/max year allowed
+    cal.setRange(2000, 2070);   // min/max year allowed
     calendar.create();          // create a popup calendar
     calendar.parseDate(calval,fmt); // set it to a new date
   }
@@ -1765,7 +1765,7 @@ function selectwidget(cal, date) {
     }
     if ((b[i] == "y") || (b[i] == "yy") || (b[i] == "yyyy")) {
       y = parseInt(a[i], 10);
-      (y < 100) && (y += (y > 29) ? 1900 : 2000);
+      (y < 100) && (y += (y > 29) ? 1900 : 2070);
     }
     if (b[i] == "M" || b[i] == "MM") {
       for (j = 0; j < 12; ++j) {
