@@ -8,6 +8,13 @@ ad_library {
 namespace eval ref_br_ibge:: {}
 
 
+ad_proc -public ref_br_ibge::get_municipality_options {} {
+    Returns cities and code to ad_form select element
+} {
+    return [db_list_of_lists select_municipality { SELECT name, ibge_code FROM br_ibge_municipality }]
+}
+
+
 ad_proc -public ref_br_ibge::get_municipality {} { 
 	Get all data of ibge and put it in array
 } {

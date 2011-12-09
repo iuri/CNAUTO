@@ -1,1 +1,1 @@
-\COPY br_ibge_municipality FROM '/var/www/cif/packages/ref-br-ibge/sql/common/br-municipality.dat' DELIMITER ',' NULL AS ''
+COPY br_ibge_municipality FROM '[acs_root_dir]/packages/ref-br-ibge/sql/common/br-municipality.dat' WITH DELIMITER ',' NULL AS ''
