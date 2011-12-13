@@ -4,40 +4,23 @@ ad_page_contract {
 
 } {
     {assurance_id:integer,optional}
-    {state ""}
     {return_url ""}
 }
 
 
-if { [exists_and_not_null cal_item_id] } {
-    set page_title [_ cnauto-assurance.Edit_Item]
+if { [exists_and_not_null assurance_id] } {
+    set page_title [_ cnauto-assurance.Edit_assurance]
     #set ad_form_mode display
 } else {
-    set page_title [_ cnauto-assurance.Add_Item]
+    set page_title [_ cnauto-assurance.Add_assurance]
     #set ad_form_mode edit
 }
 
 
- 
-set color_options [cn_assurance::get_color_options]
+set return_url [ad_return_url]
+set vehicle_ae_url [export_vars -base "vehicle-ae" {return_url}] 
+set person_ae_url [export_vars -base "person-ae" {return_url}] 
 
-
-set where_clause ""
-if {[exists_and_not_null state]} {
-    set where_clause "WHERE state_code = :state"
-}
-
-
-set municipality_options [db_list_of_lists select_municipality "
-    SELECT name, ibge_code FROM br_ibge_municipality $where_clause ORDER BY name
-"]
-
-set state_options [db_list_of_lists select_states { SELECT state_name, abbrev FROM br_states }]
-
-set year_options {"2000 2000" "2001 2001" "2002 2002" "2003 2003" "2004 2004" "2005 2005" "2006 2006" "2007 2007" "2008 2008" "2009 2009" "2010 2010" "2011 2011"}
-#set year_options [db_list_of_lists select_years { SELECT EXTRACT(YEAR FROM INTERVAL ('now' + '10 years')); }]
-
-ns_log Notice "$year_options"
 
 ad_form -name assurance_ae -form {
     {assurance_id:key}
@@ -45,118 +28,154 @@ ad_form -name assurance_ae -form {
         {label "<h2>[_ cnauto-assurance.Vehicle_info]</h2>"}
         {value ""}
     }
-    {chassis:text(text)
-	{label "[_ cnauto-asssurance.Chassis]"}
+    {dcn:integer
+	{label "[_ cnauto-assurance.DCN]"}
+	{html {size 5} maxlength 10}
+	{value ""}
     }
-    {model:text(text)
-	{label "[_ cnauto-asssurance.Model]"}
+    {assurance_number:integer
+	{label "[_ cnauto-assurance.Number]"}
+	{value ""}
     }
-    {engine:text(text)
-	{label "[_ cnauto-assurance.Engine]"}
-    }	
-    {color:text(select)
-	{label "[_ cnauto-assurance.Color]"}
-	{options $color_options}
+    {assurance_date:date
+	{label "[_ cnauto-assurance.Assurance_date]"}
+	{format "YYYY MM DD"}
+	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('assurance_date', 'y-m-d');" > \[<b>[_ calendar.y-m-d]</b>\]}} 
     }
-    {year_of_model:integer(select)
-	{label "[_ cnauto-assurance.Year_of_model]"}
-	{options $year_options}
-    } 
-    {year_of_fabrication:integer(select)
-	{label "[_ cnauto-assurance.Year_of_fabricant]"}
-	{options $year_options}
-    } 
-    {inform2:text(inform)
-        {label "<h2>[_ cnauto-assurance.Assurance_info]</h2>"}
+    {status:text(text)
+	{label "[_ cnauto-assurance.Status]"}
         {value ""}
     }
-    {purchase_date:date
-	{label "[_ cnauto-assurance.Purchase_date]"}
+    {lp:text(text)
+	{label "[_ cnauto-assurance.LP]"}
+        {value ""}
+    }
+    {lp_date:date
+	{label "[_ cnauto-assurance.LP_date]"}
 	{format "YYYY MM DD"}
-	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('purchase_date', 'y-m-d');" > \[<b>[_ calendar.y-m-d]</b>\]} 
-	} 
+	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('lp_date', 'y-m-d');" > \[<b>[_ calendar.y-m-d]</b>\]}} 
     }
-    {arrival_date:date
-	{label "[_ cnauto-assurance.Arrival_date]"}
+    {lp_2:text(text)
+	{label "[_ cnauto-assurance.LP_2]"}
+        {value ""}
+    }
+    {lp_2_date:date
+	{label "[_ cnauto-assurance.LP_2_date]"}
 	{format "YYYY MM DD"}
-	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('arrival_date', 'y-m-d');" > \[<b>[_ calendar.y-m-d]</b>\]} 
-	} 
+	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('lp_2_date', 'y-m-d');" > \[<b>[_ calendar.y-m-d]</b>\]}} 
     }
-    {billing_date:date
-	{label "[_ cnauto-assurance.Billing_date]"}
+    {service_order:integer 
+	{label "[_ cnauto-assurance.Service_order]"}
+	{html {size 5} maxlength 10}
+        {value ""}
+    }
+    {so_date:date
+	{label "[_ cnauto-assurance.SO_date]"}
 	{format "YYYY MM DD"}
-	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('billing_date', 'y-m-d');" > \[<b>[_ calendar.y-m-d]</b>\]} 
-	} 
+	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('so_date', 'y-m-d');" > \[<b>[_ calendar.y-m-d]</b>\]}}
+	
     }
-    {duration:text(text)
-	{label "[_ cnauto-assurance.Duration]"}
+    {chassis:text(text)
+	{label "[_ cnauto-assurance.Chassis]"}
+	{help_text "<a href=\"${vehicle_ae_url}\">#cnauto-assurance.Add_vehicle#</a>"}
+        {value ""}
     }
-    {distributor_code:text(text)
-	{label "[_ cnauto-assurance.Distributor]"}
+    {kilometers:integer
+	{label "[_ cnauto-assurance.Kilometers]"}
+	{html {size 10} maxlength 10}
+        {value ""}
     }
-    {owner:text(text)
-	{label "[_ cnauto-assurance.Owner]"}
-	{html {size 40} maxlength 255}
+    {part_group:text(text)
+	{label "[_ cnauto-assurance.Set]"}
+	{html {size 10} maxlength 10}
+        {value ""}
     }
-    {phone:text(text)
-	{label "[_ cnauto-assurance.Phone]"}
-	{html {size 20} maxlength 15}
-    }	
-    {postal_address:text(text)
-	{label "[_ cnauto-assurance.Postal_address]"}
-	{html {size 60} maxlength 255}
+    {part_code:text(text)
+	{label "[_ cnauto-assurance.Part_code]"}
+        {value ""}
     }
-    {postal_address2:text(text)
-	{label "[_ cnauto-assurance.Postal_address2]"}
-	{html {size 60} maxlength 255}
+    {part_quantity:integer
+	{label "[_ cnauto-assurance.Quantity]"}
+	{html {size 5} maxlength 10}
+        {value ""}
     }
-    {postal_code:text(text)
-	{label "[_ cnauto-assurance.Postal_code]"}
-	{html {size 60} maxlength 50}
+    {damage_description:text(textarea)
+	{label "[_ cnauto-assurance.Damage]"}
+        {value ""}
     }
-    {state:text(select)
-	{label "[_ cnauto-assurance.State]"}
-	{options $state_options}
-	{html {onChange "document.assurance_ae.__refreshing_p.value='1';document.assurance_ae.submit()"}}
+    {third_service:text(text)
+	{label "[_ cnauto-assurance.Third_service]"}
+        {value ""}
     }
-    {municipality_code:text(select)
-	{label "[_ cnauto-assurance.Countries]"}
-	{options $municipality_options}
+    {cost_price:text(text)
+	{label "[_ cnauto-assurance.Cost_price]"}
+        {value ""}
     }
-    {country_code:text(hidden)
-	{value "BR"}
+    {assurance_price:text(text)
+	{label "[_ cnauto-assurance.LP_date]"}
+        {value ""}
     }
-    {notes:text(textarea)
-	{label "[_ cnauto-assurance.Notes]"}
+    {tmo_code:text(text)
+	{label "[_ cnauto-assurance.LP_date]"}
+        {value ""}
+    }
+    {tmo_duration:text(text)
+	{label "[_ cnauto-assurance.LP_date]"}
+        {value ""}
+    }
+    {cost:text(text)
+	{label "[_ cnauto-assurance.LP_date]"}
+        {value ""}
+    }
+    {ttl_sg:text(text)
+	{label "[_ cnauto-assurance.LP_date]"}
+        {value ""}
     }
 } -on_submit {
 } -new_data {
     
-    set assurance_id [cn_assurance::new \
-			  -chassis $chassis \
-			  -model $model \
-			  -engine $engine \
-			  -color $color \
-			  -year_of_model $year_of_model \
-			  -year_of_fabrication $year_of_fabrication \
-			  -purchase_date $purchase_date \
-			  -arrival_date $arrival_date \
-			  -billing_date $billing_date \
-			  -duration $duration \
-			  -distributor_code $distributor_code \
-			  -owner $owner \
-			  -phone $phone \
-			  -postal_address $postal_address \
-			  -postal_address2 $postal_address2 \
-			  -postal_code $postal_code \
-			  -state $state \
-			  -country_code $country_code \
-			  -notes $notes \
-			  -creation_ip [ad_conn peeraddr] \
-			  -creation_user [ad_conn user_id] \
-			  -context_id [ad_conn package_id] \
-			 ]
+    set assurance_date "[template::util::date::get_property year $assurance_date] [template::util::date::get_property month $assurance_date] [template::util::date::get_property day $assurance_date]"
 
+    set lp_date "[template::util::date::get_property year $lp_date] [template::util::date::get_property month $lp_date] [template::util::date::get_property day $lp_date]"
+
+    set lp_2_date "[template::util::date::get_property year $lp_2_date] [template::util::date::get_property month $lp_2_date] [template::util::date::get_property day $lp_2_date]"
+
+
+    set so_date "[template::util::date::get_property year $so_date] [template::util::date::get_property month $so_date] [template::util::date::get_property day $so_date]"
+
+
+    db_transaction { 
+	set assurance_id [cn_assurance::new \
+			      -dcn $dcn \
+			      -assurance_number $assurance_number \
+			      -assurance_date $assurance_date \
+			      -status $status \
+			      -lp $lp \
+			      -lp_date $lp_date \
+			      -lp_2 $lp_2 \
+			      -lp_2_date $lp_2_date \
+			      -service_order $service_order \
+			      -service_order_date $so_date \
+			      -chassis $chassis \
+			      -kilometers $kilometers \
+			      -part_group $part_group \
+			      -part_code $part_code \
+			      -part_quantity $part_quantity \
+			      -damage_description $damage_description \
+			      -third_service $third_service \
+			      -cost_price $cost_price \
+			      -assurance_price $assurance_price \
+			      -tmo_code $tmo_code \
+			      -tmo_duration $tmo_duration \
+			      -cost  $cost \
+			      -ttl_sg $ttl_sg \
+			      -creation_ip [ad_conn peeraddr] \
+			      -creation_user [ad_conn user_id] \
+			      -context_id [ad_conn package_id] \
+			 ]
+    }
+    
+    
 } -edit_data {
 } -after_submit {
     ad_returnredirect $return_url
