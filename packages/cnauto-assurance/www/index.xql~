@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<queryset>
+  <fullquery name="assurance_pagination">
+    <querytext> </querytext>
+  </fullquery>
+
+  <fullquery name="slecta_assurances">
+    <querytext> </querytext>
+  </fullquery>
+
+</queryset>
