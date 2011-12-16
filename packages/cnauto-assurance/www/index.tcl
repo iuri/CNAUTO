@@ -2,6 +2,9 @@ ad_page_contract {
     
     Assurance main page
 
+} {
+    {orderby "person,asc"}
+    page:optional
 }
 
 
@@ -31,6 +34,9 @@ template::list::create \
     -actions $actions \
     -row_pretty_plural "assurances" \
     -bulk_actions $bulk_actions \
+    -page_flush_p t \
+    -page_size 50 \
+    -page_query_name assurances_pagination \
     -elements {
 	assurance_number {
 	    label "[_ cnauto-assurance.Number]"
@@ -50,13 +56,15 @@ template::list::create \
 		<a href="assurances.person_url">@assurances.person_name;noquote@</a>
 	    }
 	}
-    }
+    } -orderby {
+	person {
+	    label "[_ cnauto-assurance.Person]"
+	    orderby "lower(cp.first_names || ' ' || cp.last_name)"
+	}
+    } 
+
 
 db_multirow -extend {assurance_url vehicle_url person_url} assurances select_assurances {
-    SELECT ca.assurance_id, ca.assurance_number, cv.vehicle_id, cv.vin AS chassis, cp.person_id, cp.first_names || ' ' || cp.last_name AS person_name
-    FROM cn_assurances ca, cn_persons cp, cn_vehicles cv
-    WHERE ca.vehicle_id = cv.vehicle_id
-    AND cp.person_id = cv.person_id
     
 } {
 
