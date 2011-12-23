@@ -5,6 +5,7 @@ ad_page_contract {
 } {
     {orderby "person,asc"}
     page:optional
+    {keyword ""}
 }
 
 
@@ -24,6 +25,10 @@ set actions {
 
 set bulk_actions [list]
 
+
+if {[exists_and_not_null keyword]} {
+    set where_clause "AND (cv.vin = :keyword OR ca.assurance_number = :keyword)"
+}
 
 
 
@@ -53,7 +58,7 @@ template::list::create \
 	person {
 	    label "[_ cnauto-assurance.Person]"
 	    display_template {
-		<a href="assurances.person_url">@assurances.person_name;noquote@</a>
+		<a href="@assurances.person_url@">@assurances.person_name;noquote@</a>
 	    }
 	}
     } -orderby {
@@ -68,7 +73,14 @@ db_multirow -extend {assurance_url vehicle_url person_url} assurances select_ass
     
 } {
 
-    set assurance_url [export_vars -base assurance-one {assurance_id}]
-    set vehicle_url [export_vars -base vehicle-one {vehicle_id}]
-    set person_url [export_vars -base person-one {person_id}]
+    set assurance_url [export_vars -base assurance-one {return_url assurance_id}]
+    set vehicle_url [export_vars -base vehicle-one {return_url vehicle_id}]
+    set person_url [export_vars -base person-one {return_url person_id}]
 }
+
+
+ad_form -name search -form {
+    {keyword:text(text)
+	{label [_ cnauto-assurance.Search]}
+    }    
+} 

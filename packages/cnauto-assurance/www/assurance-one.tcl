@@ -7,7 +7,10 @@ ad_page_contract {
 }
 
 set page_title [_ cnauto-assurance.Assurance_info]
-set vehicle_one_url ""
+
+set vehicle_id [db_string select_vehicle_id { SELECT vehicle_id FROM cn_assurances WHERE assurance_id = :assurance_id }]
+set vehicle_one_url [export_vars -base "vehicle-one" {return_url vehicle_id}] 
+
 
 ad_form -name assurance -mode display -form {
     {inform1:text(inform)
@@ -125,8 +128,4 @@ ad_form -name assurance -mode display -form {
 	WHERE cv.vehicle_id = ca.vehicle_id 
 	AND ca.assurance_id = :assurance_id
     }
-    
-    set vehicle_one_url [export_vars -base "vehicle-one" {return_url vehicle_id}] 
-
-
 }

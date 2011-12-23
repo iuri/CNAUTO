@@ -28,7 +28,7 @@ set municipality_options [db_list_of_lists select_municipality "
 set state_options [db_list_of_lists select_states { SELECT state_name, abbrev FROM br_states }]
 
 
-ad_form -name person_ae -form {
+ad_form -name person_ae -cancel_url $return_url -form {
     {person_id:key}
     {return_url:text(hidden)
 	{value $return_url}
@@ -82,10 +82,20 @@ ad_form -name person_ae -form {
 	{label "[_ cnauto-assurance.Countries]"}
 	{options $municipality_options}
     }
-    {country_code:text(hidden)
+    {country:text(hidden)
 	{value "BR"}
     }
     
+} -edit_request {
+
+
+    db_1row select_vehicle_info {
+
+	SELECT DISTINCT cp.cpf_cnpj, cp.first_names, cp.last_name, cp.type, cp.email, postal_address, cp.postal_address2, cp.postal_code, cp.state_abbrev AS state, cp.municipality AS municipality_code, cp,country_code AS country, cp.phone FROM cn_persons cp WHERE cp.person_id = person_id
+
+    }
+ 
+
 } -on_submit {
     
 } -new_data {
