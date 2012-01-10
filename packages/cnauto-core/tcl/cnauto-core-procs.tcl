@@ -41,7 +41,7 @@ ad_proc -public cnauto_core::format_output_line {
     #ns_log Notice "FORMAT LINE: $line"
 
     set suplemento [format "%15d" 0]
-    set tipomov [format "%1s" "I"]
+    set tipomov [format "%1s" "A"]
 
     set numero [format "%-15s" [lindex $line 0]]
     set vigencia [format "%-16s" [lindex $line 1]]
