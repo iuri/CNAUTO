@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="cnauto-core" locale="en_US" charset="ISO-8859-1">
+
+  <msg key="Address">Address</msg>
+  <msg key="Admin">Admin</msg>
+  <msg key="Contact">Contact</msg>
+  <msg key="Company">Company</msg>
+  <msg key="Email">Terms of Use</msg>
+  <msg key="Follow_us_on_twitter">Follow us on Twitter</msg>
+  <msg key="Home">Home</msg>
+  <msg key="Log_in">Login</msg>
+  <msg key="Log_out">Logout</msg>
+  <msg key="Name">Name</msg>
+  <msg key="Products">Products</msg>
+  <msg key="OK">OK</msg>
+  <msg key="Receive_our_newsletter">Receive our Newsletter</msg>
+  <msg key="Services">Services</msg>
+  <msg key="SiteMap">SiteMap</msg>
+  <msg key="Terms_of_Use">Terms of Use</msg>
+
+</message_catalog>

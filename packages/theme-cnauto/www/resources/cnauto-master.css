@@ -1,83 +1,185 @@
-
 .main {
     width: 1024px;
     margin: 0px 0px;
  
 }
 
-.main .logo {
+.main .header {}
+
+.main .header .logo {
+    background: url('/resources/theme-cnauto/images/logo-cnauto.jpg');
+    background-repeat: no-repeat;
+    width: 100px;
+    height:41px;
+    border: 0px;
     margin:0px 0px;
-    float:left:
+    float:left;
 }
 
 
-.main .newsletter_form {
-    margin: 0px;
-    width: 600px;
-    float:right;
-}
-
-.main .newsletter_form .input_text {
-    width: 90px;
-    height: 10px;
-    font: 10px verdana, arial, helvetica, sans-serif;
-}
-
-.main .newsletter_form .input_submit {
-    width: 30px;
-    height: 20px;
-}
-
-
-.main .title {
-    margin-top: 0px;
-    margin-left: 400px;
+.main .header .header-navigation {
     float: right;
 }
 
-.main .title .locale {
-    margin-left: 180px;
+.main .header .header-navigation ul {
+}
+
+.main .header .header-navigation ul li {
+    list-style: none;
+    display: inline;
+}
+
+.main .header .header-navigation a:link, a:visited {
+    color: #ec3b45;
+    text-decoration: none;
+    font-family: tahoma,verdana,sans-serif;
+    font-weight: normal;      /* Pressing it will take you to the current date */
+
+}
+
+.main .header .header-navigation a:hover {
+    color: #ff7179;
+    font-family: tahoma,verdana,sans-serif;
+    font-weight: normal;      /* Pressing it will take you to the current date */
+}
+
+
+
+/* Main navigation */
+
+#main-navigation {
+	float:left;
+	width:100%;
+	background: url("/resources/openacs-default-theme/images/bg.gif") repeat-x bottom;
+	clear: both;
+	display: block;
+}
+	
+#main-navigation ul {
+	margin:0;
+	padding:10px 10px 0;
+	list-style:none;
+}
  
+#main-navigation li {
+	float:left;
+	background:url("/resources/openacs-default-theme/images/left.gif") no-repeat left top;
+	margin:0;
+	padding:0 0 0 9px;
 }
+ 
+#main-navigation a {
+	float:left;
+	display:block;
+	background:url("/resources/openacs-default-theme/images/right.gif") no-repeat right top;
+	padding:5px 15px 4px 6px;
+	text-decoration:none;
+	font-weight:bold;
+	font-size: .95em;
+	color:#666666;
+}
+	
+ 
+#main-navigation #main-navigation-active {
+	background-image:url("/resources/openacs-default-theme/images/left_on.gif");
+}
+	
+#main-navigation #main-navigation-active a {
+	background-image:url("/resources/openacs-default-theme/images/right_on.gif");
+	color:#000;
+	padding-bottom:5px;
+}
+ 
+#main-navigation a:hover {
+    color: #000;
+    text-decoration: underline;
+}
+ 
+/* End of main navigation */
 
+/* Subnavigation */
 
-.main .title .url {}
-
-
-.main .title .url a:link {
+#sub-navigation {
+    float: left;
+    width:100%;
+    background: url("/resources/openacs-default-theme/images/bg.gif") repeat-x bottom;
+    clear: both;
+    padding-top: 5px;  /* remove this padding to make the subnavigation links to appear completly enclosed */
+    padding-bottom: 5px  /* remove this padding to make the subnavigation links to appear completly enclosed */
+}
+	
+#sub-navigation ul {
+    margin: 0;
+    padding:0px 10px 10px 10px;
+    list-style:none;
+    line-height: .7em;
+}
+	
+#sub-navigation li {
+    float:left;
+    border-right: 1px solid #a0a3a1;
+    padding: 0px 20px 0px 20px ; 
+}
+	
+#sub-navigation a {
+    float:left;
+    display:block;
+    color:#666666;
+    padding:4px 0px 6px 0px;
     text-decoration: none;
-    text-align: right;
-    font-family: Arial, Verdana, sans-serif;
-    font-size: 24px;
-    color:red;
+    font-weight:bold;
+    font-size: .95em;
 }
 
-.main .title .url a:hover {
+#sub-navigation li a:hover {
+    color: #000;
+    text-decoration: underline;
+}
+
+#sub-navigation li#sub-navigation-active a {
+    color: #000;
+}
+
+/* End of subnavigation */
+
+
+
+
+
+
+
+.main .content {
+    clear: both;
+}
+
+
+
+.main .footer {
+    clear: both;
+}
+
+.main .footer .footer-navigation {
+    float: right;
+}
+
+
+.main .footer .footer-navigation ul {}
+
+.main .footer .footer-navigation ul li {
+    list-style: none;
+    display: inline;
+}
+
+
+.main .footer .footer-navigation a:link, a:visited {
+    color: #ec3b45;
     text-decoration: none;
-    color:red;
-    text-align: right;
-    font-family: Arial, Verdana, sans-serif;
-    font-size: 24px;
+    font-family: tahoma,verdana,sans-serif;
+    font-weight: normal;      /* Pressing it will take you to the current date */
 }
 
-
-
-
-
-
-
-
-
-.column1 a:link, a:visited {
-    color: blue; 
-}
-.column1 a:hover {
-    color: #000000; 
-}
-
-.column2 a:link, a:visited {
-    color: red; 
-}
-.column2 a:hover {
-    color: #ffffff; 
+.main .footer .footer-navigation a:hover {
+    color: #ff7179;
+    font-family: tahoma,verdana,sans-serif;
+    font-weight: normal;      /* Pressing it will take you to the current date */
 }

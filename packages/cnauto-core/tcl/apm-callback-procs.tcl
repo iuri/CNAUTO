@@ -53,6 +53,17 @@ ad_proc -private cnauto_core::install::after_instantiate {
 				       -parent_node_id $subsite_node_id \
 				      ]
     }
+
+    if {[apm_package_installed_p "cnauto-resources"]} {
+	set newsletter_package_id [site_node::instantiate_and_mount -node_name "resources" \
+				       -package_key "cnauto-resources" \
+				       -package_name "Resources" \
+				       -context_id $subsite_package_id \
+				       -parent_node_id $subsite_node_id \
+				      ]
+    }
+
+
     return
 }
 
