@@ -9,6 +9,8 @@ ad_library {
 }
 
 namespace eval cnauto_core {}
+namespace eval cn_core::util {}
+
 
 
 ad_proc -public cnauto_core::item_exists {
@@ -217,3 +219,16 @@ ad_proc -public cnauto_core::export_csv_to_txt {
 }
 
 
+
+
+
+ad_proc -public cn_core::util::treat_string {
+    {-str}
+} {
+    Removes special chars from the string
+} {
+
+    set str [string map {à á â ã ç é ê í óôõú-" "" " " ""} [string tolower $str]]
+
+    return $str 
+}
