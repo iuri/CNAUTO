@@ -6,8 +6,13 @@ ad_page_contract {
     {orderby "person,asc"}
     page:optional
     {keyword ""}
+} -properties {
+    context:onevalue
+    title:onevalue
 }
 
+set title "[_ cnauto-assurances.Assurances]"
+set context [list $title]
 
 set return_url [ad_return_url]
 set assurance_ae_url [export_vars -base "assurance-ae" {return_url}] 
@@ -18,13 +23,13 @@ set person_ae_url [export_vars -base "person-ae" {return_url}]
 
 set actions {
     "#cnauto-assurance.Add_assurance#" "assurance-ae?return_url=/cnauto-assurance" "#cnauto-assurance.Add_a_new_assurance#"
-    "#cnauto-assurance.Add_vehicle#" "vehicle-ae?return_url=/cnauto-assurance" "#cnauto-assurance.Add_a_new_vehicle#"
-    "#cnauto-assurance.Add_person#" "person-ae?return_url=/cnauto-assurance" "#cnauto-assurance.Add_a_new_person#"
-
+    "#cnauto-assurance.Import_CSV_file#" "import-csv-file?return_url=/cnauto-assurance" "#cnauto-assurance.Import_csv_file#"
 }
 
 set bulk_actions [list]
 
+
+set where_clause ""
 
 if {[exists_and_not_null keyword]} {
     set where_clause "AND (cv.vin = :keyword OR ca.assurance_number = :keyword)"
@@ -81,6 +86,6 @@ db_multirow -extend {assurance_url vehicle_url person_url} assurances select_ass
 
 ad_form -name search -form {
     {keyword:text(text)
-	{label [_ cnauto-assurance.Search]}
+	{label "[_ cnauto-assurance.Search]"}
     }    
 } 

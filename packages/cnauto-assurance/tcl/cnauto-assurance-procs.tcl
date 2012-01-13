@@ -6,68 +6,129 @@ ad_library {
 
 
 namespace eval cn_assurance {}
-namespace eval cn_vehicle {}
 
-ad_proc -public cn_vehicle::new { 
-    {-chassis}
-    {-model}
-    {-year_of_model ""}
-    {-year_of_fabrication ""}
-    {-engine ""}
-    {-color ""}
-    {-arrival_date ""}
-    {-billing_date ""}
-    {-purchase_date ""}
-    {-duration ""}
-    {-distributor_code ""}
-    {-person_id ""}
-    {-notes ""}
-    {-creation_ip ""}
-    {-creation_user ""}
-    {-context_id ""}
+
+ad_proc -public  cn_assurance::import_csv_file {
+    {-input_file}
 } {
-    Add a new vehicle 
+
+    Imports CSV files to add assurance requires
 } {
-     
-    if {$creation_ip == ""} {
-	set creation_ip [ad_conn peeraddr]
-    }
-    
-    if {$creation_user == ""} {
-	set creation_user [ad_conn user_id]
-    }
-     
-    if {$context_id == ""} {
-	set context_id [ad_conn package_id]
-    }
+
+    ns_log Notice "Running ad_proc cn_assurance::import_csv_file"
+
+    set input_file [open "${input_file}" r]
+    set lines [split [read $input_file] \n]
+    close $input_file
+
+    # 0 DCN;
+    # 1 SG;
+    # 2 DATA SG;
+    # 3 STATUS;
+    # 4 LP;
+    # 5 DATA LP;
+    # 6 LP 2¦ vez;O
+    # 7 OS;
+    # 8 DATA OS;
+    # 9 CHASSI;
+    # 10 KM;
+    # 11 CONJ.;
+    # 12 CàDIGO DA PE.A;Q
+    # 13 QTD PE.A;
+    # 14 DEFEITO;
+    # 15 SVC 3§;P
+    # 16 RE.O CUSTO;
+    # 17 PRE.O GARANTIA;
+    # 18 COD TMO;
+    # 19 TEMPO TMO;
+    # 20 VALOR;
+    # 21 TTL SG;;;;;;;
+
+    foreach line $lines {
+	set line [split $line {;}] 
+	ns_log Notice "LINE $line"
 
 
-   #set vehicle_id [db_nextval acs_object_id_seq]
+	set dcn [lindex $line 0]
+	set assurance_number [lindex $line 1]
+
+	set assurance_date [lindex $line 2]
+	set assurance_date [split $assurance_date {/}]
+	set assurance_date "[lindex $assurance_date 2][lindex $assurance_date 1][lindex $assurance_date 0]"
+
+	set status [lindex $line 3]
+	set lp [lindex $line 4]
+
+	set lp_date [lindex $line 5]
+	set lp_date [split $lp_date {/}]
+	set lp_date "[lindex $lp_date 2][lindex $lp_date 1][lindex $lp_date 0]"
+
+	set lp_2 [lindex $line 6]
+	set service_order [lindex $line 7]
+	if {[regexp {[A-z]} $service_order]} {
+	    set service_order ""
+	}
+
+
+	set service_order_date [lindex $line 8]
+	set service_order_date [split $service_order_date {/}]
+	set service_order_date "[lindex $service_order_date 2][lindex $service_order_date 1][lindex $service_order_date 0]"
+
+	set chassis [lindex $line 9]
+
+	set vehicle_id [cn_resources::vehicle::new -chassis $chassis]
+
+	set kilometers [lindex $line 10]
+
+	set part_code [lindex $line 12]
+	set part_id [cn_resource::part::new -part_code $part_code]
+
+	set part_group [lindex $line 11]
+	set part_quantity [lindex $line 13]
+	set damage_description [lindex $line 14]
+	set third_service [lindex $line 15]
+	set cost_price [lindex $line 16]
+	set assurance_price [lindex $line 17]
+	set tmo_code [lindex $line 18]
+	set tmo_duration [lindex $line 19]
+	set cost [lindex $line 20]
+	set ttl_sg [lindex $line 21]
 	
-    set vehicle_id [db_exec_plsql insert_vehicle {
-	SELECT cn_vehicle__new (
-				null,
-				:chassis,
-				:engine,
-				:model,
-				:year_of_model,
-				:year_of_fabrication,
-				:color,
-				:purchase_date,
-				:arrival_date,	
-				:billing_date,
-				:duration,
-				:distributor_code,
-				:person_id,
-				:notes,
-				:creation_ip,
-				:creation_user,
-				:context_id
-				)
-    }]
-    
-    return $vehicle_id
+    }
+
+
+    cn_assurance::new \
+	-dcn $dcn \
+	-assurance_number $assurance_number \
+	-assurance_date $assurance_date \
+	-status $status \
+	-lp $lp \
+	-lp_date $lp_date \
+	-lp_2 $lp_2 \
+	-service_order $service_order \
+	-service_order_date $service_order_date \
+	-vehicle_id $vehicle_id \
+	-kilometers $kilometers \
+	-part_group $part_group \
+	-part_code $part_code \
+	-part_quantity $part_quantity \
+	-damage_description $damage_description \
+	-third_service $third_service \
+	-cost_price $cost_price \
+	-assurance_price $assurance_price \
+	-tmo_code $tmo_code \
+	-tmo_duration $tmo_duration \
+	-cost $cost \
+	-ttl_sg $ttl_sg \
+	-creation_ip [ad_conn peeraddr] \
+	-creation_user [ad_conn user_id] \
+	-context_id [ad_conn package_id]    
+	
+
 }
+
+
+
 
 
 ad_proc -public cn_assurance::new { 
@@ -81,7 +142,7 @@ ad_proc -public cn_assurance::new {
     {-lp_2_date ""}
     {-service_order ""} 
     {-service_order_date ""}
-    {-chassis ""}
+    {-vehicle_id ""}
     {-kilometers ""}
     {-part_group ""}
     {-part_code ""}
@@ -181,70 +242,6 @@ ad_proc -public cn_assurance::new {
     }]
     
     return $assurance_id
-}
-
-
-namespace eval cn_assurance::person {}
-
-ad_proc -public cn_assurance::person::new {
-    {-cpf_cnpj}
-    {-first_names ""}
-    {-last_name ""}
-    {-email ""}
-    {-type ""}
-    {-phone ""}
-    {-postal_address ""}
-    {-postal_address2 ""}
-    {-postal_code ""}
-    {-state ""}
-    {-municipality ""}
-    {-country_code "BR"}
-    {-creation_ip ""}
-    {-creation_user ""}
-    {-context_id ""}    
-} {
-    Add a new person
-
-    @author Iuri Sampaio (iuri.sampaio@iurix.com)
-    @creation-date 2011-12-12
-
-} {
-
-    if {$creation_ip == ""} {
-	set creation_ip [ad_conn peeraddr]
-    }
-    
-    if {$creation_user == ""} {
-	set creation_user [ad_conn user_id]
-    }
-    
-    if {$context_id == ""} {
-	set context_id [ad_conn package_id]
-    }
-    
-    
-    set person_id [db_exec_plsql insert_person {
-	SELECT cn_person__new (
-			       :cpf_cnpj,
-			       :first_names,
-			       :last_name,
-			       :email,
-			       :type,
-			       :phone,
-			       :postal_address,
-			       :postal_address2,
-			       :postal_code,
-			       :state,
-			       :municipality,
-			       :country_code,
-			       :creation_ip,
-			       :creation_user,
-			       :context_id
-			       );
-    }]
-    
-    return $person_id
-    
 }
 
 
