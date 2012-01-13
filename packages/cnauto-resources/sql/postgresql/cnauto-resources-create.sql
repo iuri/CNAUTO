@@ -233,24 +233,26 @@ CREATE OR REPLACE FUNCTION cn_part__new(
 ------------------------------------
 CREATE TABLE cn_persons (
        person_id	integer not null
-       			CONSTRAINT cn_persons_person_id_pk PRIMARY KEY
-       			CONSTRAINT cn_persons_person_id_fk
-			REFERENCES  acs_objects (object_id),
+       			CONSTRAINT cn_persons_person_id_pk PRIMARY KEY,
        cpf_cnpj		varchar(25)
        			CONSTRAINT cn_persons_cpf_cnpj_un UNIQUE,
-       first_names	varchar (30),
-       last_name	varchar(30),
+       legal_name	varchar(100),
+       pretty_name	varchar(100),
+       code		varchar(10),
        type		varchar(10),	
+       contact_id	integer
+       			CONSTRAINT cn_persons_contact_id_fk
+ 		        REFERENCES acs_objects (object_id),
        email		varchar(30),
        postal_address 	varchar(255),
        postal_address2 	varchar(255),
        postal_code 	varchar(50),
-       state_abbrev 	varchar(2)
-       		    	CONSTRAINT cn_assurances_state_abbrev_fk
+       state_code 	varchar(2)
+       		    	CONSTRAINT cn_persons_state_code_fk
  		        REFERENCES br_states (abbrev),
-       municipality 	varchar(100),
+       city_code	integer,
        country_code 	varchar(2)
-       		    	CONSTRAINT cn_assurances_country_code_fk
+       		    	CONSTRAINT cn_persons_country_code_fk
 			REFERENCES countries (iso),
        phone		varchar(15)
 );
@@ -277,37 +279,41 @@ SELECT acs_object_type__create_type (
 
 CREATE OR REPLACE FUNCTION cn_person__new (
        varchar,	  	   -- cpf_cnpj
-       varchar,	  	   -- first_names
-       varchar,		   -- last_name
-       varchar,		   -- email
+       varchar,	  	   -- legal_name
+       varchar,		   -- pretty_name
+       varchar,		   -- code
        varchar,		   -- type
+       integer,		   -- contact_id
+       varchar,		   -- email
        varchar,		   -- phone
        varchar,		   -- postal_address
        varchar,		   -- postal_address2
        varchar,		   -- postal_code
-       varchar,		   -- state_abbrev
-       varchar,		   -- municipality
-       varchar,		   -- country
+       varchar,		   -- state_code
+       integer,		   -- city_code
+       varchar,		   -- country_code
        varchar,		   -- creation_ip
        integer,		   -- creation_user
        integer		   -- context_id
 ) RETURNS integer AS '
   DECLARE
 	p_cpf_cnpj		ALIAS FOR $1;
-	p_first_names		ALIAS FOR $2;
-	p_last_name		ALIAS FOR $3;
-	p_email			ALIAS FOR $4;
+	p_legal_name		ALIAS FOR $2;
+	p_corporate_name	ALIAS FOR $3;
+	p_code			ALIAS FOR $4;
 	p_type			ALIAS FOR $5;
-       	p_phone		   	ALIAS FOR $6;
-       	p_postal_address    	ALIAS FOR $7;
-       	p_postal_address2   	ALIAS FOR $8;
-       	p_postal_code 	   	ALIAS FOR $9;
-       	p_state_abbrev 	   	ALIAS FOR $10;    		    	 
-       	p_municipality 	   	ALIAS FOR $11;
-       	p_country_code 	   	ALIAS FOR $12;
-	p_creation_ip		ALIAS FOR $13;
-       	p_creation_user		ALIAS FOR $14;
-       	p_context_id		ALIAS FOR $15;
+	p_email			ALIAS FOR $6;
+	p_contact_id		ALIAS FOR $7;
+       	p_phone		   	ALIAS FOR $8;
+       	p_postal_address    	ALIAS FOR $9;
+       	p_postal_address2   	ALIAS FOR $10;
+       	p_postal_code 	   	ALIAS FOR $11;
+       	p_state_code 	   	ALIAS FOR $12;    		    	 
+       	p_city_code 	   	ALIAS FOR $13;
+       	p_country_code 	   	ALIAS FOR $14;
+	p_creation_ip		ALIAS FOR $15;
+       	p_creation_user		ALIAS FOR $16;
+       	p_context_id		ALIAS FOR $17;
 
        	v_id	integer;		
        	v_type	varchar;
@@ -328,30 +334,34 @@ CREATE OR REPLACE FUNCTION cn_person__new (
        INSERT INTO cn_persons (
        	      person_id,
 	      cpf_cnpj,
-	      first_names,
-	      last_name,
-	      email,
+	      legal_name,
+	      corporate_name,
+	      code,
 	      type,
+	      contact_id,
+	      email,
 	      phone,
 	      postal_address,
 	      postal_address2,
 	      postal_code,
-	      state_abbrev,
-	      municipality,
+	      state_code,
+	      city_code,
 	      country_code
 	) VALUES (
 	  v_id,
 	  p_cpf_cnpj,
-	  p_first_names,
-	  p_last_name,
-	  p_email,
+	  p_legal_name,
+	  p_corporate_name,
+	  p_code,
 	  p_type,
+	  p_contact_id,
+	  p_email,
        	  p_phone,
        	  p_postal_address,
        	  p_postal_address2,
        	  p_postal_code,
-       	  p_state_abbrev,    		    	 
-       	  p_municipality,
+       	  p_state_code,    		    	 
+       	  p_city_code,
        	  p_country_code
 	);
 
@@ -369,6 +379,8 @@ DECLARE
 	
 BEGIN
 	
+	-- REmove user first
+
 	DELETE FROM cn_persons WHERE person_id = p_person_id;
  	
 	PERFORM acs_object__delete (p_person_id);
