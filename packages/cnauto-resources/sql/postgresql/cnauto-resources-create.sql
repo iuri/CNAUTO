@@ -238,8 +238,8 @@ CREATE TABLE cn_persons (
        			CONSTRAINT cn_persons_cpf_cnpj_un UNIQUE,
        legal_name	varchar(100),
        pretty_name	varchar(100),
-       code		varchar(10),
-       type		varchar(10),	
+       code		varchar(100),
+       type		varchar(100),	
        contact_id	integer
        			CONSTRAINT cn_persons_contact_id_fk
  		        REFERENCES acs_objects (object_id),

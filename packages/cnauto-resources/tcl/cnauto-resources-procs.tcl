@@ -76,17 +76,17 @@ ad_proc -public cn_resources::get_city_code {
     Returns city's code
 } {
 
-    
-    set city [cn_core::util::treat_string -str $city]
+    set city [lindex [split $city "-"] 0]
+#    set city [cn_core::util::treat_string -str $city]
 
     # WHERE name like [lindex city 0]
     db_foreach select_city_info {
 	SELECT ibge_code, name FROM br_ibge_municipality ORDER BY name
     } {
 
-	set name [cn_core::util::treat_string -str $name]
+	#set name [cn_core::util::treat_string -str $name]
 
-	ns_log Notice "$ibge_code | $name | $city"
+	ns_log Notice "$ibge_code | [enconding utf8 $name] | [encoding utf8 $city]"
 	
 	if {[string equal $name $city]} {
 	    return $city_code
@@ -105,21 +105,46 @@ ad_proc -public cn_resources::get_state_code {
     
     set state [cn_core::util::treat_string -str $state]
 
-    # WHERE name like [lindex city 0]
-    db_foreach select_city_info {
-	SELECT state_abbrev FROM br_states 
+    # WHERE name like [lindex state 0] -- optimize the query with the first letter of the word
+    db_foreach select_state_info {
+	SELECT abbrev, state_name FROM br_states 
     } {
 
-	set state_abbrev [cn_core::util::treat_string -str $state_abbrev]
-
-	ns_log Notice "$state_abbrev | $state"
+	set abbrev [cn_core::util::treat_string -str $abbrev]
+	set state_name [cn_core::util::treat_string -str $state_name]
 	
-	if {[string equal $state_abbrev $state]} {
-	    return $
+	if {[string equal $abbrev $state] || [string equal $state_name $state]} {
+	    return $abbrev
 	}
     }
     
-    return 
+    return ""
+}
+
+ad_proc -public cn_resources::get_country_code {
+    {-country $country}
+} {
+    Returns country's code
+} {
+
+    
+    set country [cn_core::util::treat_string -str $country]
+
+    # WHERE name like [lindex city 0]
+    db_foreach select_country_info {
+	SELECT iso, default_name FROM countries 
+    } {
+
+	set default_name [cn_core::util::treat_string -str $default_name]
+	set iso [cn_core::util::treat_string -str $iso]
+
+	
+	if {[string equal $country $default_name] || [string equal $country $iso]} {
+	    return $iso
+	}
+    }
+    
+    return ""
 }
 
 
@@ -140,69 +165,41 @@ ad_proc -public  cn_resources::persons::import_csv_file {
 
     
     foreach line $lines {
-	set line [split $line {;}] 
+	set line [split $line {,}] 
 	ns_log Notice "LINE $line"
 	
-	# 0 CIDADE
-	# 1 ESTADO
-	# 2 NOME FANTASIA
-	# 3 RAZÃO SOCIAL
-	# 4 CNPJ
-	# 5 CODIGO
-	# 6 TIPO
-	# 7 CONTATO
-	# 8 TELEFONE
-	# 9 ENDEREÇO
-	# 10 CEP
-	# 11 E-mail Titular
+	# 0 codigo
+	# 1 first_name/last_name - corporate_name/legal_name
+	# 2 type concessionarias / CNAUTO / Funcionarios / Diretores / 
+	# 3 pais
+	# 4 CEP
+	# 5 estado
+	# 6 cidade
+	# 7 bairro 8 9 10 11
+	# 12 TELEFONE
+	# 13 Email
 
-	set city [lindex $line 0]
+
+	set code [lindex $line 0]
+	set name [lindex $line 1]
+	set type [lindex $line 2]
+
+	set country [lindex $line 3]
+	set country_code [cn_resources::get_country_code -country $country]
+
+	set postal_code [lindex $line 4]
+
+	set state [lindex $line 5]
+	set state_code [cn_resources::get_state_code -state $state]
+
+	set city [lindex $line 6]
 	set city_code [cn_resources::get_city_code -city $city]
 	
-	set state [lindex $line 1]
-	#set state_code [cn_resources::get_state_code -state $state]
-
-	set corporate_name [lindex $line 2] 
-	set legal_name [lindex $line 3]
-	set cpf_cnpj [lindex $line 4]
-	set code [lindex $line 5]
-	set type [lindex $line 6]
-
-	# Begin to colect contact/user info
-	set contact [lindex $line 7]
-	ns_log Notice "CONMTACT $contact"
-	for {set i 0} {$i < [expr [llength $contact] - 1]} {incr i} {
-	    lappend first_names [lindex $contact $i]
-	}
-
-	set last_name [lindex $contact $i]
-       	set email [lindex $line 11] \
-	    
-	# Adding user/member/contact
-	set contact_id [db_nextval acs_object_id_seq]
-	array set creation_info [auth::create_user \
-                                     -user_id $contact_id \
-                                     -email $email \
-                                     -first_names $first_names \
-                                     -last_name $last_name \
-				    ]
-	set group_id [application_group::group_id_from_package_id -package_id [	subsite::get_element -element "package_id"]]
-	
-	if { $creation_info(creation_status) eq "ok" && [exists_and_not_null group_id] } {
-            group::add_member \
-                -group_id $group_id \
-                -user_id $contact_id \
-                -rel_type "membership_rel"
-        }
-	# End Adding user/member/contact
-	
-	set phone [lindex $line 8]
-	set postal_address [lindex $line 9]
-	set postal_address2 ""
-	set postal_code [lindex $line 10]
-
-	set country_code "BR"
-	
+	set postal_addess "[lindex $line 8] [lindex $line 9] [lindex $line 10] [lindex $line 7]"
+	set postal_addess2 [lindex $line 11]
+	set phone [lindex $line 12]
+	set email [lindex $line 13]
+	set cpf_cnpj [lindex $line 14]
 
 
     ns_log Notice "
