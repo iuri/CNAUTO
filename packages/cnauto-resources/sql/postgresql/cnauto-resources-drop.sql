@@ -43,10 +43,6 @@ DROP TABLE cn_parts;
 
 
 
-
-
-
-
 DROP FUNCTION cn_person__delete (integer);
 
 DROP FUNCTION cn_person__new (
@@ -73,8 +69,8 @@ SELECT acs_object_type__drop_type (
 );
 
 
-DROP TABLE cn_persons;
 
+DROP TABLE cn_persons;
 
 
 
@@ -115,6 +111,8 @@ DROP TABLE cn_vehicles;
 
 
 
+
+DROP TABLE cn_categories CASCADE;
 
 
 

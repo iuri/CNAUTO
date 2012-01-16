@@ -76,17 +76,17 @@ ad_proc -public cn_resources::get_city_code {
     Returns city's code
 } {
 
-    set city [split $city "-"]
-    set city [cn_core::util::treat_string -str $city]
+    set city [lindex [split $city "-"] 0]
+#    set city [cn_core::util::treat_string -str $city]
 
     # WHERE name like [lindex city 0]
     db_foreach select_city_info {
 	SELECT ibge_code, name FROM br_ibge_municipality ORDER BY name
     } {
 
-	set name [cn_core::util::treat_string -str $name]
+	#set name [cn_core::util::treat_string -str $name]
 
-	ns_log Notice "$ibge_code | $name | $city"
+	ns_log Notice "$ibge_code | [enconding utf8 $name] | [encoding utf8 $city]"
 	
 	if {[string equal $name $city]} {
 	    return $city_code
@@ -107,14 +107,14 @@ ad_proc -public cn_resources::get_state_code {
 
     # WHERE name like [lindex state 0] -- optimize the query with the first letter of the word
     db_foreach select_state_info {
-	SELECT state_abbrev, state_name FROM br_states 
+	SELECT abbrev, state_name FROM br_states 
     } {
 
-	set state_abbrev [cn_core::util::treat_string -str $state_abbrev]
+	set abbrev [cn_core::util::treat_string -str $abbrev]
 	set state_name [cn_core::util::treat_string -str $state_name]
 	
-	if {[string equal $state_abbrev $state] || [string equal $state_name $state]} {
-	    return $state_abbrev
+	if {[string equal $abbrev $state] || [string equal $state_name $state]} {
+	    return $abbrev
 	}
     }
     
@@ -195,49 +195,11 @@ ad_proc -public  cn_resources::persons::import_csv_file {
 	set city [lindex $line 6]
 	set city_code [cn_resources::get_city_code -city $city]
 	
-	set postal_addess [lindex $line 8] [lindex $line 9] [lindex $line 10] [lindex $line 7]
+	set postal_addess "[lindex $line 8] [lindex $line 9] [lindex $line 10] [lindex $line 7]"
 	set postal_addess2 [lindex $line 11]
 	set phone [lindex $line 12]
 	set email [lindex $line 13]
-	
-
-
-
-
-
-
-	
-	set postal_code [lindex $line 4]
-
-	set city [lindex $line 0]
-	set city_code [cn_resources::get_city_code -city $city]
-	
-	set state [lindex $line 1]
-	#set state_code [cn_resources::get_state_code -state $state]
-
-	set corporate_name [lindex $line 2]]
-	ns_log Notice "ST $corporate_name"
-
-	set legal_name [lindex $line 3]
-	set cpf_cnpj [lindex $line 4]
-	set code [lindex $line 5]
-	set type [lindex $line 6]
-
-	# Begin to colect contact/user info
-	set contact [lindex $line 7]
-	ns_log Notice "CONMTACT $contact"
-	for {set i 0} {$i < [expr [llength $contact] - 1]} {incr i} {
-	    lappend first_names [lindex $contact $i]
-	}
-
-	set last_name [lindex $contact $i]
-       	set email [lindex $line 11] \
-	
-
-	set phone [lindex $line 8]
-
-	set country_code "BR"
-	
+	set cpf_cnpj [lindex $line 14]
 
 
     ns_log Notice "

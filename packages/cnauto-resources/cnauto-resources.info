@@ -9,13 +9,13 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>f</inherit-templates-p>
     
-    <version name="0.4d" url="http://openacs.org/repository/download/apm/cnauto-resources-0.4d.apm">
+    <version name="0.6d" url="http://openacs.org/repository/download/apm/cnauto-resources-0.6d.apm">
         <owner url="mailto:iuri.sampaio@cnauto.com.br">Iuri Sampaio</owner>
         <summary>Package for resources management</summary>
         <description format="text/html">Package for resources management</description>
         <maturity>0</maturity>
 
-        <provides url="cnauto-resources" version="0.4d"/>
+        <provides url="cnauto-resources" version="0.6d"/>
         <requires url="cnauto-core" version="0.1d"/>
         <requires url="ref-countries" version="5.6.0"/>
         <requires url="ref-br-states" version="0.1d"/>

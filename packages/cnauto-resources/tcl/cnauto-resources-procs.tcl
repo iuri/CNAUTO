@@ -148,6 +148,57 @@ ad_proc -public cn_resources::get_country_code {
 }
 
 
+
+namespace eval cn_resources::categories {}
+
+ad_proc -public  cn_resources::categories::import_csv_file {
+    {-input_file}
+} {
+
+    Imports CSV files to add categories
+} {
+
+    ns_log Notice "Running ad_proc cn_resources::categories::import_csv_file"
+
+    set input_file [open "${input_file}" r]
+    set lines [split [read $input_file] \n]
+    close $input_file
+
+    set package_id [ad_conn package_id]
+    set object_type "cn_person"
+    
+    foreach line $lines {
+	set line [split $line {,}] 
+	ns_log Notice "LINE $line"
+	
+	set category_id [db_nextval acs_object_id_seq]
+	set pretty_name [lindex [lindex $line 0] 0]
+	set name [lindex [lindex $line 0] 0]
+	
+	ns_log notice "[llength $name] - $name"
+
+	db_transaction {
+	    db_dml insert_category {
+	      INSERT INTO cn_categories (
+		       category_id,
+		       package_id,
+		       pretty_name,
+		       name,
+		       object_type
+	       ) VALUES (
+			 :category_id,
+			 :package_id,
+			 :name,
+			 :pretty_name,
+			 :object_type
+	       )
+	    }
+	}
+    }
+    
+    return
+}
+
 namespace eval cn_resources::persons {}
 
 ad_proc -public  cn_resources::persons::import_csv_file {

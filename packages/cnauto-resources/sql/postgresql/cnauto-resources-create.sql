@@ -239,7 +239,7 @@ CREATE TABLE cn_persons (
        legal_name	varchar(100),
        pretty_name	varchar(100),
        code		varchar(100),
-       type		varchar(100),	
+       type_id		integer,	
        contact_id	integer
        			CONSTRAINT cn_persons_contact_id_fk
  		        REFERENCES acs_objects (object_id),
@@ -282,7 +282,7 @@ CREATE OR REPLACE FUNCTION cn_person__new (
        varchar,	  	   -- legal_name
        varchar,		   -- pretty_name
        varchar,		   -- code
-       varchar,		   -- type
+       integer,		   -- type_id
        integer,		   -- contact_id
        varchar,		   -- email
        varchar,		   -- phone
@@ -301,7 +301,7 @@ CREATE OR REPLACE FUNCTION cn_person__new (
 	p_legal_name		ALIAS FOR $2;
 	p_corporate_name	ALIAS FOR $3;
 	p_code			ALIAS FOR $4;
-	p_type			ALIAS FOR $5;
+	p_type_id		ALIAS FOR $5;
 	p_email			ALIAS FOR $6;
 	p_contact_id		ALIAS FOR $7;
        	p_phone		   	ALIAS FOR $8;
@@ -337,7 +337,7 @@ CREATE OR REPLACE FUNCTION cn_person__new (
 	      legal_name,
 	      corporate_name,
 	      code,
-	      type,
+	      type_id,
 	      contact_id,
 	      email,
 	      phone,
@@ -353,7 +353,7 @@ CREATE OR REPLACE FUNCTION cn_person__new (
 	  p_legal_name,
 	  p_corporate_name,
 	  p_code,
-	  p_type,
+	  p_type_id,
 	  p_contact_id,
 	  p_email,
        	  p_phone,
@@ -392,6 +392,19 @@ END;' language 'plpgsql';
 
 
 
+------------------------------------
+-- Table cn_colors
+------------------------------------
+CREATE TABLE cn_categories (
+       category_id     integer
+       		       CONSTRAINT cn_categories_category_id_pk PRIMARY KEY, 
+       package_id      integer,
+       name	       varchar(50),
+       pretty_name     varchar(50),
+       object_type     varchar(20)
+       		       CONSTRAINT cn_categories_object_type_fk
+		       REFERENCES acs_object_types(object_type)
+);
 
 
 ------------------------------------
