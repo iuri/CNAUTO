@@ -1,0 +1,8 @@
+ad_page_contract {
+    Resources main page
+}
+
+
+set return_url [ad_return_url]
+
+set person_ae_url [export_vars -base "person-ae" {return_url}]
