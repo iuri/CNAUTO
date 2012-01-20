@@ -1,41 +1,24 @@
--- /packages/cnauto-resources/sql/postgresql/upgrade/upgrade-0.4d-0.5d.sql
+-- /packages/cnauto-resources/sql/postgresql/upgrade/upgrade-0.6d-0.7d.sql
 
-SELECT acs_log__debug ('/packages/cnauto-resources/sql/postgresql/upgrade/upgrade-0.4d-0.5d.sql','');
+SELECT acs_log__debug ('/packages/cnauto-resources/sql/postgresql/upgrade/upgrade-0.6d-0.7d.sql','');
 
-
-CREATE TABLE cn_categories (
-       category_id     integer
-       		       CONSTRAINT cn_categories_category_id_pk PRIMARY KEY, 
-       package_id      integer,
-       name	       varchar(50),
-       object_type     varchar(20)
-       		       CONSTRAINT cn_categories_object_type_fk
-		       REFERENCES acs_object_types(object_type)
+DROP FUNCTION cn_person__new ( 
+     varchar,
+     varchar,
+     varchar,
+     varchar,
+     varchar,
+     varchar,
+     varchar,
+     varchar,
+     varchar,
+     varchar,
+     integer,
+     varchar,
+     varchar,
+     integer,
+     integer
 );
-
-
-
-
-DROP FUNCTION cn_person__new (
-       varchar,	  	   -- cpf_cnpj
-       varchar,	  	   -- legal_name
-       varchar,		   -- pretty_name
-       varchar,		   -- code
-       varchar,		   -- type
-       integer,		   -- contact_id
-       varchar,		   -- email
-       varchar,		   -- phone
-       varchar,		   -- postal_address
-       varchar,		   -- postal_address2
-       varchar,		   -- postal_code
-       varchar,		   -- state_code
-       integer,		   -- city_code
-       varchar,		   -- country_code
-       varchar,		   -- creation_ip
-       integer,		   -- creation_user
-       integer		   -- context_id
-);
-
 
 CREATE OR REPLACE FUNCTION cn_person__new (
        varchar,	  	   -- cpf_cnpj
@@ -59,11 +42,11 @@ CREATE OR REPLACE FUNCTION cn_person__new (
   DECLARE
 	p_cpf_cnpj		ALIAS FOR $1;
 	p_legal_name		ALIAS FOR $2;
-	p_corporate_name	ALIAS FOR $3;
+	p_pretty_name		ALIAS FOR $3;
 	p_code			ALIAS FOR $4;
 	p_type_id		ALIAS FOR $5;
-	p_email			ALIAS FOR $6;
-	p_contact_id		ALIAS FOR $7;
+	p_contact_id		ALIAS FOR $6;
+	p_email			ALIAS FOR $7;
        	p_phone		   	ALIAS FOR $8;
        	p_postal_address    	ALIAS FOR $9;
        	p_postal_address2   	ALIAS FOR $10;
@@ -95,7 +78,7 @@ CREATE OR REPLACE FUNCTION cn_person__new (
        	      person_id,
 	      cpf_cnpj,
 	      legal_name,
-	      corporate_name,
+	      pretty_name,
 	      code,
 	      type_id,
 	      contact_id,
@@ -111,7 +94,7 @@ CREATE OR REPLACE FUNCTION cn_person__new (
 	  v_id,
 	  p_cpf_cnpj,
 	  p_legal_name,
-	  p_corporate_name,
+	  p_pretty_name,
 	  p_code,
 	  p_type_id,
 	  p_contact_id,
@@ -129,8 +112,3 @@ CREATE OR REPLACE FUNCTION cn_person__new (
 
 END;' language 'plpgsql';
 
-ALTER TABLE cn_persons RENAME COLUMN type TO type_id; 
---ALTER TABLE cn_persons ALTER COLUMN type_id TYPE integer;
-
-ALTER TABLE cn_persons DROP column type_id;
-ALTER TABLE cn_persons ADD column type_id integer;

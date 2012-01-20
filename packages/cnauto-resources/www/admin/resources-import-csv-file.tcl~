@@ -1,5 +1,5 @@
 ad_page_contract {
-    Import CSV file Assurance Requires
+    Import Categories from CSV file 
     
     @author Iuri Sampaio (iuri.sampaio@iurix.com)
     @creation-date 2012-01-12
@@ -20,8 +20,8 @@ ad_form -html { enctype multipart/form-data } -name import_file -form {
     
     ns_log Notice "$input_file | $mime_type"
 
-    if {[string equal $mime_type "application/vnd.ms-excel"]} {
-	cn_resources::persons::import_csv_file -input_file $tmp_file
+    if {[string equal $mime_type "application/vnd.ms-excel"] || [string equal $mime_type "text/csv"]} {
+	cn_resources::categories::import_csv_file -input_file $tmp_file
     } else {
 	ad_return_complaint 0 "Wrong file extension: <b> [lindex $input_file 0] </b> <br \>  You can upload only CSV files!!"
 

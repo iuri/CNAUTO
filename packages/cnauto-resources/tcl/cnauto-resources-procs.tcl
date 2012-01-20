@@ -1,3 +1,4 @@
+
 ad_library {
     CN Auto Resources API
 }
@@ -5,6 +6,211 @@ ad_library {
 
 namespace eval cn_resources {}
 namespace eval cn_resources::vehicle {}
+
+
+ad_proc -public  cn_resources::import_csv_file {
+    {-input_file}
+} {
+
+    Imports CSV files to add categories
+} {
+
+    ns_log Notice "Running ad_proc cn_resources::import_csv_file"
+
+    set input_file [open "${input_file}" r]
+    set lines [split [read $input_file] \n]
+    close $input_file
+    
+    foreach line $lines {
+	set line [split $line {;}] 
+	ns_log Notice "LINE $line"
+	
+	set resource_id [db_nextval acs_object_id_seq]
+	set code [lindex $line 0]
+	set pretty_name [lindex $line 1]
+	set name [cn_core::util::treat_string -str [lindex $line 1]]
+	set description [lindex $line 1]
+	set class [lindex $line 2]
+	set unit [lindex $line 3]
+	set ncm_class [lindex $line 4]
+	
+	#ns_log notice "[llength $name] - $name"
+
+	set exists_p [db_string select_code {
+	    SELECT code FROM cn_resources WHERE code = :code
+	} -default null]
+
+	if {$exists_p == "null"} {
+
+	    
+	    db_transaction {
+		db_dml insert_resource {
+		    INSERT INTO cn_resources (
+                         resource_id,
+					      code,
+					      name,
+					      pretty_name,
+					      description,
+					      class,
+					      ncm_class,
+					      unit
+					      ) VALUES (
+							:resource_id,
+							:code,
+							:name,
+							:pretty_name,
+							:description,
+							:class,
+							:ncm_class,
+							:unit
+					      )
+		}
+	    }
+	    
+	}
+    }
+    
+    
+    return
+}
+
+
+
+namespace eval cn_resources::vehicles {}
+
+ad_proc -public  cn_resources::vehicles::import_csv_file {
+    {-input_file}
+} {
+
+    Imports CSV files to add vehicles
+} {
+
+    ns_log Notice "Running ad_proc cn_resources::vehicles::import_csv_file"
+
+    set input_file [open "${input_file}" r]
+    set lines [split [read $input_file] \n]
+    close $input_file
+
+    foreach line $lines {
+	set line [split $line {;}] 
+	ns_log Notice "LINE $line"
+	
+
+	set vin [lindex $line 0]
+	set model [lindex $line 1]
+	set purchase_date [lindex $line 2]
+	if {[exists_and_not_null purchase_date]} {
+	    set purchase_date [split $purchase_date {/}]
+	    set purchase_date "[lindex $purchase_date 2]-[lindex $purchase_date 1]-[lindex $purchase_date 0]"
+	} else {
+	    set purchase_date ""
+	}
+	    
+
+
+	set duration [lindex $line 3]
+	set color ""
+	set distributor [lindex $line 5]
+	set owner [lindex $line 6]
+	
+	set postal_address [lindex $line 7]
+	set city [lindex $line 8]
+	set state [lindex $line 9]
+	set postal_code [lindex $line 10]
+	set phone [lindex $line 11]
+	set yof [lindex $line 12]
+	set yom [lindex $line 13]
+	set engine [lindex $line 14]
+
+	set arrival_date [lindex $line 15]
+	if {[exists_and_not_null arrival_date]} {
+	    set arrival_date [split $arrival_date {/}]
+	    set arrival_date "[lindex $arrival_date 2]-[lindex $arrival_date 1]-[lindex $arrival_date 0]"
+	} else {
+	    set arrival_date ""
+	}
+ 
+
+	set billing_date [lindex $line 16]
+	if {[exists_and_not_null billing_date]} {
+	    set billing_date [split $billing_date {/}]
+	    set billing_date "[lindex $billing_date 2]-[lindex $billing_date 1]-[lindex $billing_date 0]"
+	} else {
+	    set billing_date ""
+	}
+
+	set notes [lindex $line 17]
+
+	
+	
+	set resource_id ""
+	set person_id ""
+	set creation_ip [ad_conn peeraddr]
+	set creation_user [ad_conn user_id]
+	set context_id [ad_conn package_id]
+
+	#ns_log notice "[llength $name] - $name"
+
+
+	ns_log Notice "
+	    vin $vin \n 
+	    model $model \n
+	    purchase_date $purchase_date \n
+	    duration $duration \n
+	    color $color \n
+	    distributor $distributor \n
+	    owner  $owner \n
+	    postal_address \n 
+	    city $color \n
+	    state $state \n
+	    postal_code $postal_code \n
+	    phone $phone \n
+	    yof $yof \
+	    yom $yom \n
+	    engine  $engine \n
+	    arrival_date $arrival_date \n
+	    billing_date $billing_date
+	    notes $notes \n
+        "
+
+
+
+	set exists_p [db_string select_code {
+	    SELECT vin FROM cn_vehicles WHERE vin = :vin
+	} -default null]
+
+	if {$exists_p == "null" && $vin != ""} {
+
+	    
+	    db_transaction {
+		db_exec_plsql insert_vehicle {
+		    SELECT cn_vehicle__new (
+					    :vin,
+					    :model,
+					    :engine,
+					    :yom,
+					    :yof,
+					    :color,
+					    :purchase_date,
+					    :arrival_date,
+					    :billing_date,
+					    :duration,
+					    :resource_id,
+					    :person_id,
+					    :notes,
+					    :creation_ip,
+					    :creation_user,
+					    :context_id
+					    )
+		}
+	    }
+	    
+	}
+    }
+    
+    
+    return
+}
 
 
 ad_proc -public cn_resources::vehicle::new { 
@@ -77,23 +283,26 @@ ad_proc -public cn_resources::get_city_code {
 } {
 
     set city [lindex [split $city "-"] 0]
-#    set city [cn_core::util::treat_string -str $city]
+    set city [cn_core::util::treat_string -str $city]
 
     # WHERE name like [lindex city 0]
-    db_foreach select_city_info {
+    set cities [db_list_of_lists select_city_info {
 	SELECT ibge_code, name FROM br_ibge_municipality ORDER BY name
-    } {
+    } ]
 
-	#set name [cn_core::util::treat_string -str $name]
-
-	ns_log Notice "$ibge_code | [enconding utf8 $name] | [encoding utf8 $city]"
+    foreach element $cities {
+	
+	set name [cn_core::util::treat_string -str [lindex $element 1]]
+	
+	#ns_log Notice "[lindex $element 0] | $name | $city"
 	
 	if {[string equal $name $city]} {
-	    return $city_code
+	    return [lindex $element 0]
+
 	}
     }
     
-    return 
+    return ""
 }
 
 ad_proc -public cn_resources::get_state_code {
@@ -106,15 +315,18 @@ ad_proc -public cn_resources::get_state_code {
     set state [cn_core::util::treat_string -str $state]
 
     # WHERE name like [lindex state 0] -- optimize the query with the first letter of the word
-    db_foreach select_state_info {
+    set states [db_list_of_lists select_state_info {
 	SELECT abbrev, state_name FROM br_states 
-    } {
-
-	set abbrev [cn_core::util::treat_string -str $abbrev]
-	set state_name [cn_core::util::treat_string -str $state_name]
+    }]
+    
+    foreach element $states {
 	
+	set abbrev [cn_core::util::treat_string -str [lindex $element 0]]
+	set state_name [cn_core::util::treat_string -str [lindex $element 1]]
+	
+	#ns_log Notice "$state | $abbrev | $state_name"
 	if {[string equal $abbrev $state] || [string equal $state_name $state]} {
-	    return $abbrev
+	    return [lindex $element 0]
 	}
     }
     
@@ -131,18 +343,22 @@ ad_proc -public cn_resources::get_country_code {
     set country [cn_core::util::treat_string -str $country]
 
     # WHERE name like [lindex city 0]
-    db_foreach select_country_info {
+    set countries [db_list_of_lists select_country_info {
 	SELECT iso, default_name FROM countries 
-    } {
+    }]
+    
 
-	set default_name [cn_core::util::treat_string -str $default_name]
-	set iso [cn_core::util::treat_string -str $iso]
-
+    foreach element $countries {
 	
-	if {[string equal $country $default_name] || [string equal $country $iso]} {
-	    return $iso
+	set iso_aux [cn_core::util::treat_string -str [lindex $element 0]]
+	set default_name_aux [cn_core::util::treat_string -str [lindex $element 1]] 
+			      
+	#ns_log Notice "$country | $default_name_aux | $iso_aux"
+	if {[string equal $country $default_name_aux] || [string equal $country $iso_aux]} {
+	    return [lindex $element 0]
 	}
     }
+    
     
     return ""
 }
@@ -172,34 +388,52 @@ ad_proc -public  cn_resources::categories::import_csv_file {
 	ns_log Notice "LINE $line"
 	
 	set category_id [db_nextval acs_object_id_seq]
-	set pretty_name [lindex [lindex $line 0] 0]
-	set name [lindex [lindex $line 0] 0]
+	set pretty_name [lindex $line 0]
+	set name [cn_core::util::treat_string -str [lindex $line 0]]
 	
-	ns_log notice "[llength $name] - $name"
+	
+	#ns_log notice "[llength $name] - $name"
 
 	db_transaction {
 	    db_dml insert_category {
-	      INSERT INTO cn_categories (
-		       category_id,
-		       package_id,
-		       pretty_name,
-		       name,
-		       object_type
-	       ) VALUES (
-			 :category_id,
-			 :package_id,
-			 :name,
-			 :pretty_name,
-			 :object_type
-	       )
+		INSERT INTO cn_categories (
+		   category_id,
+		   package_id,
+		   pretty_name,
+		   name,
+		   object_type
+		) VALUES (
+		     :category_id,
+		     :package_id,
+		     :pretty_name,
+		     :name,
+		     :object_type
+		)
 	    }
 	}
+	
     }
     
     return
 }
 
+
 namespace eval cn_resources::persons {}
+
+
+ad_proc -public cn_resources::persons::get_type_id {
+    {-type}
+} {
+    Returns type_id 
+} {
+    
+    return [db_string select_type_id {
+	SELECT category_id 
+	FROM cn_categories 
+	WHERE object_type = 'cn_person' 
+	AND name = :type
+    }]
+}
 
 ad_proc -public  cn_resources::persons::import_csv_file {
     {-input_file}
@@ -216,8 +450,10 @@ ad_proc -public  cn_resources::persons::import_csv_file {
 
     
     foreach line $lines {
-	set line [split $line {,}] 
-	ns_log Notice "LINE $line"
+	set line [split $line {;}] 
+
+	if {$line != ""} {  
+	    ns_log Notice "LINE $line"
 	
 	# 0 codigo
 	# 1 first_name/last_name - corporate_name/legal_name
@@ -231,68 +467,89 @@ ad_proc -public  cn_resources::persons::import_csv_file {
 	# 13 Email
 
 
-	set code [lindex $line 0]
-	set name [lindex $line 1]
-	set type [lindex $line 2]
-
-	set country [lindex $line 3]
-	set country_code [cn_resources::get_country_code -country $country]
-
-	set postal_code [lindex $line 4]
-
-	set state [lindex $line 5]
-	set state_code [cn_resources::get_state_code -state $state]
-
-	set city [lindex $line 6]
-	set city_code [cn_resources::get_city_code -city $city]
-	
-	set postal_addess "[lindex $line 8] [lindex $line 9] [lindex $line 10] [lindex $line 7]"
-	set postal_addess2 [lindex $line 11]
-	set phone [lindex $line 12]
-	set email [lindex $line 13]
-	set cpf_cnpj [lindex $line 14]
-
-
-    ns_log Notice "
+	    set code [lindex $line 0]
+	    set pretty_name [lindex $line 1]
+	    set legal_name ""
+	    set contact_id ""
+	    set type [lindex $line 2]
+	    
+	    set type [cn_core::util::treat_string -str $type]
+	    ns_log Notice "TYPE $type"
+	    set type_id [cn_resources::persons::get_type_id -type $type]
+	    
+	    
+	    set country [lindex $line 3]
+	    set country_code [cn_resources::get_country_code -country $country]
+	    
+	    set postal_code [lindex $line 4]
+	    
+	    set state [lindex $line 5]
+	    set state_code [cn_resources::get_state_code -state $state]
+	    
+	    set city [lindex $line 6]
+	    set city_code [cn_resources::get_city_code -city $city]
+	    
+	    set postal_address "[lindex $line 8] [lindex $line 9] [lindex $line 10] [lindex $line 7]"
+	    set postal_address2 [lindex $line 11]
+	    set phone [lindex $line 12]
+	    set email [lindex $line 13]
+	    
+	    
+	    set cpf_cnpj [lindex $line 14]
+	    if {[string equal $cpf_cnpj "000.000.000-00"] || [string equal $cpf_cnpj "000.000.000/0000-00"]} {
+		set cpf_cnpj ""
+	    }
+	    
+	    ns_log Notice "
 	-cpf_cnpj $cpf_cnpj \n
+        -pretty_name $pretty_name \n
         -legal_name $legal_name \n
-        -corporate_name $corporate_name \n
         -code $code \n
-	-type $type \n
+	-type_id $type_id \n
         -contact_id $contact_id \n
 	-email $email \n
 	-phone $phone \n
-	-postal_address $postal_address2 \n
+	-postal_address $postal_address \n
 	-postal_address2 $postal_address2 \n
 	-postal_code $postal_code \n
 	-state_code $state_code \n
 	-city_code $city_code \n
 	-country_code $country_code \n
     "
+	    
+	    set exists_p [db_string select_cpf_cnpj {
+		SELECT cpf_cnpj FROM cn_persons
+		WHERE cpf_cnpj = :cpf_cnpj
+	    } -default null]
+	    
+	    ns_log Notice "TEST $exists_p | CNPJ $cpf_cnpj"
+	    
+	    if {$exists_p == "null"} {
+		ns_log Notice "INSERT"
+		
 
+		cn_resources::person::new \
+		    -cpf_cnpj $cpf_cnpj \
+		    -legal_name $legal_name \
+		    -pretty_name $pretty_name \
+		    -code $code \
+		    -type_id $type_id \
+		    -contact_id $contact_id \
+		    -email $email \
+		    -phone $phone \
+		    -postal_address $postal_address \
+		    -postal_address2 $postal_address2 \
+		    -postal_code $postal_code \
+		    -state_code $state_code \
+		    -city_code $city_code \
+		    -country_code $country_code \
+		    -creation_ip [ad_conn peeraddr] \
+		    -creation_user [ad_conn user_id] \
+		-context_id [ad_conn package_id]         	
+	    }
+	}
+    }	
 
-
-	#cn_resources::person::new \
-	    -cpf_cnpj $cpf_cnpj \
-	    -legal_name $legal_name \
-	    -corporate_name $corporate_name \
-	    -code $code \
-	    -type $type \
-	    -contact_id $contact_id \
-	    -email $email \
-	    -phone $phone \
-	    -postal_address $postal_address \
-	    -postal_address2 $postal_address2 \
-	    -postal_code $postal_code \
-	    -state_code $state_code \
-	    -city_code $city_code \
-	    -country_code $country_code \
-	    -creation_ip [ad_conn peeraddr] \
-	    -creation_user [ad_conn user_id] \
-	    -context_id [ad_conn package_id]         	
-	
-    }
-    
     return
 }
 
@@ -301,9 +558,9 @@ namespace eval cn_resources::person {}
 ad_proc -public cn_resources::person::new {
     {-cpf_cnpj}
     {-legal_name ""}
-    {-corporate_name ""}
+    {-pretty_name ""}
     {-code ""}
-    {-type ""}
+    {-type_id ""}
     {-contact_id ""}
     {-email ""}
     {-phone ""}
@@ -341,13 +598,13 @@ ad_proc -public cn_resources::person::new {
     ns_log Notice "
 	-cpf_cnpj $cpf_cnpj \n
         -legal_name $legal_name \n
-        -corporate_name $corporate_name \n
+        -pretty_name $pretty_name \n
         -code $code \n
-	-type $type \n
+	-type_id $type_id \n
         -contact_id \n
 	-email $email \n
 	-phone $phone \n
-	-postal_address $postal_address2 \n
+	-postal_address $postal_address \n
 	-postal_address2 $postal_address2 \n
 	-postal_code $postal_code \n
 	-state_code $state_code \n
@@ -358,30 +615,30 @@ ad_proc -public cn_resources::person::new {
 	-context_id $context_id    
     "
 
-    
-    
-    set person_id [db_exec_plsql insert_person {
-	SELECT cn_person__new (
-			       :cpf_cnpj,
-			       :legal_name,
-			       :corporate_name,
-			       :code,
-			       :type,
-			       :contact_id,
-			       :email,
-			       :phone,
-			       :postal_address,
-			       :postal_address2,
-			       :postal_code,
-			       :state_code,
-			       :city_code,
-			       :country_code,
-			       :creation_ip,
-			       :creation_user,
-			       :context_id
-			       );
-    }]
-    
+    db_transaction {
+	set person_id [db_exec_plsql insert_person {
+	    SELECT cn_person__new (
+				   :cpf_cnpj,
+				   :legal_name,
+				   :pretty_name,
+				   :code,
+				   :type_id,
+				   :contact_id,
+				   :email,
+				   :phone,
+				   :postal_address,
+				   :postal_address2,
+				   :postal_code,
+				   :state_code,
+				   :city_code,
+				   :country_code,
+				   :creation_ip,
+				   :creation_user,
+				   :context_id
+				   );
+	}]
+    }
+
     return $person_id
     
 }

@@ -4,9 +4,9 @@
 CREATE TABLE cn_resources (
     resource_id integer
     		CONSTRAINT cn_resources_resource_id_pk PRIMARY KEY,
-    code 	varchar(100) NOT NULL,
-    name 	varchar(100),
-    pretty_name varchar(100),
+    code 	varchar(255) NOT NULL,
+    name 	varchar(255),
+    pretty_name varchar(255),
     description text,
     class 	varchar(50),
     unit 	varchar(50),
@@ -243,7 +243,7 @@ CREATE TABLE cn_persons (
        contact_id	integer
        			CONSTRAINT cn_persons_contact_id_fk
  		        REFERENCES acs_objects (object_id),
-       email		varchar(30),
+       email		varchar(255),
        postal_address 	varchar(255),
        postal_address2 	varchar(255),
        postal_code 	varchar(50),
@@ -299,11 +299,11 @@ CREATE OR REPLACE FUNCTION cn_person__new (
   DECLARE
 	p_cpf_cnpj		ALIAS FOR $1;
 	p_legal_name		ALIAS FOR $2;
-	p_corporate_name	ALIAS FOR $3;
+	p_pretty_name		ALIAS FOR $3;
 	p_code			ALIAS FOR $4;
 	p_type_id		ALIAS FOR $5;
-	p_email			ALIAS FOR $6;
-	p_contact_id		ALIAS FOR $7;
+	p_contact_id		ALIAS FOR $6;
+	p_email			ALIAS FOR $7;
        	p_phone		   	ALIAS FOR $8;
        	p_postal_address    	ALIAS FOR $9;
        	p_postal_address2   	ALIAS FOR $10;
@@ -335,7 +335,7 @@ CREATE OR REPLACE FUNCTION cn_person__new (
        	      person_id,
 	      cpf_cnpj,
 	      legal_name,
-	      corporate_name,
+	      pretty_name,
 	      code,
 	      type_id,
 	      contact_id,
@@ -351,7 +351,7 @@ CREATE OR REPLACE FUNCTION cn_person__new (
 	  v_id,
 	  p_cpf_cnpj,
 	  p_legal_name,
-	  p_corporate_name,
+	  p_pretty_name,
 	  p_code,
 	  p_type_id,
 	  p_contact_id,
@@ -448,7 +448,9 @@ CREATE TABLE cn_vehicles (
        person_id	   	integer
        			   	CONSTRAINT cn_vehicles_person_id_fk
 			   	REFERENCES cn_persons (person_id),
-       distributor_code	   	varchar(10),
+       resource_id		integer
+       				CONSTRAINT cn_vehicles_resource_id_fk
+				REFERENCES cn_resources (resource_id),
        notes		   	text
 );
 
@@ -487,7 +489,7 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
       timestamptz,	   -- arrival_date
       timestamptz,	   -- billing_date
       varchar,		   -- duration
-      varchar,		   -- distributor_code
+      integer,		   -- resource_id
       integer,		   -- person_id
       text,		   -- notes
       varchar,             -- creation_ip
@@ -495,26 +497,24 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
       integer		   -- context_id
 ) RETURNS integer AS '
   DECLARE
-       p_vehicle_id		ALIAS FOR $1;
-       p_vin			ALIAS FOR $2; 
-       p_model		      	ALIAS FOR $3;
-       p_engine		      	ALIAS FOR $4;
-       p_year_of_model	      	ALIAS FOR $5;		
-       p_year_of_fabrication 	ALIAS FOR $6;
-       p_color			ALIAS FOR $7;
-       p_purchase_date		ALIAS FOR $8;
-       p_arrival_date		ALIAS FOR $9;
-       p_billing_date		ALIAS FOR $10;
-       p_duration		ALIAS FOR $11;
-       p_distributor_code	ALIAS FOR $12;
-       p_person_id		ALIAS FOR $13;
-       p_notes			ALIAS FOR $14;
-       p_creation_ip		ALIAS FOR $15;
-       p_creation_user		ALIAS FOR $16;
-       p_context_id		ALIAS FOR $17;
+       p_vin			ALIAS FOR $1; 
+       p_model		      	ALIAS FOR $2;
+       p_engine		      	ALIAS FOR $3;
+       p_year_of_model	      	ALIAS FOR $4;		
+       p_year_of_fabrication 	ALIAS FOR $5;
+       p_color			ALIAS FOR $6;
+       p_purchase_date		ALIAS FOR $7;
+       p_arrival_date		ALIAS FOR $8;
+       p_billing_date		ALIAS FOR $9;
+       p_duration		ALIAS FOR $10;
+       p_resource_id		ALIAS FOR $11;
+       p_person_id		ALIAS FOR $12;
+       p_notes			ALIAS FOR $13;
+       p_creation_ip		ALIAS FOR $14;
+       p_creation_user		ALIAS FOR $15;
+       p_context_id		ALIAS FOR $16;
 
        v_id	integer;		
-       v_type	varchar;
 
   BEGIN
 
@@ -541,7 +541,7 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
 	      billing_date, 
 	      duration, 
 	      person_id, 
-	      distributor_code,
+	      resource_id,
 	      notes
        ) VALUES (
        	      v_id,
@@ -556,7 +556,7 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
 	      p_billing_date,
        	      p_duration,
        	      p_person_id,
-	      p_distributor_code,
+	      p_resource_id,
 	      p_notes
        );
 

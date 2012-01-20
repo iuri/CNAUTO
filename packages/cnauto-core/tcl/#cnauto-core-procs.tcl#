@@ -227,5 +227,44 @@ ad_proc -public cn_core::util::treat_string {
 } {
     Removes special chars from the string
 } {
+
+ár a ôn a ão a 
+éd e 
+çã a o}
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: 1 - Disponiveis
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: LINE {Usuários Automáticos}
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: 1 - Usuários
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: LINE {Assistências Técnicas}
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: 1 - Assistências
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: LINE Vendedores
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: 1 - Vendedores
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: LINE {Oficinas Credenciadas}
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: 1 - Oficinas
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: LINE Concessionárias
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: 1 - Concessionárias
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: LINE Entregadores
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: 1 - Entregadores
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: LINE {Entregadores Terceirizados}
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: 1 - Entregadores
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: LINE {Entregadores Próprios}
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: 1 - Entregadores
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: LINE Montadores
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: 1 - Montadores
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: LINE {Montador Interno}
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: 1 - Montador
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: LINE {Montador Terceirizado}
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: 1 - Montador
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: LINE {PMSP sem Cadastros}
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: 1 - PMSP
+[16/Jan/2012:16:24:49][1559.3067407216][-default:4-] Notice: LINE {PMSP com Cadastros}
+[16/Jan/2012:16:24:50][1559.3067407216][-default:4-] Notice: 1 - PMSP
+[16/Jan/2012:16:24:50][1559.3067407216][-default:4-] Notice: LINE {Prestadores de Serviços}
+[16/Jan/2012:16:24:50][1559.3067407216][-default:4-] Notice: 1 - Prestadores
+[16/Jan/2012:16:24:50][1559.3067407216][-default:4-] Notice: LINE {Fornecedores de Impostos}
+[16/Jan/2012:16:24:50][1559.3067407216][-default:4-] Notice: 1 - Fornecedores
+[16/Jan/2012:16:24:50][1559.3067407216][-default:4-] Notice: LINE {Fornecedores do Exte
+
+    set str [string map {à á â ã ç é ê í óôõú-" "" " " ""} [string tolower $str]]
+
     return $str 
 }

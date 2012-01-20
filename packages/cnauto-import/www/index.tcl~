@@ -1,9 +1,9 @@
 ad_page_contract {
     
-    Assurance main page
+    Import main page
 
 } {
-    {orderby "person,asc"}
+    {orderby "provider,asc"}
     page:optional
     {keyword ""}
 } -properties {
@@ -11,19 +11,16 @@ ad_page_contract {
     title:onevalue
 }
 
-set title "[_ cnauto-assurances.Assurances]"
+set title "[_ cnauto-import.Import]"
 set context [list $title]
 
 set return_url [ad_return_url]
-set assurance_ae_url [export_vars -base "assurance-ae" {return_url}] 
-set vehicle_ae_url [export_vars -base "vehicle-ae" {return_url}] 
-set person_ae_url [export_vars -base "person-ae" {return_url}] 
+set assurance_ae_url [export_vars -base "order-ae" {return_url}] 
 
 
 
 set actions {
-    "#cnauto-assurance.Add_assurance#" "assurance-ae?return_url=/cnauto-assurance" "#cnauto-assurance.Add_a_new_assurance#"
-    "#cnauto-assurance.Import_CSV_file#" "import-csv-file?return_url=/cnauto-assurance" "#cnauto-assurance.Import_csv_file#"
+    "#cnauto-import.Add_order#" "order-ae?return_url=/cnauto-order" "#cnauto-import.Add_a_new_order#"
 }
 
 set bulk_actions [list]

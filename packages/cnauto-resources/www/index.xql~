@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<queryset>
+  <fullquery name="resources_pagination">
+    <querytext> 
+        SELECT cr.resource_id, cr.code, cr.pretty_name, cr.class
+    	FROM cn_resources cr
+	[template::list::filter_where_clauses -and -name "resources"]
+    	[template::list::orderby_clause -orderby -name "resources"]
+
+    </querytext>
+  </fullquery>
+
+  <fullquery name="select_persons">
+    <querytext> 
+
+        SELECT cp.person_id, cp.code, cp.pretty_name, cc.pretty_name AS pretty_type
+    	FROM cn_persons cp, cn_categories cc
+	WHERE cc.category_id = cp.type_id
+	[template::list::filter_where_clauses -and -name "persons"]
+    	[template::list::page_where_clause -and -name "persons" -key "cp.person_id"]
+    	[template::list::orderby_clause -orderby -name "persons"]
+
+
+    </querytext>
+  </fullquery>
+
+</queryset>

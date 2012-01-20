@@ -31,7 +31,7 @@ if {[exists_and_not_null state_code]} {
 }
 
 set city_options [db_list_of_lists select_city_info "
-    SELECT name, ibge_code FROM br_ibge_municipality
+    SELECT name, ibge_code FROM br_ibge_municipality $where_clause
 "]
        
 
@@ -41,7 +41,7 @@ set type_options [db_list_of_lists select_types {
 }]
 
 
-ad_form -name person_ae -form {
+ad_form -name person_ae -cancel_url $return_url -form {
     {person_id:key}
     {inform1:text(inform)
 	{label "<b>[_ cnauto-resources.Person_Info]</b>"}
@@ -56,7 +56,7 @@ ad_form -name person_ae -form {
 	{label "[_ cnauto-resources.Email]"}
     }
     {code:text(text)
-	{label "[_ cnauto-resources.First_names]"}
+	{label "[_ cnauto-resources.Code]"}
     }
     {type_id:integer(select)
 	{label "[_ cnauto-resources.Type]"}
@@ -106,7 +106,7 @@ ad_form -extend -name person_ae -form {
     {state_code:text(select)
 	{label "[_ cnauto-resources.State]"}
 	{options $state_options}
-	{html {onChange "document.person_ae.__refreshing_p.value='1';document.cal_item.submit();"}}
+	{html {onChange "document.person_ae.__refreshing_p.value='1';document.person_ae.submit();"}}
     }
     {city_code:text(select)
 	{label "[_ cnauto-resources.City_names]"}
@@ -114,30 +114,31 @@ ad_form -extend -name person_ae -form {
     }
     {country_code:text(select)
 	{label "[_ cnauto-resources.Country]"}
-	{options {{"" "Select"} {"BR" "Brazil"} {"EX" "Foreign Country"}}}
+	{options {{"Select" ""} {"Brazil" "BR"} {"Foreign Country" "EX"}}}
     }
 } -on_submit {
 } -new_data {
+
+	cn_resources::person::new \
+	    -cpf_cnpj $cpf_cnpj \
+	    -legal_name $legal_name \
+	    -corporate_name $corporate_name \
+	    -code $code \
+	    -type $type \
+	    -contact_id $contact_id \
+	    -email $email \
+	    -phone $phone \
+	    -postal_address $postal_address \
+	    -postal_address2 $postal_address2 \
+	    -postal_code $postal_code \
+	    -state_code $state_code \
+	    -city_code $city_code \
+	    -country_code $country_code \
+	    -creation_ip [ad_conn peeraddr] \
+	    -creation_user [ad_conn user_id] \
+	    -context_id [ad_conn package_id]         	
     
-    cn_resources::person::new \
-	-cpf_cnpj $cpf_cnpj \
-	-legal_name $legal_name \
-	-corporate_name $corporate_name \
-	-code $code \
-	-type $type \
-	-contact_id $contact_id \
-	-email $email \
-	-phone $phone \
-	-postal_address $postal_address \
-	-postal_address2 $postal_address2 \
-	-postal_code $postal_code \
-	-state_code $state_code \
-	-city_code $city_code \
-	-country_code $country_code \
-	-creation_ip [ad_conn peeraddr] \
-	-creation_user [ad_conn user_id] \
-	-context_id [ad_conn package_id]         	
-    
+
 } -edit_request {
 } -after_submit {
     ad_returnredirect $return_url
