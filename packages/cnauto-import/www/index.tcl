@@ -3,7 +3,7 @@ ad_page_contract {
     Import main page
 
 } {
-    {orderby "provider,asc"}
+    {orderby "code,asc"}
     page:optional
     {keyword ""}
 } -properties {
@@ -21,6 +21,7 @@ set assurance_ae_url [export_vars -base "order-ae" {return_url}]
 
 set actions {
     "#cnauto-import.Add_order#" "order-ae?return_url=/cnauto-order" "#cnauto-import.Add_a_new_order#"
+    "#cnauto-import.Incoterms#" "admin/incoterms?return_url=/cnauto-order" "#cnauto-import.List_incoterms#"
 }
 
 set bulk_actions [list]
@@ -41,9 +42,6 @@ template::list::create \
     -actions $actions \
     -row_pretty_plural "orders" \
     -bulk_actions $bulk_actions \
-    -page_flush_p t \
-    -page_size 50 \
-    -page_query_name orders_pagination \
     -elements {
 	code {
 	    label "[_ cnauto-import.Code]"
@@ -51,64 +49,37 @@ template::list::create \
 		<a href="@orders.order_url@">@orders.code;noquote@
 	    }
 	}
-	provider {
+	provider_id {
 	    label "[_ cnauto-import.Provider]"
 	    display_template {
-		<a href="@orders.provider_url@">@orders.provider;noquote@</a>
+		<a href="@orders.provider_url@">@orders.provider_id;noquote@</a>
 	    }
 	}
-	assignee {
-	    label "[_ cnauto-import.Assignee]"
+	incoterm_id {
+	    label "[_ cnauto-import.Incoterm]"
 	    display_template {
-		@orders.assignee;noquote@</a>
-	    }
+		@orders.incoterm_id;noquote@</a>
+	    }	    
 	}
-	department {
-	    label "[_ cnauto-import.Department]"
-	    display_template {
-		@orders.department;noquote@</a>
-	    }
-	}
-	estimated_days {
-	    label "[_ cnauto-import.Estimated_days]"
-	    display_template {
-		@orders.incoterm;noquote@</a>
-	    }
-	} 
-	estimated_date {
-	    label "[_ cnauto-import.Estimated_date]"
-	    display_template {
-		@orders.estimated_date;noquote@</a>
-	    }
-	}  
-	executed_date {
-	    label "[_ cnauto-import.Executed_date]"
-	    display_template {
-		@orders.executed_date;noquote@</a>
-	    }
-	} 
 	incoterm_value {
 	    label "[_ cnauto-import.Incoterm_value]"
 	    display_template {
 		@orders.incoterm_value;noquote@</a>
-	    }
-	
+	    }	    
 	}
-   } -orderby {
-	provider {
-	    label "[_ cnauto-import.Provider]"
-	    orderby "lower(cp.provider)"
+    } -orderby {
+	code {
+	    label "[_ cnauto-import.Code]"
+	    orderby "lower(co.code)"
 	}
     } 
 
 
-db_multirow -extend {assurance_url vehicle_url person_url} assurances select_assurances {
-   
-} {
+db_multirow -extend {provider_url order_url} orders select_orders {} {
+    
+    set order_url ""
+    set provider_url ""
 
-    set assurance_url [export_vars -base assurance-one {return_url assurance_id}]
-    set vehicle_url [export_vars -base vehicle-one {return_url vehicle_id}]
-    set person_url [export_vars -base person-one {return_url person_id}]
 }
 
 
