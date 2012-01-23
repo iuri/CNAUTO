@@ -61,12 +61,11 @@ CREATE OR REPLACE FUNCTION cn_order__new (
   DECLARE
 	p_code			ALIAS FOR $1;
 	p_provider_id		ALIAS FOR $2;
-	p_workflow_id		ALIAS FOR $3;
-	p_incoterm_id		ALIAS FOR $4;
-	p_incoterm_value	ALIAS FOR $5;
-	p_creation_ip		ALIAS FOR $6;
-	p_creation_user		ALIAS FOR $7;
-	p_context_id		ALIAS FOR $8;
+	p_incoterm_id		ALIAS FOR $3;
+	p_incoterm_value	ALIAS FOR $4;
+	p_creation_ip		ALIAS FOR $5;
+	p_creation_user		ALIAS FOR $6;
+	p_context_id		ALIAS FOR $7;
 
        	v_id			integer;
 
@@ -81,16 +80,16 @@ CREATE OR REPLACE FUNCTION cn_order__new (
 		  true			-- 
         );
 	
-	INSERTO INTO cn_orders (
+	INSERT INTO cn_orders (
 		order_id,
 		code,
-		provider,
+		provider_id,
 		incoterm_id,
 		incoterm_value	
 	) VALUES (
 		v_id,
 		p_code,
-		p_provider,
+		p_provider_id,
 		p_incoterm_id,
 		p_incoterm_value	
 	);

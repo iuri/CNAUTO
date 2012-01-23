@@ -16,6 +16,7 @@
         <maturity>0</maturity>
 
         <provides url="cnauto-import" version="0.1d"/>
+        <requires url="cnauto-orders" version="0.1d"/>
 
         <callbacks>
         </callbacks>

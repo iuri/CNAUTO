@@ -2,7 +2,7 @@ ad_page_contract {
 
     Add/Edit person
 } {
-    {person_id ""}
+    {person_id:integer,optional}
     {type_id ""}
     {state_code ""}
     {return_url ""}
@@ -35,25 +35,32 @@ set city_options [db_list_of_lists select_city_info "
 "]
        
 
-set type_options [db_list_of_lists select_types {
-    SELECT pretty_name, category_id
-    FROM cn_categories WHERE object_type = 'cn_person'
-}]
+if {$type_id == ""} {
+    set type_options [db_list_of_lists select_types {
+	SELECT pretty_name, category_id
+	FROM cn_categories WHERE object_type = 'cn_person' ORDER BY pretty_name
+    }]
+} else {
+    set type_options [db_list_of_lists select_types {
+	SELECT pretty_name, category_id
+	FROM cn_categories WHERE category_id = :type_id
+    }]
+}
+    
 
-
-ad_form -name person_ae -cancel_url $return_url -form {
+ad_form -name person_ae -form {
     {person_id:key}
     {inform1:text(inform)
-	{label "<b>[_ cnauto-resources.Person_Info]</b>"}
+	    {label "<b>[_ cnauto-resources.Company_info]</b>"}
     }
-    {first_names:text(text)
-	{label "[_ cnauto-resources.First_names]"}
+    {cpf_cnpj:text(text)
+	{label "[_ cnauto-resources.CPF_CNPJ]"}
     }
-    {last_name:text(text)
-	{label "[_ cnauto-resources.Last_names]"}
+    {legal_name:text(text)
+	{label "[_ cnauto-resources.Legal_name]"}
     }
-    {email:text(text)
-	{label "[_ cnauto-resources.Email]"}
+    {corporate_name:text(text)
+	{label "[_ cnauto-resources.Corporate_name]"}
     }
     {code:text(text)
 	{label "[_ cnauto-resources.Code]"}
@@ -65,80 +72,96 @@ ad_form -name person_ae -cancel_url $return_url -form {
     }
 }
 
-if {[exists_and_not_null type_id] } {
+if {$type_id != ""} {
     ad_form -extend -name person_ae -form {
 	{inform2:text(inform)
-	    {label "<b>[_ cnauto-resources.Company_info]</b>"}
+	    {label "<b>[_ cnauto-resources.Person_Info]</b>"}
 	}
-	{cpf_cnpj:text(text)
-	    {label "[_ cnauto-resources.CPF_CNPJ]"}
+	{email:text(text),optional
+	    {label "[_ cnauto-resources.Email]"}
 	}
-	{legal_name:text(text)
-	    {label "[_ cnauto-resources.Legal_name]"}
+ 	{first_names:text(text),optional
+	    {label "[_ cnauto-resources.First_names]"}
 	}
-	{corporate_name:text(text)
-	    {label "[_ cnauto-resources.Corporate_name]"}
+	{last_name:text(text),optional
+	    {label "[_ cnauto-resources.Last_names]"}
 	}
-
+	{inform3:text(inform)
+	    {label "<b>[_ cnauto-resources.Contact_info]</b>"}
+	}
+	{phone:text(text),optional
+	    {label "[_ cnauto-resources.Phone]"}
+	}
+	{postal_address:text(text),optional
+	    {label "[_ cnauto-resources.Postal_address]"}
+	}
+	{postal_address2:text(text),optional
+	    {label "[_ cnauto-resources.Postal_address]"}
+	}
+	{postal_code:text(text),optional
+	    {label "[_ cnauto-resources.Postal_code]"}
+	}
+	{state_code:text(select),optional
+	    {label "[_ cnauto-resources.State]"}
+	    {options $state_options}
+	    {html {onChange "document.person_ae.__refreshing_p.value='1';document.person_ae.submit();"}}
+	}
+	{city_code:text(select),optional
+	    {label "[_ cnauto-resources.City_names]"}
+	    {options $city_options}
+	}
+	{country_code:text(select),optional
+	    {label "[_ cnauto-resources.Country]"}
+	    {options {{"Select" ""} {"Brazil" "BR"} {"Foreign Country" "EX"}}}
+	}
     }
 }
 
-
-
-
-
 ad_form -extend -name person_ae -form {
-    {inform3:text(inform)
-	{label "<b>[_ cnauto-resources.Contact_info]</b>"}
-    }
-    {phone:text(text)
-	{label "[_ cnauto-resources.Phone]"}
-    }
-    {postal_address:text(text)
-	{label "[_ cnauto-resources.Postal_address]"}
-    }
-    {postal_address2:text(text)
-	{label "[_ cnauto-resources.Postal_address]"}
-    }
-    {postal_code:text(text)
-	{label "[_ cnauto-resources.Postal_code]"}
-    }
-    {state_code:text(select)
-	{label "[_ cnauto-resources.State]"}
-	{options $state_options}
-	{html {onChange "document.person_ae.__refreshing_p.value='1';document.person_ae.submit();"}}
-    }
-    {city_code:text(select)
-	{label "[_ cnauto-resources.City_names]"}
-	{options $city_options}
-    }
-    {country_code:text(select)
-	{label "[_ cnauto-resources.Country]"}
-	{options {{"Select" ""} {"Brazil" "BR"} {"Foreign Country" "EX"}}}
+    {return_url:text(hidden)
+	{value $return_url}
     }
 } -on_submit {
 } -new_data {
-
-	cn_resources::person::new \
-	    -cpf_cnpj $cpf_cnpj \
-	    -legal_name $legal_name \
-	    -corporate_name $corporate_name \
-	    -code $code \
-	    -type $type \
-	    -contact_id $contact_id \
-	    -email $email \
-	    -phone $phone \
-	    -postal_address $postal_address \
-	    -postal_address2 $postal_address2 \
-	    -postal_code $postal_code \
-	    -state_code $state_code \
-	    -city_code $city_code \
-	    -country_code $country_code \
-	    -creation_ip [ad_conn peeraddr] \
-	    -creation_user [ad_conn user_id] \
-	    -context_id [ad_conn package_id]         	
     
+    
+    if {$email != ""} {
+	
+	set contact_id [db_nextval acs_object_id_seq]
+	
+	array set creation_info [auth::create_user \
+				     -user_id $contact_id \
+				     -email $email \
+				     -first_names $first_names \
+				     -last_name $last_name \
+				    ]	
+    } else {
+	set contact_id ""
+    }
 
+    
+    
+    
+    
+    cn_resources::person::new \
+	-cpf_cnpj $cpf_cnpj \
+	-legal_name $legal_name \
+	-pretty_name $corporate_name \
+	-code $code \
+	-type_id $type_id \
+	-contact_id $contact_id \
+	-email $email \
+	-phone $phone \
+	-postal_address $postal_address \
+	-postal_address2 $postal_address2 \
+	-postal_code $postal_code \
+	-state_code $state_code \
+	-city_code $city_code \
+	-country_code $country_code \
+	-creation_ip [ad_conn peeraddr] \
+	-creation_user [ad_conn user_id] \
+	-context_id [ad_conn package_id]         	
+    
 } -edit_request {
 } -after_submit {
     ad_returnredirect $return_url

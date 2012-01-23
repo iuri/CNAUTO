@@ -21,7 +21,7 @@ set assurance_ae_url [export_vars -base "order-ae" {return_url}]
 
 set actions {
     "#cnauto-import.Add_order#" "order-ae?return_url=/cnauto-order" "#cnauto-import.Add_a_new_order#"
-    "#cnauto-import.Incoterms#" "admin/incoterms?return_url=/cnauto-order" "#cnauto-import.List_incoterms#"
+    "#cnauto-import.Admin#" "admin/index?return_url=/cnauto-order" "#cnauto-import.Admin#"
 }
 
 set bulk_actions [list]
@@ -49,16 +49,16 @@ template::list::create \
 		<a href="@orders.order_url@">@orders.code;noquote@
 	    }
 	}
-	provider_id {
+	provider {
 	    label "[_ cnauto-import.Provider]"
 	    display_template {
-		<a href="@orders.provider_url@">@orders.provider_id;noquote@</a>
+		<a href="@orders.provider_url@">@orders.provider;noquote@</a>
 	    }
 	}
-	incoterm_id {
+	incoterm {
 	    label "[_ cnauto-import.Incoterm]"
 	    display_template {
-		@orders.incoterm_id;noquote@</a>
+		@orders.incoterm;noquote@</a>
 	    }	    
 	}
 	incoterm_value {
@@ -66,6 +66,12 @@ template::list::create \
 	    display_template {
 		@orders.incoterm_value;noquote@</a>
 	    }	    
+	}
+	creation_date {
+	    label ""
+	    display_template {
+		@orders.creation_date;noquote@
+	    }
 	}
     } -orderby {
 	code {
@@ -77,7 +83,9 @@ template::list::create \
 
 db_multirow -extend {provider_url order_url} orders select_orders {} {
     
-    set order_url ""
+    set order_url [export_vars -base "order-one" {order_id return_url}]
+
+    ns_log Notice "TEDST $order_id | "
     set provider_url ""
 
 }

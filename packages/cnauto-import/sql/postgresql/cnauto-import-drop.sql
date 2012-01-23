@@ -21,9 +21,9 @@ DROP FUNCTION cn_import_wo_map__delete (
 
 DROP TABLE cn_import_incoterms;
 
-DROP TABLE cn_import_workflows;
+DROP TABLE cn_import_workflows CASCADE;
 
-DROP TABLE cn_import_departments;
+DROP TABLE cn_import_departments CASCADE;
 
 
 ------------------------------------
@@ -31,3 +31,5 @@ DROP TABLE cn_import_departments;
 ------------------------------------
  			 
 DROP TABLE cn_import_workflow_order_map;
+
+

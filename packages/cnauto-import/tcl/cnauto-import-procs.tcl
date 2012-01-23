@@ -35,3 +35,25 @@ ad_proc -public cn_import::incoterm::new {
 
     return 
 }
+
+
+
+ad_proc -public cn_import::get_provider_options {} {
+    Returns a list of providers for a seletc widget
+} {
+
+    
+    
+
+    set providers [db_list_of_lists select_providers {
+	SELECT cp.pretty_name, cp.person_id 
+	FROM cn_persons cp, cn_categories cc 
+	WHERE cp.type_id = cc.category_id AND cc.name = 'fornecedoresdoexterior';
+    }]
+
+    lappend providers "{#cn-import.Select_providers#} 0"
+
+    ns_log Notice "$providers"
+
+    return $providers
+}

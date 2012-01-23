@@ -40,5 +40,5 @@ SELECT acs_object_type__drop_type (
 -- Table: cn_orders
 ------------------------------------
 
-DROP TABLE cn_orders;
+DROP TABLE cn_orders CASCADE;
 

@@ -1,6 +1,6 @@
 ad_page_contract {
     
-    Incoterms admin page
+    Workflow admin page
 
 } {
     {orderby "name,asc"}
@@ -11,46 +11,44 @@ ad_page_contract {
     title:onevalue
 }
 
-set title "[_ cnauto-import.Import]"
+set title "[_ cnauto-import.Workflow]"
 set context [list $title]
 
 set return_url [ad_return_url]
-set assurance_ae_url [export_vars -base "order-ae" {return_url}] 
-
 
 set bulk_actions [list]
 
 set actions [list]
 
 template::list::create \
-    -name incoterms \
-    -multirow incoterms \
-    -key incoterm_id \
+    -name workflow_steps \
+    -multirow workflow_steps \
+    -key workflow_id \
     -actions $actions \
-    -row_pretty_plural "orders" \
+    -row_pretty_plural "workflow_steps" \
     -bulk_actions $bulk_actions \
     -elements {
 	name {
 	    label "[_ cnauto-import.Name]"
 	    display_template {
-		@incoterms.name;noquote@
+		@workflow_steps.name;noquote@
 	    }
 	}
 	pretty_name {
 	    label "[_ cnauto-import.Pretty_name]"
 	    display_template {
-		@incoterms.pretty_name;noquote@
+		@workflow_steps.pretty_name;noquote@
 	    }
 	}
     } -orderby {
 	name {
 	    label "[_ cnauto-import.Name]"
-	    orderby "lower(cii.name)"
+	    orderby "lower(ciw.name)"
 	}
     } 
 
 
-db_multirow -extend {} incoterms select_incoterms {
-    SELECT cii.name, cii.pretty_name FROM cn_import_incoterms cii
+db_multirow -extend {} workflow_steps select_workflow {
+    SELECT ciw.name, ciw.pretty_name FROM cn_import_workflows ciw
 } {}
 
