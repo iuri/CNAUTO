@@ -1,7 +1,0 @@
-<master>
-
-<property name="@title;noquote@"></property>
-<property name="@context;noquote@"></property>
-
-
-<a href="import_categories">Import Person Categories</a>

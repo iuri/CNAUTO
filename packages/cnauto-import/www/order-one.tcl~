@@ -1,6 +1,0 @@
-ad_page_contract {
-
-    Order's Info page
-} {
-    {-order_id}
-}

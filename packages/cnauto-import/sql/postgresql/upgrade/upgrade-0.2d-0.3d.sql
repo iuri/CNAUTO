@@ -1,26 +1,4 @@
--- /packages/cnauto-assurance/sql/postgresql/cnauto-import-create.sql
-
---
--- The CN Auto Import Package
---
--- @author Iuri Sampaio (iuri.sampaio@iurix.com)
--- @creation-date 2012-01-21
---
-
-
-------------------------------------
--- Table: cn_import_incoterms
-------------------------------------
-
-CREATE TABLE cn_import_incoterms (
-       incoterm_id		 integer 
-       				 CONSTRAINT cn_import_inconterms_inconterm_id_pk PRIMARY KEY,
-       name			 varchar(255)
-       				 CONSTRAINT cn_import_incoterms_name_un UNIQUE,
-       pretty_name		 varchar(255)
-);
-
-
+-- /packages/cnauto-assurance/sql/postgresql/upgrade/upgrade-0.2d-0.3d.sql
 
  
 ------------------------------------
@@ -164,7 +142,7 @@ CREATE OR REPLACE FUNCTION cn_workflow_step__edit (
 	       pretty_name = p_pretty_name,
 	       assigner_id = p_assigner_id,
 	       assignee_id = p_assignee_id,
-	       department_id  p_department_id,
+	       department_id = p_department_id,
 	       estimated_days = p_estimated_days,
 	       estimated_date = p_estimated_date,
 	       executed_date = p_executed_date,
@@ -243,5 +221,104 @@ CREATE OR REPLACE FUNCTION cn_workflow_order_map__delete (
 	RETURN 0;
   END;' language 'plpgsql';
 
+
+
+CREATE OR REPLACE FUNCTION inline_0 ()
+RETURNS integer AS '
+  DECLARE
+	v_workflow_id	integer;
+
+  BEGIN
+	
+	SELECT acs_object_id_seq.nextval INTO v_workflow_id FROM dual;
+  
+	INSERT INTO cn_workflows (
+	       workflow_id,
+	       name,
+	       pretty_name
+	) VALUES (
+	       v_workflow_id,
+	       ''importorder'',
+	       ''Import Order''
+	);
+
+	RETURN 0;
+
+  END;' language 'plpgsql';
+
+SELECT inline_0 ();
+DROP FUNCTION inline_0 ();
+
+CREATE OR REPLACE FUNCTION inline_0 ()
+RETURNS integer AS '
+  DECLARE
+	v_step_id	integer;
+	v_workflow_id 	integer;
+	row	  	record;
+  BEGIN
+	
+
+	-- SELECT nextval(''t_acs_object_id_seq'') INTO v_step_id;
+
+	SELECT workflow_id INTO v_workflow_id FROM cn_workflows WHERE name = ''importorder'';
+
+	FOR row IN
+	    SELECT name, pretty_name, sort_order FROM cn_import_workflows
+	
+	LOOP
+		SELECT acs_object_id_seq.nextval INTO v_step_id FROM dual;
+
+		INSERT INTO cn_workflow_steps (
+		       step_id,
+		       workflow_id,
+		       name,
+		       pretty_name,
+		       sort_order
+		) VALUES (
+		  	 v_step_id,
+			 v_workflow_id,
+			 row.name,
+			 row.pretty_name,
+			 row.sort_order
+		);
+	END LOOP;
+
+	RETURN 0;  
+
+  END;' language 'plpgsql';
+
+
+SELECT inline_0 ();
+DROP FUNCTION inline_0 ();
+
+
+DROP FUNCTION cn_import_wo_map__new (
+       integer,	  	   -- map_id
+       integer,		   -- workflow_id
+       integer, 	   -- order_id
+       integer,		   -- assigner_id
+       integer,		   -- assignee_id
+       integer,		   -- department_id
+       integer,		   -- estimated_days
+       timestamptz,	   -- estimated_date
+       timestamptz	   -- executed_date
+);
+
+
+DROP FUNCTION cn_import_wo_map__delete (
+       integer		   -- map_id
+);
+
+
+DROP TABLE cn_import_workflows CASCADE;
+
+DROP TABLE cn_import_departments CASCADE;
+
+
+------------------------------------
+-- Table: cn_import_workflow_order_map
+------------------------------------
+ 			 
+DROP TABLE cn_import_workflow_order_map;
 
 

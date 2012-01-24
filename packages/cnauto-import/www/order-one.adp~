@@ -1,4 +1,0 @@
-<master>
-
-<property name="title">@title;noquote@</property>
-<property name="name">@context;noquote@</property>

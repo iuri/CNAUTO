@@ -14,16 +14,18 @@ ad_page_contract {
 set title "[_ cnauto-import.Workflow]"
 set context [list $title]
 
-set return_url [ad_return_url]
+set return_url [ad_conn url]
 
 set bulk_actions [list]
 
 set actions [list]
 
+
+
 template::list::create \
     -name workflow_steps \
     -multirow workflow_steps \
-    -key workflow_id \
+    -key step_id \
     -actions $actions \
     -row_pretty_plural "workflow_steps" \
     -bulk_actions $bulk_actions \
@@ -40,15 +42,23 @@ template::list::create \
 		@workflow_steps.pretty_name;noquote@
 	    }
 	}
+	sort_order {
+	    label "[_ cnauto-import.Sort_order]"
+	    display_template {
+		<input type="integer" size=2 name="steps.@workflow_steps.step_id@" value="@workflow_steps.sort_order@">
+	    }
+	}
     } -orderby {
 	name {
 	    label "[_ cnauto-import.Name]"
-	    orderby "lower(ciw.name)"
+	    orderby "lower(cws.name)"
 	}
     } 
 
 
 db_multirow -extend {} workflow_steps select_workflow {
-    SELECT ciw.name, ciw.pretty_name FROM cn_import_workflows ciw
+    SELECT cws.step_id, cws.workflow_id, cws.name, cws.pretty_name, cws.sort_order 
+    FROM cn_workflow_steps cws
+    ORDER BY cws.sort_order
 } {}
 
