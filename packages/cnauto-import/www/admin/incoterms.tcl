@@ -15,8 +15,6 @@ set title "[_ cnauto-import.Import]"
 set context [list $title]
 
 set return_url [ad_return_url]
-set assurance_ae_url [export_vars -base "order-ae" {return_url}] 
-
 
 set bulk_actions [list]
 

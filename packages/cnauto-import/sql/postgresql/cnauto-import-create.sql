@@ -30,7 +30,10 @@ CREATE TABLE cn_workflows (
        workflow_id		integer
        				CONSTRAINT cn_workflows_workflow_id_pk PRIMARY KEY,   
        name			varchar(255),
-       pretty_name		varchar(255)
+       pretty_name		varchar(255),
+       package_id		integer
+       				CONSTRAINT cn_workflows_workflow_id_fk 
+				REFERENCES apm_packages (package_id)
 );
 
 

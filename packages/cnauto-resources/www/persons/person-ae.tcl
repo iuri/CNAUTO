@@ -59,8 +59,8 @@ ad_form -name person_ae -form {
     {legal_name:text(text)
 	{label "[_ cnauto-resources.Legal_name]"}
     }
-    {corporate_name:text(text)
-	{label "[_ cnauto-resources.Corporate_name]"}
+    {pretty_name:text(text)
+	{label "[_ cnauto-resources.Name]"}
     }
     {code:text(text)
 	{label "[_ cnauto-resources.Code]"}
@@ -146,7 +146,7 @@ ad_form -extend -name person_ae -form {
     cn_resources::person::new \
 	-cpf_cnpj $cpf_cnpj \
 	-legal_name $legal_name \
-	-pretty_name $corporate_name \
+	-pretty_name $pretty_name \
 	-code $code \
 	-type_id $type_id \
 	-contact_id $contact_id \

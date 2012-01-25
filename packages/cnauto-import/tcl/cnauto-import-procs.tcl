@@ -74,9 +74,9 @@ ad_proc -public cn_import::workflow::new {
 namespace eval cn_import::workflow::step {}
 
 ad_proc -public cn_import::workflow::step::new {
+    {-workflow_id}
     {-name ""}
     {-pretty_name ""}
-    {-workflow_id}
 } {
 
     Adds a new step to a workflow

@@ -16,9 +16,8 @@
         <maturity>0</maturity>
 
         <provides url="cnauto-assurance" version="0.1d"/>
-        <requires url="ref-countries" version="5.6.0"/>
-        <requires url="ref-br-states" version="0.1d"/>
-        <requires url="ref-br-ibge" version="0.5d"/>
+        <requires url="cnauto-core" version="0.1d"/>
+        <requires url="cnauto-resources" version="0.3d"/>
 
         <callbacks>
         </callbacks>
