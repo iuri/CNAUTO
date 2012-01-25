@@ -1,10 +1,4 @@
-<master src="/www/blank-compat">
-
-<property name="title">@title;noquote@</property>
-<property name="context">@context;noquote@</property>
-
-
-
+<master src="/www/blank-master">
 
 <div class="main">
   <div class="header">
@@ -22,8 +16,28 @@
 	    <li><a href="@logout_url@">#cnauto-core.Log_out#</a></li>
           </if>
       </ul>
-
     </div>
+    <div class="breadcumbs"> 
+      <br>
+      <if @context_bar@ not nil>
+        @context_bar;noquote@
+      </if>
+      <else>
+        <if @context:rowcount@ not nil>
+        <ul class="compact">
+          <multiple name="context">
+          <if @context.url@ not nil>
+            <li><a href="@context.url@">@context.label@</a> @separator@</li>
+          </if>
+          <else>
+            <li>@context.label@</li>
+          </else>
+          </multiple>
+        </ul>
+        </if>
+      </else>
+
+    </div>   
 
     <if @navigation:rowcount@ not nil>
       <list name="navigation_groups">

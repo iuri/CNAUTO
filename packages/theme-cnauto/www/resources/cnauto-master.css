@@ -16,7 +16,10 @@
     float:left;
 }
 
-
+.main .header .breadcumbs {
+    clear: both;
+    float: left;
+}
 .main .header .header-navigation {
     float: right;
 }
