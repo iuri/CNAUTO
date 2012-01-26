@@ -12,6 +12,7 @@ ad_page_contract {
 set title "[_ cnauto-import.Admin]"
 set context [list $title]
 
+set return_url [ad_return_url]
 
 set node_id [db_string select_node_id {
     SELECT node_id 
@@ -22,7 +23,6 @@ set node_id [db_string select_node_id {
 
 set resources_url [site_node::get_url -node_id $node_id]
 
-set type_id 826
+set type_id [cn_categories::get_category_id -name "fornecedoresdoexterior"]
 
-ns_log Notice "TEDST $resources_url"
 set person_ae_url [export_vars -base "${resources_url}persons/person-ae"  {return_url type_id}]

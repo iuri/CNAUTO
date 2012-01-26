@@ -9,7 +9,22 @@ ad_library {
 }
 
 namespace eval cnauto_core {}
+
+namespace eval cn_core {}
+
 namespace eval cn_core::util {}
+namespace eval cn_categories {}
+
+ad_proc -public cn_categories::get_category_id {
+    {-name}
+    {-type ""}
+} {
+    Returns category_id
+} {
+    return [db_string select_category_id {
+	SELECT category_id FROM cn_categories WHERE name = :name OR object_type = :type
+    } -default null]
+} 
 
 
 

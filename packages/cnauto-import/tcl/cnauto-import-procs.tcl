@@ -7,8 +7,11 @@ ad_library {
 
 
 namespace eval cn_import {}
-namespace eval cn_import::incoterm {}
 
+##########################
+###  Incoterms
+##########################
+namespace eval cn_import::incoterm {}
 
 ad_proc -public cn_import::incoterm::new {
     {-name ""}
@@ -38,6 +41,10 @@ ad_proc -public cn_import::incoterm::new {
 
 
 
+##########################
+###  Workflow
+##########################
+
 namespace eval cn_import::workflow {}
 
 # There is a design error on the workflow structure created. 
@@ -56,26 +63,41 @@ ad_proc -public cn_import::workflow::new {
     set workflow_id [db_nextval acs_object_id_seq]
 	
 
-    db_dml insert_workflow {
-	INSERT INTO cn_import_workflows (
-	    workflow_id,
-	    name,
-	    pretty_name
-        ) VALUES (
-		  :workflow_id,
-		  :name,
-		  :pretty_name
-	)
+    db_transaction {
+	db_dml insert_workflow {
+	    INSERT INTO cn_workflows (
+				      workflow_id,
+				      name,
+				      pretty_name
+				      ) VALUES (
+						:workflow_id,
+						:name,
+						:pretty_name
+						)
+	}
     }
 
     return $workflow_id
 }
 
+
+
+
+
+
+
+
+##########################
+###  Workflow Steps
+##########################
+
+
+
+
 namespace eval cn_import::workflow::step {}
 
 ad_proc -public cn_import::workflow::step::new {
     {-workflow_id}
-    {-name ""}
     {-pretty_name ""}
 } {
 
@@ -84,16 +106,19 @@ ad_proc -public cn_import::workflow::step::new {
 
     set step_id [db_nextval acs_object_id_seq]
 	
+    set name [cn_core::util::treat_string -str $pretty_name]
 
-    db_exec_plsql insert_step {
-	SELECT cn_workflow_step__new (
-				      :step_id,
-				      :workflow_id,
-				      :name,
-				      :pretty_name
-				      )
+    db_transaction {
+	db_exec_plsql insert_step {
+	    SELECT cn_workflow_step__new (
+					  :step_id,
+					  :workflow_id,
+					  :name,
+					  :pretty_name
+					  )
+	}
     }
-
+    
     return $step_id
 }
 
@@ -165,9 +190,7 @@ ad_proc -public cn_import::workflow::step::edit {
 ad_proc -public cn_import::get_provider_options {} {
     Returns a list of providers for a seletc widget
 } {
-
-    
-    
+   
 
     set providers [db_list_of_lists select_providers {
 	SELECT cp.pretty_name, cp.person_id 

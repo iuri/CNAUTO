@@ -1,26 +1,65 @@
 ad_page_contract {
 
-    Add/Edit workflow step
+    Add/Edit workflow
 } {
-    {workflow_id ""}
+    {workflow_id:integer,optional}
     {return_url ""}
 }
 
-if { [exists_and_not_null order_id] } {
-    set page_title [_ cnauto-import.Edit_step]
+if { [exists_and_not_null workflow_id] } {
+    set title [_ cnauto-import.Edit_workflow]
+    set context [list $title]
     #set ad_form_mode display
 } else {
-    set page_title [_ cnauto-import.Add_step]
+    set title [_ cnauto-import.Add_workflow]
+    set context [list $title]
     #set ad_form_mode edit
 }
 
 
-ad_form name step_ae -form {
+ad_form -name workflow_ae -form {
+    {workflow_id:key}
+    {pretty_name:text(text)
+	{label "[_ cnauto-import.Name]"}
+    }
 } -on_submit {
 } -new_data {
+    
+    set workflow_id [db_nextval acs_object_id_seq]
+    set package_id [ad_conn package_id]
+    set name [cn_core::util::treat_string -str $pretty_name]
+
+    db_exec_plsql insert_workflow {
+	SELECT cn_workflow__new (
+				 :workflow_id,
+				 :package_id,
+				 :name,
+				 :pretty_name
+				 )
+    }
+
 } -edit_data {
 
-    cn_import::workflow::step::edit \
+    set name [cn_core::utils::treat_string -str $pretty_name]
+
+    db_exec_plsql edit_workflow {
+	SELECT cn_workflow__edit (
+				 :workflow_id,
+				 :package_id,
+				 :name,
+				 :pretty_name
+				 )
+    }
+
+
+
+
+
+
+
+
+
+#    cn_import::workflow::step::edit \
 	-step_id $step_id \
 	-workflow_id $workflow_id \
 	-name $name \

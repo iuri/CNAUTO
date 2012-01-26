@@ -14,10 +14,7 @@ ad_page_contract {
 set title "[_ cnauto-import.Import]"
 set context [list $title]
 
-set return_url [ad_return_url]
-set assurance_ae_url [export_vars -base "order-ae" {return_url}] 
-
-
+set return_url [ad_conn url]
 
 set actions {
     "#cnauto-import.Add_order#" "order-ae?return_url=/cnauto-order" "#cnauto-import.Add_a_new_order#"
@@ -25,14 +22,6 @@ set actions {
 }
 
 set bulk_actions [list]
-
-
-set where_clause ""
-
-if {[exists_and_not_null keyword]} {
-    set where_clause "AND (cio.n = :keyword OR ca.assurance_number = :keyword)"
-}
-
 
 
 template::list::create \
@@ -81,12 +70,28 @@ template::list::create \
     } 
 
 
+set package_id [ad_conn package_id]
+
+set workflow_id [db_string select_workflow_id {
+    SELECT workflow_id FROM cn_workflows WHERE package_id = :package_id
+} -default null]
+
+
 db_multirow -extend {provider_url order_url} orders select_orders {} {
     
-    set order_url [export_vars -base "order-one" {order_id return_url}]
+    set order_url [export_vars -base "order-one" {order_id workflow_id return_url}]
 
-    ns_log Notice "TEDST $order_id | "
-    set provider_url ""
+    set node_id [db_string select_node_id {
+	SELECT node_id 
+	FROM site_nodes sn, apm_packages ap 
+	WHERE ap.package_id = sn.object_id 
+	AND package_key = 'cnauto-resources'
+    }]
+    
+    set resources_url [site_node::get_url -node_id $node_id]
+    
+    ns_log Notice "TEST $order_id | "
+    set provider_url [export_vars -base "${resources_url}persons/person-one" {person_id return_url}]
 
 }
 

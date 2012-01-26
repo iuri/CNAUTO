@@ -10,81 +10,104 @@ ad_library {
 namespace eval cnauto_core::install {}
 
 
-ad_proc -private cnauto_core::install::after_instantiate {
-    {-package_id}
+ad_proc -private cnauto_core::install::after_install {} {
+
+   Instantiate and Mount CNAUTO subsite and app's
 } {
-   Instantiate and Mount IVC subsite and app's
-} {
-    ns_log Notice "Running callback cnauto_core::install::after_instantiate"
+    ns_log Notice "Running callback cnauto_core::install::after_install"
        
 
-    set subsite_package_id [db_string cnauto_subite_p {
-	SELECT sn1.object_id
-	FROM site_nodes sn1, site_nodes sn2, acs_objects o 
-	WHERE sn1.name = 'cnauto' 
-	AND sn1.parent_id = sn2.node_id 
-	AND sn2.object_id = o.object_id 
-	AND o.title = '#acs-kernel.Main_Site#'
+    set context_id [db_string select_package_id {
+	SELECT o.package_id
+	FROM acs_objects o 
+	WHERE o.title = '#acs-kernel.Main_Site#'
     } -default null]
  
-    if {![exists_and_not_null subsite_package_id]} {
+    if {[exists_and_not_null context_id]} {
 	set subsite_package_id [site_node::instantiate_and_mount -node_name "cnauto" \
 				    -package_key "acs-subsite" \
 				    -package_name "CN Auto" \
-				    -context_id $package_id \
+				    -context_id $context_id \
 				   ]
-    }
     
-    set subsite_node_id [site_node::get_node_id_from_object_id -object_id $subsite_package_id]
     
-    if {[apm_package_installed_p "xowiki"]} {
-	set xowiki_package_id [site_node::instantiate_and_mount \
-				   -node_name "content" \
-				   -package_key "xowiki" \
-				   -package_name "content" \
-				   -context_id $subsite_package_id \
-				   -parent_node_id $subsite_node_id \
-				  ]
-
-    }
+	set subsite_node_id [site_node::get_node_id_from_object_id -object_id $subsite_package_id]
     
-    if {[apm_package_installed_p "news"]} {
-	set news_package_id [site_node::instantiate_and_mount -node_name "news" \
-				 -package_key "newsletter" \
-				 -package_name "News" \
-				 -context_id $subsite_package_id \
-				 -parent_node_id $subsite_node_id \
-				 ]
-    }
-
-    if {[apm_package_installed_p "newsletter"]} {
-	set newsletter_package_id [site_node::instantiate_and_mount -node_name "newsletter" \
-				       -package_key "newsletter" \
-				       -package_name "Newsletter" \
+	if {[apm_package_installed_p "xowiki"]} {
+	    set xowiki_package_id [site_node::instantiate_and_mount \
+				       -node_name "content" \
+				       -package_key "xowiki" \
+				       -package_name "content" \
 				       -context_id $subsite_package_id \
 				       -parent_node_id $subsite_node_id \
 				      ]
-    }
-
-    if {[apm_package_installed_p "cnauto-resources"]} {
-	set newsletter_package_id [site_node::instantiate_and_mount -node_name "resources" \
-				       -package_key "cnauto-resources" \
-				       -package_name "Resources" \
+	    
+	}
+	
+	if {[apm_package_installed_p "news"]} {
+	    set news_package_id [site_node::instantiate_and_mount -node_name "news" \
+				     -package_key "newsletter" \
+				     -package_name "News" \
+				     -context_id $subsite_package_id \
+				     -parent_node_id $subsite_node_id \
+				    ]
+	}
+	
+	if {[apm_package_installed_p "newsletter"]} {
+	    set newsletter_package_id [site_node::instantiate_and_mount -node_name "newsletter" \
+					   -package_key "newsletter" \
+					   -package_name "Newsletter" \
+					   -context_id $subsite_package_id \
+					   -parent_node_id $subsite_node_id \
+					  ]
+	}
+	
+	if {[apm_package_installed_p "cnauto-resources"]} {
+	    set newsletter_package_id [site_node::instantiate_and_mount -node_name "resources" \
+					   -package_key "cnauto-resources" \
+					   -package_name "Resources" \
+					   -context_id $subsite_package_id \
+					   -parent_node_id $subsite_node_id \
+					  ]
+	}
+	
+	if {[apm_package_installed_p "cnauto-assurances"]} {
+	    set assurances_package_id [site_node::instantiate_and_mount -node_name "assurances" \
+					   -package_key "cnauto-assurances" \
+					   -package_name "Assurances" \
+					   -context_id $subsite_package_id \
+					   -parent_node_id $subsite_node_id \
+					  ]
+	}
+	
+	if {[apm_package_installed_p "cnauto-resources"]} {
+	    set assurances_package_id [site_node::instantiate_and_mount -node_name "resources" \
+					   -package_key "cnauto-resources" \
+					   -package_name "Resources" \
+					   -context_id $subsite_package_id \
+					   -parent_node_id $subsite_node_id \
+					  ]
+	}
+	
+	if {[apm_package_installed_p "cnauto-orders"]} {
+	    set orders_package_id [site_node::instantiate_and_mount -node_name "orders" \
+				       -package_key "cnauto-orders" \
+				       -package_name "Ordes" \
 				       -context_id $subsite_package_id \
 				       -parent_node_id $subsite_node_id \
 				      ]
-    }
-
-    if {[apm_package_installed_p "cnauto-assurances"]} {
-	set newsletter_package_id [site_node::instantiate_and_mount -node_name "assurances" \
-				       -package_key "cnauto-assurances" \
-				       -package_name "Assurances" \
-				       -context_id $subsite_package_id \
-				       -parent_node_id $subsite_node_id \
-				      ]
-    }
-
-    return
+	}
+	
+	if {[apm_package_installed_p "cnauto-import"]} {
+	    set import_package_id [site_node::instantiate_and_mount -node_name "imports" \
+					   -package_key "cnauto-import" \
+					   -package_name "Imports" \
+					   -context_id $subsite_package_id \
+					   -parent_node_id $subsite_node_id \
+					  ]
+	}
+    }	
+	return
 }
 
 

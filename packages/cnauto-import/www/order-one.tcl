@@ -3,6 +3,8 @@ ad_page_contract {
     Order's Info page
 } {
     {order_id:integer,notnull}
+    {workflow_id:integer,notnull}
+    {return_url ""}
 }
 
 set title "[_ cnauto-orders.Order_info]"
@@ -14,13 +16,14 @@ set map_url [export_vars -base order-workflow-map {return_url order_id}]
 
 
 
+
+
 # Gets all the workflow steps
 db_multirow -extend {} steps select_workflow_steps {
-    SELECT ciw.pretty_name AS step, ciw.sort_order, wom.assigner_id, wom.assignee_id,  wom.department_id, wom.estimated_days, wom.estimated_date, wom.executed_date
-    FROM cn_import_workflow_order_map wom, cn_import_workflows ciw
-    WHERE wom.order_id = :order_id
-    AND ciw.workflow_id = wom.workflow_id
-    ORDER BY ciw.sort_order
+    SELECT cws.pretty_name AS step, cws.sort_order, cws.assigner_id, cws.assignee_id,  cws.department_id, cws.estimated_days, cws.estimated_date, cws.executed_date
+    FROM cn_workflow_steps cws 
+    WHERE cws.workflow_id = :workflow_id
+    ORDER BY cws.sort_order
 }
 
 

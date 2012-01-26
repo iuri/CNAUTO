@@ -3,7 +3,7 @@ ad_page_contract {
     Workflow admin page
 
 } {
-    {orderby "name,asc"}
+    {orderby "pretty_name,asc"}
     page:optional
     {keyword ""}
 } -properties {
@@ -14,17 +14,25 @@ ad_page_contract {
 set title "[_ cnauto-import.Workflow_steps]"
 set context [list $title]
 
+set package_id [ad_conn package_id]
 set return_url [ad_conn url]
 
-set bulk_actions [list]
+set workflow_id [db_string select_workflow_id {
+    SELECT workflow_id FROM cn_workflows WHERE package_id = :package_id
+} -default null]
 
-set actions [list]
+ns_log Notice "$package_id | $workflow_id"
+
+if {$workflow_id == ""} {
+    ad_returnredirect [export_vars -base workflow-ae {return_url}]
+}
+
 
 set package_id [ad_conn package_id]
 
-db_1row select_workflow_id {
-    SELECT workflow_id FROM cn_workflows WHERE package_id = :package_id
-}
+set bulk_actions [list]
+set actions [list]
+
 
 template::list::create \
     -name workflow_steps \
@@ -34,12 +42,6 @@ template::list::create \
     -row_pretty_plural "workflow_steps" \
     -bulk_actions $bulk_actions \
     -elements {
-	name {
-	    label "[_ cnauto-import.Name]"
-	    display_template {
-		@workflow_steps.name;noquote@
-	    }
-	}
 	pretty_name {
 	    label "[_ cnauto-import.Pretty_name]"
 	    display_template {
@@ -53,16 +55,16 @@ template::list::create \
 	    }
 	}
     } -orderby {
-	name {
+	pretty_name {
 	    label "[_ cnauto-import.Name]"
-	    orderby "lower(cws.name)"
+	    orderby "lower(cws.pretty_name)"
 	}
     } 
 
 
 
 db_multirow -extend {} workflow_steps select_workflow {
-    SELECT cws.step_id, cws.name, cws.pretty_name, cws.sort_order 
+    SELECT cws.step_id, cws.pretty_name, cws.sort_order 
     FROM cn_workflow_steps cws
     WHERE cws.workflow_id = :workflow_id
     ORDER BY cws.sort_order

@@ -17,12 +17,15 @@ CREATE TABLE cn_orders (
        order_id		      integer
        			      CONSTRAINT cn_orders_order_id_pk PRIMARY KEY
 			      CONSTRAINT cn_orders_order_id_fk
-			      REFERENCES acs_objects (object_id),                
+			      REFERENCES acs_objects (object_id),
        code		      varchar(100)
        			      CONSTRAINT cn_orders_code_un UNIQUE,
        type_id		      integer
        			      CONSTRAINT cn_orders_type_id_fk
 			      REFERENCES cn_categories (category_id),
+       parent_id	      integer
+       			      CONSTRAINT cn_orders_parent_id_fk
+			      REFERENCES cn_orders (order_id),
        provider_id	      integer
        			      CONSTRAINT cn_orders_provider_id_fk
 			      REFERENCES cn_persons (person_id),
@@ -51,6 +54,7 @@ SELECT acs_object_type__create_type (
 
 CREATE OR REPLACE FUNCTION cn_order__new (
        varchar,	  	   -- code
+       integer,		   -- type_id
        integer,		   -- provider_id
        integer,		   -- incoterm_id
        varchar,		   -- incoterm_value
@@ -60,12 +64,13 @@ CREATE OR REPLACE FUNCTION cn_order__new (
 ) RETURNS integer AS '
   DECLARE
 	p_code			ALIAS FOR $1;
-	p_provider_id		ALIAS FOR $2;
-	p_incoterm_id		ALIAS FOR $3;
-	p_incoterm_value	ALIAS FOR $4;
-	p_creation_ip		ALIAS FOR $5;
-	p_creation_user		ALIAS FOR $6;
-	p_context_id		ALIAS FOR $7;
+	p_type_id		ALIAS FOR $2;
+	p_provider_id		ALIAS FOR $3;
+	p_incoterm_id		ALIAS FOR $4;
+	p_incoterm_value	ALIAS FOR $5;
+	p_creation_ip		ALIAS FOR $6;
+	p_creation_user		ALIAS FOR $7;
+	p_context_id		ALIAS FOR $8;
 
        	v_id			integer;
 
@@ -83,12 +88,14 @@ CREATE OR REPLACE FUNCTION cn_order__new (
 	INSERT INTO cn_orders (
 		order_id,
 		code,
+		type_id,
 		provider_id,
 		incoterm_id,
 		incoterm_value	
 	) VALUES (
 		v_id,
 		p_code,
+		p_type_id,
 		p_provider_id,
 		p_incoterm_id,
 		p_incoterm_value	

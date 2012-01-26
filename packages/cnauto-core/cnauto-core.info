@@ -18,7 +18,7 @@
         <provides url="cnauto-core" version="0.1d"/>
 
         <callbacks>
-	  <callback type="after-instantiate" proc="cnauto_core::install::after_instantiate" />
+	  <callback type="after-install" proc="cnauto_core::install::after_install" />
 	  <callback type="before-unmount" proc="cnauto_core::install::before_unmount" />
         </callbacks>
         <parameters>

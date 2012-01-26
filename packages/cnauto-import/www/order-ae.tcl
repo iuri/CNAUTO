@@ -17,8 +17,6 @@ if { [exists_and_not_null order_id] } {
 }
 
 
-set return_url [ad_return_url]
-
 set provider_options [cn_import::get_provider_options]
 
 ad_form -name order_ae -form {
@@ -49,8 +47,11 @@ ad_form -name order_ae -form {
 	SELECT incoterm_id FROM cn_import_incoterms WHERE name = 'FOB'
     }]
     
+    set type_id [cn_categories::get_category_id -name "importorder" -type "cn_order"]
+    ns_log Notice "TYPE ID $type_id "
     set order_id [cn_order::new \
 		      -code $code \
+		      -type_id $type_id \
 		      -provider_id $provider_id \
 		      -incoterm_id $incoterm_id \
 		      -incoterm_value $incoterm_value \
@@ -58,7 +59,28 @@ ad_form -name order_ae -form {
 		      -creation_user [ad_conn user_id] \
 		      -context_id [ad_conn package_id] \
 		     ]
+    
 
+    set context_id [ad_conn package_id]
+
+
+    set workflow_id [db_string select_workflow_id {
+	SELECT workflow_id FROM cn_workflows WHERE package_id = :context_id
+    } -default null]
+    
+    if {[info exists $order_id] && [info exists $workflow_id]} {
+	
+	set map_id [db_nextval acs_object_id_seq]
+	
+	db_exec_plsql workflow_order_mapping {
+	    SELECT cn_workflow_order_map__new (
+					       :map_id,
+					       :workflow_id,
+					       :order_id
+					       )
+	}
+    }
+    
     
 } -edit_data {
 } -after_submit {

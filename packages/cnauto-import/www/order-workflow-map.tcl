@@ -7,7 +7,7 @@ ad_page_contract {
 }
 
 db_foreach map_order_workflow {
-    SELECT workflow_id FROM cn_import_workflows
+    SELECT workflow_id FROM cn_workflows
 } {
 
     set exists_p [db_0or1row exists_mapping {

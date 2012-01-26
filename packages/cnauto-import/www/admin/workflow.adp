@@ -7,8 +7,8 @@
 <h1>#cnauto-import.Add_step#</h1>
 <form name="workflow-step-add" action="workflow-step-add" method="post">
   <table><tr> 
-  <td valign="top" align="left" width="30%"><input type="text" name="name"></td>
-  <td valign="top" align="left" width="50%"><input type="text" name="pretty_name">
+  <td valign="top" align="left" width="50%">&nbsp;</td>
+  <td valign="top" align="left" width="50%">#cnauto-import.Name#:<input type="text" name="pretty_name">
   <input type="hidden" name="return_url" value="@return_url@">
   <input type="hidden" name="workflow_id" value="@workflow_id@">
   <input style="float:right" type="submit" name="submit" value="#cnauto-import.Add_step#"></td>
