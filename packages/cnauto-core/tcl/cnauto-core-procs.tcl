@@ -227,5 +227,11 @@ ad_proc -public cn_core::util::treat_string {
 } {
     Removes special chars from the string
 } {
+
+
+
+
+    set str [string map {à á â ã ç é ê í óôõú-" "" " " ""} [string tolower $str]]
+
     return $str 
 }

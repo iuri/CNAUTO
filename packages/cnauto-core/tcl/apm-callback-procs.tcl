@@ -17,12 +17,24 @@ ad_proc -private cnauto_core::install::after_instantiate {
 } {
     ns_log Notice "Running callback cnauto_core::install::after_instantiate"
        
-    set subsite_package_id [site_node::instantiate_and_mount -node_name "cnauto" \
-				-package_key "acs-subsite" \
-				-package_name "CN Auto" \
-				-context_id $package_id \
-			       ]
-        
+
+    set subsite_package_id [db_string cnauto_subite_p {
+	SELECT sn1.object_id
+	FROM site_nodes sn1, site_nodes sn2, acs_objects o 
+	WHERE sn1.name = 'cnauto' 
+	AND sn1.parent_id = sn2.node_id 
+	AND sn2.object_id = o.object_id 
+	AND o.title = '#acs-kernel.Main_Site#'
+    } -default null]
+ 
+    if {![exists_and_not_null subsite_package_id]} {
+	set subsite_package_id [site_node::instantiate_and_mount -node_name "cnauto" \
+				    -package_key "acs-subsite" \
+				    -package_name "CN Auto" \
+				    -context_id $package_id \
+				   ]
+    }
+    
     set subsite_node_id [site_node::get_node_id_from_object_id -object_id $subsite_package_id]
     
     if {[apm_package_installed_p "xowiki"]} {
@@ -63,6 +75,14 @@ ad_proc -private cnauto_core::install::after_instantiate {
 				      ]
     }
 
+    if {[apm_package_installed_p "cnauto-assurances"]} {
+	set newsletter_package_id [site_node::instantiate_and_mount -node_name "assurances" \
+				       -package_key "cnauto-assurances" \
+				       -package_name "Assurances" \
+				       -context_id $subsite_package_id \
+				       -parent_node_id $subsite_node_id \
+				      ]
+    }
 
     return
 }

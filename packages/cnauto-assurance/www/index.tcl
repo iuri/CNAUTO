@@ -69,7 +69,7 @@ template::list::create \
     } -orderby {
 	person {
 	    label "[_ cnauto-assurance.Person]"
-	    orderby "lower(cp.pretty_name)"
+	    orderby "lower(cp.first_names || ' ' || cp.last_name)"
 	}
     } 
 

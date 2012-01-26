@@ -16,7 +16,10 @@
     float:left;
 }
 
-
+.main .header .breadcumbs {
+    clear: both;
+    float: left;
+}
 .main .header .header-navigation {
     float: right;
 }
@@ -166,7 +169,7 @@ th.list-table, th.list-table-narrow, .list-table th {
 
 
 .list-table tr.odd, .list-tiny tr.odd {
-	background-color: #ffc9ca;
+	background-color: #fdd5d8;
 	color: inherit;
 }
 

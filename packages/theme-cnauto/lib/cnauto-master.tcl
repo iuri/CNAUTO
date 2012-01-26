@@ -10,6 +10,21 @@ ad_page_contract {
 set title [apm_instance_name_from_id [ad_conn package_id]]
 set context $title
 
+if {[info exists context]} {
+    set context_tmp $context
+    unset context
+} else {
+    set context_tmp {}
+}
+
+ad_context_bar_multirow -- $context_tmp
+
+# Context bar separator
+set subsite_id [ad_conn subsite_id]
+set separator [parameter::get -package_id $subsite_id -parameter ContextBarSeparator -default ":"]
+
+
+
 template::head::add_css -href "/resources/theme-cnauto/cnauto-master.css"
 
 set system_url [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemURL -default ""]

@@ -11,7 +11,7 @@ ad_page_contract {
     title:onevalue
 }
 
-set title "[_ cnauto-import.Workflow]"
+set title "[_ cnauto-import.Workflow_steps]"
 set context [list $title]
 
 set return_url [ad_conn url]
@@ -20,7 +20,11 @@ set bulk_actions [list]
 
 set actions [list]
 
+set package_id [ad_conn package_id]
 
+db_1row select_workflow_id {
+    SELECT workflow_id FROM cn_workflows WHERE package_id = :package_id
+}
 
 template::list::create \
     -name workflow_steps \
@@ -56,9 +60,11 @@ template::list::create \
     } 
 
 
+
 db_multirow -extend {} workflow_steps select_workflow {
-    SELECT cws.step_id, cws.workflow_id, cws.name, cws.pretty_name, cws.sort_order 
+    SELECT cws.step_id, cws.name, cws.pretty_name, cws.sort_order 
     FROM cn_workflow_steps cws
+    WHERE cws.workflow_id = :workflow_id
     ORDER BY cws.sort_order
 } {}
 
