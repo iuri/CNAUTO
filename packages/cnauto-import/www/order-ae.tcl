@@ -18,6 +18,7 @@ if { [exists_and_not_null order_id] } {
 
 
 set provider_options [cn_import::get_provider_options]
+set incoterm_options [cn_import::get_incoterm_options]
 
 ad_form -name order_ae -form {
     {order_id:key}
@@ -32,8 +33,16 @@ ad_form -name order_ae -form {
 	{label "[_ cnauto-import.Provider]"}
 	{options $provider_options}
     }
+    {incoterm_id:integer(select)
+	{label "[_ cnauto-import.Incoterm]"}
+	{options $incoterm_options}
+    }	
     {incoterm_value:text(text)
 	{label "[_ cnaut-import.Incoterm_value]"}
+    }
+    {estimated_days:integer
+	{label "[_ cnaut-import.Estimated_days]"}
+	{html {size 5} maxlenght 10}
     }
 } -on_submit {
 
@@ -43,18 +52,16 @@ ad_form -name order_ae -form {
      set provider_id 0
 } -new_data {
     
-    set incoterm_id [db_string select_incoterm_id {
-	SELECT incoterm_id FROM cn_import_incoterms WHERE name = 'FOB'
-    }]
     
     set type_id [cn_categories::get_category_id -name "importorder" -type "cn_order"]
-    ns_log Notice "TYPE ID $type_id "
+
     set order_id [cn_order::new \
 		      -code $code \
 		      -type_id $type_id \
 		      -provider_id $provider_id \
 		      -incoterm_id $incoterm_id \
 		      -incoterm_value $incoterm_value \
+		      -estimated_days $estimated_days \
 		      -creation_ip [ad_conn peeraddr] \
 		      -creation_user [ad_conn user_id] \
 		      -context_id [ad_conn package_id] \
@@ -69,7 +76,9 @@ ad_form -name order_ae -form {
     } -default null]
     
     if {[info exists $order_id] && [info exists $workflow_id]} {
+
 	
+	#Maps workflow X order
 	set map_id [db_nextval acs_object_id_seq]
 	
 	db_exec_plsql workflow_order_mapping {
@@ -78,6 +87,20 @@ ad_form -name order_ae -form {
 					       :workflow_id,
 					       :order_id
 					       )
+	}
+    
+	# Maps Orders X Steps X workflow 
+	
+	set step_id [db_string select_step_id {
+	    SELECT step_id FROM cn_workflow_steps 
+	    WHERE name = 'enviodopedido' 
+	    AND workflow_id = :workflow_id 
+	}]
+ 
+	db_exec_plsql update_step {
+	    UPDATE cn_workflow_steps SET 
+	    WHERE step_id = :step_id
+
 	}
     }
     

@@ -9,13 +9,13 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>f</inherit-templates-p>
     
-    <version name="0.3d" url="http://openacs.org/repository/download/apm/cnauto-orders-0.3d.apm">
+    <version name="0.5d" url="http://openacs.org/repository/download/apm/cnauto-orders-0.5d.apm">
         <owner url="mailto:iuri.sampaio@iurix.com">Iuri Sampaio</owner>
         <summary>Package for order's management</summary>
         <description format="text/html">Package for order's management</description>
         <maturity>0</maturity>
 
-        <provides url="cnauto-orders" version="0.3d"/>
+        <provides url="cnauto-orders" version="0.5d"/>
         <requires url="cnauto-core" version="0.1d"/>
         <requires url="cnauto-resources" version="0.11d"/>
 

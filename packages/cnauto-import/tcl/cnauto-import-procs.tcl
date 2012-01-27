@@ -13,6 +13,16 @@ namespace eval cn_import {}
 ##########################
 namespace eval cn_import::incoterm {}
 
+ad_proc -public cn_import::get_incoterm_options {} {
+    Returns a list of incoterms to a ad_form select widget
+
+} {
+
+    return [db_list_of_lists select_incomterms {
+	SELECT name, incoterm_id FROM cn_import_incoterms
+    }]
+}
+
 ad_proc -public cn_import::incoterm::new {
     {-name ""}
     {-pretty_name ""}

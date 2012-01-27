@@ -30,7 +30,8 @@ CREATE TABLE cn_orders (
        			      CONSTRAINT cn_orders_provider_id_fk
 			      REFERENCES cn_persons (person_id),
        incoterm_id	      integer,
-       incoterm_value	      varchar(255)
+       incoterm_value	      varchar(255),
+       estimated_days	      integer
 );
 
 ------------------------------------
@@ -58,6 +59,7 @@ CREATE OR REPLACE FUNCTION cn_order__new (
        integer,		   -- provider_id
        integer,		   -- incoterm_id
        varchar,		   -- incoterm_value
+       integer,		   -- estimated_days
        varchar,		   -- creation_ip
        integer,		   -- creation_user
        integer		   -- context_id
@@ -68,9 +70,10 @@ CREATE OR REPLACE FUNCTION cn_order__new (
 	p_provider_id		ALIAS FOR $3;
 	p_incoterm_id		ALIAS FOR $4;
 	p_incoterm_value	ALIAS FOR $5;
-	p_creation_ip		ALIAS FOR $6;
-	p_creation_user		ALIAS FOR $7;
-	p_context_id		ALIAS FOR $8;
+	p_estimated_days	ALIAS FOR $6;
+	p_creation_ip		ALIAS FOR $7;
+	p_creation_user		ALIAS FOR $8;
+	p_context_id		ALIAS FOR $9;
 
        	v_id			integer;
 
@@ -91,14 +94,16 @@ CREATE OR REPLACE FUNCTION cn_order__new (
 		type_id,
 		provider_id,
 		incoterm_id,
-		incoterm_value	
+		incoterm_value,
+		estimated_days,	
 	) VALUES (
 		v_id,
 		p_code,
 		p_type_id,
 		p_provider_id,
 		p_incoterm_id,
-		p_incoterm_value	
+		p_incoterm_value,
+		p_estimated_days	
 	);
 
 	RETURN v_id;

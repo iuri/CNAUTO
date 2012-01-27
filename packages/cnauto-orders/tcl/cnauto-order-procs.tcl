@@ -13,6 +13,7 @@ ad_proc -public cn_order::new {
     {-provider_id ""}
     {-incoterm_id ""}
     {-incoterm_value ""}
+    {-estimated_days ""}
     {-creation_ip ""}
     {-creation_user ""}
     {-context_id ""}
@@ -40,6 +41,7 @@ ad_proc -public cn_order::new {
 				  :provider_id,
 				  :incoterm_id,
 				  :incoterm_value,
+				  :estimated_days,
 				  :creation_ip,
 				  :creation_user,
 				  :context_id

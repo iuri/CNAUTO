@@ -12,7 +12,7 @@ set context [list $title]
 
 
 set return_url [ad_return_url]
-set map_url [export_vars -base order-workflow-map {return_url order_id}]
+set map_url [export_vars -base map-order {return_url order_id workflow_id}]
 
 
 
@@ -20,12 +20,20 @@ set map_url [export_vars -base order-workflow-map {return_url order_id}]
 
 # Gets all the workflow steps
 db_multirow -extend {} steps select_workflow_steps {
-    SELECT cws.pretty_name AS step, cws.sort_order, cws.assigner_id, cws.assignee_id,  cws.department_id, cws.estimated_days, cws.estimated_date, cws.executed_date
-    FROM cn_workflow_steps cws 
+    SELECT cws.pretty_name AS step, cws.sort_order 
+    FROM cn_workflow_steps cws
     WHERE cws.workflow_id = :workflow_id
     ORDER BY cws.sort_order
 }
 
+
+db_multirow -extend {} order_info select_order_info {
+    SELECT wsom.department_id, wsom.assignee_id, wsom.estimated_date, wsom.executed_date    FROM cn_workflow_step_order_map wsom, cn_workflow_steps cws
+    WHERE wsom.order_id = :order_id
+    AND cws.step_id = wsom.step_id
+    ORDER BY cws.sort_order
+
+}
 
 
 # Gets order info

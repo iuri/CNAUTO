@@ -12,7 +12,7 @@ ad_proc -public  cn_resources::import_csv_file {
     {-input_file}
 } {
 
-    Imports CSV files to add categories
+    Imports CSV files to add resources
 } {
 
     ns_log Notice "Running ad_proc cn_resources::import_csv_file"
