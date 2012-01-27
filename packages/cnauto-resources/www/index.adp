@@ -3,11 +3,11 @@
 <property name="context">@context;noquote@</property>
 
  
-<a href="persons/">#cn-resources.Persons#</a> 
-<a href="vehicles/">#cn-resources.Vehicles#</a> 
+<a href="persons/">#cnauto-resources.Persons#</a> 
+<a href="vehicles/">#cnauto-resources.Vehicles#</a> 
 
 <if @admin_p@>
-  <a href="@admin_url@">#cn-resources.Admin#</a> 
+  <a href="@admin_url@">#cnauto-resources.Admin#</a> 
 </if>
 
 
