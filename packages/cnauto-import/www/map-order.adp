@@ -24,12 +24,11 @@
       <td><a href="order-ae"><b>@orders.code;noquote@</b></a></td>
       <multiple name="steps">
         <td>
-	  <if @orders.mapped_p@ eq 1>
-	    tet
+	  @mapped_p@
+	  <if @mapped_p@ eq 1>
 	    <input type="checkbox" value="@orders.order_id@" name="maps.@steps.step_id@" checked>
 	  </if> 
 	  <else>
-            test
 	    <input type="checkbox" value="@orders.order_id@" name="maps.@steps.step_id@">
 	  </else>
 	</td>
