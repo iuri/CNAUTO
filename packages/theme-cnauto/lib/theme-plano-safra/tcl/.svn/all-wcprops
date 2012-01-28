@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/paf/!svn/ver/9478/packages/theme-plano-safra/tcl
+END
+plano-safra-procs.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/paf/!svn/ver/9476/packages/theme-plano-safra/tcl/plano-safra-procs.tcl
+END
+apm-callback-procs.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/paf/!svn/ver/9478/packages/theme-plano-safra/tcl/apm-callback-procs.tcl
+END
+apm-callback-procs.xql
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/paf/!svn/ver/9476/packages/theme-plano-safra/tcl/apm-callback-procs.xql
+END

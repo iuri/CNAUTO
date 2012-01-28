@@ -1,0 +1,1 @@
+COPY cn_colors FROM '[acs_root_dir]/packages/cnauto-core/sql/common/colors.dat' WITH DELIMITER ','
