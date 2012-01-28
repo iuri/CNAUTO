@@ -1,87 +1,34 @@
--- packages/cnauto-resources/sql/postgresl/cnauto-resources-create.sql
+-- /packages/cnauto-assurance/sql/postgresql/cnauto-resources-create.sql
+
+--
+-- The CN Auto Resources Package
+--
+-- @author Iuri Sampaio (iuri.sampaio@iurix.com)
+-- @creation-date 2012-01-21
+--
+
 
 
 ------------------------------------
--- Object Type: cn_part
+-- Table cn_vehicles
+------------------------------------
+DROP TABLE cn_vehicles; 
+
+------------------------------------
+-- Object Type: cn_vehicles
 ------------------------------------
 
 SELECT acs_object_type__drop_type (
-    'cn_part',	           -- object_type
+    'cn_vehicle',	    -- object_type
     't'
 );
 
 
 
-
-
-
-DROP FUNCTION cn_part__delete(integer);
-
-DROP FUNCTION cn_part__new(
-       varchar, -- code
-       varchar, -- name
-       varchar, -- resource_id
-       varchar, -- quantity
-       varchar, -- price
-       varchar, -- width
-       varchar, -- height
-       varchar,	-- depth
-       varchar,	-- volume
-       varchar,	-- dimensions
-       integer, -- context_id
-       integer, -- creation_user 
-       varchar	-- creation_ip
-);
-
-
-
 ------------------------------------
--- Table: cn_part
+-- cn_vehicles PL/SQL Functions
 ------------------------------------
-
-DROP TABLE cn_parts;
-
-
-
-DROP FUNCTION cn_person__delete (integer);
-
-DROP FUNCTION cn_person__new (
-       varchar,	  	   -- cpf_cnpj
-       varchar,	  	   -- first_names
-       varchar,		   -- last_name
-       varchar,		   -- email
-       varchar,		   -- type
-       varchar,		   -- phone
-       varchar,		   -- postal_address
-       varchar,		   -- postal_address2
-       varchar,		   -- postal_code
-       varchar,		   -- state_abbrev
-       varchar,		   -- municipality
-       varchar,		   -- country
-       varchar,		   -- creation_ip
-       integer,		   -- creation_user
-       integer		   -- context_id
-);
-
-SELECT acs_object_type__drop_type (
-    'cn_person',	    -- object_type
-    't'
-);
-
-
-
-DROP TABLE cn_persons;
-
-
-
-DROP TABLE cn_colors CASCADE;
-
-
-DROP FUNCTION cn_vehicle__delete (integer); 
-
-
 DROP FUNCTION cn_vehicle__new (
-      integer, 	  	   -- vehicle_id 
       varchar,		   -- chassis vin - vehicle identification number
       varchar, 		   -- engine
       varchar,		   -- model
@@ -92,7 +39,7 @@ DROP FUNCTION cn_vehicle__new (
       timestamptz,	   -- arrival_date
       timestamptz,	   -- billing_date
       varchar,		   -- duration
-      varchar,		   -- distributor_code
+      integer,		   -- resource_id
       integer,		   -- person_id
       text,		   -- notes
       varchar,             -- creation_ip
@@ -101,18 +48,93 @@ DROP FUNCTION cn_vehicle__new (
 );
 
 
+
+DROP FUNCTION cn_vehicle__delete (integer);
+
+
+------------------------------------
+-- Table: cn_part
+------------------------------------
+
+DROP TABLE cn_parts;
+
+------------------------------------
+-- Object Type: cn_part
+------------------------------------
+
 SELECT acs_object_type__drop_type (
-    'cn_vehicle',	    -- object_type
+    'cn_part',	           -- object_type
+    't');
+
+
+
+
+
+
+DROP  FUNCTION cn_part__delete (integer);
+
+DROP FUNCTION cn_part__new (
+       varchar, -- code
+       varchar, -- name
+       varchar, -- resource_id
+       varchar, -- quantity
+       varchar, -- price
+       varchar, -- width
+       varchar, -- height
+       varchar,	-- depth
+       varchar,	-- weight
+       varchar,	-- volume
+       varchar,	-- dimensions
+       integer, -- context_id
+       integer, -- creation_user 
+       varchar	-- creation_ip
+);
+
+
+
+
+------------------------------------
+-- Table cn_persons
+------------------------------------
+DROP TABLE cn_persons;
+
+------------------------------------
+-- Object Type: cn_person
+------------------------------------
+
+SELECT acs_object_type__drop_type (
+    'cn_person',	   -- object_type
     't'
 );
 
 
-DROP TABLE cn_vehicles;
+
+DROP FUNCTION cn_person__new (
+       varchar,	  	   -- cpf_cnpj
+       varchar,	  	   -- legal_name
+       varchar,		   -- pretty_name
+       varchar,		   -- code
+       integer,		   -- type_id
+       integer,		   -- contact_id
+       varchar,		   -- email
+       varchar,		   -- phone
+       varchar,		   -- postal_address
+       varchar,		   -- postal_address2
+       varchar,		   -- postal_code
+       varchar,		   -- state_code
+       integer,		   -- city_code
+       varchar,		   -- country_code
+       varchar,		   -- creation_ip
+       integer,		   -- creation_user
+       integer		   -- context_id
+);
 
 
 
+DROP FUNCTION cn_person__delete (
+       integer	  	   -- person_id
+);
 
-DROP TABLE cn_categories CASCADE;
 
 
 
@@ -122,13 +144,9 @@ DROP TABLE cn_categories CASCADE;
 DROP TABLE cn_resources;
 
 
+DROP FUNCTION cn_resource__delete (integer); 
 
-
-DROP FUNCTION cn_resource__delete(integer);
-
-
-
-DROP FUNCTION cn_resource__new(
+DROP FUNCTION cn_resource__new( 
        integer,	-- resource_id 
        varchar,	-- code
        varchar,	-- name
@@ -138,3 +156,6 @@ DROP FUNCTION cn_resource__new(
        varchar,	-- ncm_class
        varchar	-- unit
 );
+
+
+

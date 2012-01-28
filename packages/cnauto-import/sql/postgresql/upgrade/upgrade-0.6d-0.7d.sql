@@ -1,6 +1,6 @@
--- /packages/cnauto-assurance/sql/postgresql/upgrade/upgrade-0.6d-0.7d.sql
+-- /packages/cnauto-import/sql/postgresql/upgrade/upgrade-0.6d-0.7d.sql
 
-SELECT acs_log__debug (' /packages/cnauto-assurance/sql/postgresql/upgrade/upgrade-0.6d-0.7d.sql','');
+SELECT acs_log__debug (' /packages/cnauto-import/sql/postgresql/upgrade/upgrade-0.6d-0.7d.sql','');
 
 ALTER TABLE cn_workflow_steps DROP COLUMN estimated_days;
 

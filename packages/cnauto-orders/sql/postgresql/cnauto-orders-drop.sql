@@ -15,6 +15,7 @@ DROP FUNCTION cn_order__new (
        integer,		   -- workflow_id
        integer,		   -- incoterm_id
        varchar,		   -- incoterm_value
+       integer,		   -- estimated_day
        varchar,		   -- creation_ip
        integer,		   -- creation_user
        integer		   -- context_id

@@ -116,7 +116,7 @@ ad_proc -public cn_import::workflow::step::new {
 
     set step_id [db_nextval acs_object_id_seq]
 	
-    set name [cn_core::util::treat_string -str $pretty_name]
+    set name [util_text_to_url -replacement "" -text $pretty_name]
 
     db_transaction {
 	db_exec_plsql insert_step {

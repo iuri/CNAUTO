@@ -210,7 +210,8 @@ CREATE TABLE cn_workflow_step_order_map (
        step_id		        integer
        				CONSTRAINT cn_wsom_step_id_fk 
 				REFERENCES cn_workflow_steps (step_id),   
-       order_id			CONSTRAINT cn_wsom_order_id_fk
+       order_id			integer
+       				CONSTRAINT cn_wsom_order_id_fk
        				REFERENCES cn_orders (order_id),
        assigner_id		integer
 				CONSTRAINT cn_wsom_assigner_id_fk
@@ -286,7 +287,7 @@ CREATE OR REPLACE FUNCTION cn_wsom__edit (
        integer,		   -- assignee_id
        integer,		   -- department_id
        timestamptz,	   -- estimated_date
-       timestamptz,	   -- executed_date
+       timestamptz	   -- executed_date
 ) RETURNS integer AS '
   DECLARE
   	p_map_id		ALIAS FOR $1;

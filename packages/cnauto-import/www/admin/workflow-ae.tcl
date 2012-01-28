@@ -27,7 +27,7 @@ ad_form -name workflow_ae -form {
     
     set workflow_id [db_nextval acs_object_id_seq]
     set package_id [ad_conn package_id]
-    set name [cn_core::util::treat_string -str $pretty_name]
+    set name [util_text_to_url -replacement "" -text $pretty_name]
 
     db_exec_plsql insert_workflow {
 	SELECT cn_workflow__new (
@@ -40,7 +40,7 @@ ad_form -name workflow_ae -form {
 
 } -edit_data {
 
-    set name [cn_core::utils::treat_string -str $pretty_name]
+    set name [util_text_to_url -replacement "" -text $pretty_name]
 
     db_exec_plsql edit_workflow {
 	SELECT cn_workflow__edit (

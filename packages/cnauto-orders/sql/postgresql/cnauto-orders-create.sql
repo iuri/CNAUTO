@@ -95,7 +95,7 @@ CREATE OR REPLACE FUNCTION cn_order__new (
 		provider_id,
 		incoterm_id,
 		incoterm_value,
-		estimated_days,	
+		estimated_days
 	) VALUES (
 		v_id,
 		p_code,

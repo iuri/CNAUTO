@@ -1,5 +1,6 @@
--- /packages/cnauto-assurance/sql/postgresql/upgrade/upgrade-0.4d-0.5d.sql
+-- /packages/cnauto-import/sql/postgresql/upgrade/upgrade-0.4d-0.5d.sql
 
+SELECT acs_log__debug ('/packages/cnauto-import/sql/postgresql/upgrade/upgrade-0.4d-0.5d.sql','');
 
 DROP FUNCTION cn_workflow__new (
        integer,	  	   -- workflow_id

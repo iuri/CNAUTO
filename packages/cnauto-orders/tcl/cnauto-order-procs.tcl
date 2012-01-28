@@ -31,7 +31,7 @@ ad_proc -public cn_order::new {
 	set context_id [ad_conn package_id]
     }
     
-    ns_log Notice "$code | $provider_id | $incoterm_id | $incoterm_value | $context_id" 
+    ns_log Notice "$code | $type_id | $provider_id | $incoterm_id | $incoterm_value | $estimated_days | $context_id" 
     
     db_transaction {
 	set order_id [db_exec_plsql insert_order {

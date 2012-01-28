@@ -28,7 +28,9 @@ ad_proc -public  cn_resources::import_csv_file {
 	set resource_id [db_nextval acs_object_id_seq]
 	set code [lindex $line 0]
 	set pretty_name [lindex $line 1]
-	set name [cn_core::util::treat_string -str [lindex $line 1]]
+
+	set name [util_text_to_url -replacement "" -text [lindex $line 1]]
+
 	set description [lindex $line 1]
 	set class [lindex $line 2]
 	set unit [lindex $line 3]
@@ -283,7 +285,7 @@ ad_proc -public cn_resources::get_city_code {
 } {
 
     set city [lindex [split $city "-"] 0]
-    set city [cn_core::util::treat_string -str $city]
+    set city [util_text_to_url -replacement "" -text $city]
 
     # WHERE name like [lindex city 0]
     set cities [db_list_of_lists select_city_info {
@@ -292,7 +294,7 @@ ad_proc -public cn_resources::get_city_code {
 
     foreach element $cities {
 	
-	set name [cn_core::util::treat_string -str [lindex $element 1]]
+	set name [util_text_to_url -replacement "" -text [lindex $element 1]]
 	
 	#ns_log Notice "[lindex $element 0] | $name | $city"
 	
@@ -312,7 +314,7 @@ ad_proc -public cn_resources::get_state_code {
 } {
 
     
-    set state [cn_core::util::treat_string -str $state]
+    set state [util_text_to_url -replacement "" -text $state]
 
     # WHERE name like [lindex state 0] -- optimize the query with the first letter of the word
     set states [db_list_of_lists select_state_info {
@@ -321,8 +323,8 @@ ad_proc -public cn_resources::get_state_code {
     
     foreach element $states {
 	
-	set abbrev [cn_core::util::treat_string -str [lindex $element 0]]
-	set state_name [cn_core::util::treat_string -str [lindex $element 1]]
+	set abbrev [util_text_to_url -replacement "" -text [lindex $element 0]]
+	set state_name [util_text_to_url -replacement "" -text [lindex $element 1]]
 	
 	#ns_log Notice "$state | $abbrev | $state_name"
 	if {[string equal $abbrev $state] || [string equal $state_name $state]} {
@@ -340,7 +342,7 @@ ad_proc -public cn_resources::get_country_code {
 } {
 
     
-    set country [cn_core::util::treat_string -str $country]
+    set country [util_text_to_url -replacement "" -text $country]
 
     # WHERE name like [lindex city 0]
     set countries [db_list_of_lists select_country_info {
@@ -350,8 +352,8 @@ ad_proc -public cn_resources::get_country_code {
 
     foreach element $countries {
 	
-	set iso_aux [cn_core::util::treat_string -str [lindex $element 0]]
-	set default_name_aux [cn_core::util::treat_string -str [lindex $element 1]] 
+	set iso_aux [util_text_to_url -replacement "" -text [lindex $element 0]]
+	set default_name_aux [util_text_to_url -replacement "" -text [lindex $element 1]] 
 			      
 	#ns_log Notice "$country | $default_name_aux | $iso_aux"
 	if {[string equal $country $default_name_aux] || [string equal $country $iso_aux]} {
@@ -389,7 +391,7 @@ ad_proc -public  cn_resources::categories::import_csv_file {
 	
 	set category_id [db_nextval acs_object_id_seq]
 	set pretty_name [lindex $line 0]
-	set name [cn_core::util::treat_string -str [lindex $line 0]]
+	set name [util_text_to_url -replacement "" -text [lindex $line 0]]
 	
 	
 	#ns_log notice "[llength $name] - $name"
@@ -473,7 +475,7 @@ ad_proc -public  cn_resources::persons::import_csv_file {
 	    set contact_id ""
 	    set type [lindex $line 2]
 	    
-	    set type [cn_core::util::treat_string -str $type]
+	    set type [util_text_to_url -replacement "" -text $type]
 	    ns_log Notice "TYPE $type"
 	    set type_id [cn_resources::persons::get_type_id -type $type]
 	    

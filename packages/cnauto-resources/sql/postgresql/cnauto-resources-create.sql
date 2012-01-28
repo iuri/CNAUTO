@@ -1,4 +1,4 @@
--- /packages/cnauto-assurance/sql/postgresql/cnauto-resources-create.sql
+-- /packages/cnauto-resources/sql/postgresql/cnauto-resources-create.sql
 
 --
 -- The CN Auto Resources Package
@@ -400,21 +400,6 @@ END;' language 'plpgsql';
 
 
 
-------------------------------------
--- Table cn_colors
-------------------------------------
-CREATE TABLE cn_colors (
-       code      varchar(10)
-		 PRIMARY KEY,       
-       name	 varchar(50)
-       		 CONSTRAINT cn_colors_name_nn NOT NULL
-       		 CONSTRAINT cn_colors_name_un UNIQUE
-);
-
-
-
-
-
 
 ------------------------------------
 -- Table cn_vehicles
@@ -471,7 +456,6 @@ SELECT acs_object_type__create_type (
 -- cn_vehicles PL/SQL Functions
 ------------------------------------
 CREATE OR REPLACE FUNCTION cn_vehicle__new (
-      integer, 	  	   -- vehicle_id 
       varchar,		   -- chassis vin - vehicle identification number
       varchar, 		   -- engine
       varchar,		   -- model

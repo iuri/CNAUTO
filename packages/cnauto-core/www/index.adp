@@ -6,5 +6,7 @@
 <h1>@title;noquote@</h1>
 
 <ul>
+  <li><a href="@categories_url@">#cnauto-resources.Categories#</a></li>
+
   <li><a href="@export_url@">B.A. #cnauto.Export_file#</a></li>
 <ul>
