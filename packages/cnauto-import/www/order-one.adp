@@ -15,11 +15,10 @@
 <if @steps:rowcount@ gt 0>
   <tr>  
     <multiple name="steps">
-      <td><a href="workflow-ae"><b>@steps.step;noquote@</b></a></td>
+      <td><a href="@steps.step_order_url@"><b>@steps.pretty_name;noquote@</b></a></td>
     </multiple>
   </tr>
 </if>
-<if @columns:rowcount@ gt 0>
   <tr>
     <multiple name="columns">
       <td>
@@ -39,24 +38,22 @@
         </if>
 	<else>
 	  <table border=1>
-	    <multiple name="columns">
-              <tr>
-                <td>&nbsp;</td>
-                <td>@order.department_id@</td>
-              </tr>
-              <tr>
-                  <td></td>
-                  <td>@order.assignee_id@</td>
-              </tr>
-              <tr>
-                  <td>#cnauto-inmport.Estimated_date#</td>
-                  <td>@order.estimated_date@</td>
-              </tr>
-              <tr>
-                  <td>#cnauto-import.Executed_date#</td>
-                  <td>@order.executed_date@</td>
-              </tr>
-	    </multiple>
+            <tr>
+              <td>&nbsp;</td>
+              <td>@columns.department_id@</td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+              <td>@columns.assignee_id@</td>
+            </tr>
+            <tr>
+              <td>#cnauto-import.Estimated_date#</td>
+              <td>@columns.estimated_date@</td>
+            </tr>
+            <tr>
+              <td>#cnauto-import.Executed_date#</td>
+              <td>@columns.executed_date@</td>
+            </tr>
           </table>
         </else>
       </td>
