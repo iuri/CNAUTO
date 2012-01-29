@@ -16,7 +16,9 @@
 </form>
 
 <h1>@title;noquote@</h1>
-
+<ul>
+  <li><a href="@map_orders_url@">#cnauto-import.Map_orders#</a></li>
+</ul>
 <form name="workflow-steps-update-sort" action="workflow-steps-update-sort" method="post">
   <listtemplate name="workflow_steps"></listtemplate>
   <input type="hidden" name="return_url" value="@return_url@">

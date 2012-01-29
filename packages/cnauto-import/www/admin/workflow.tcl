@@ -21,17 +21,16 @@ set workflow_id [db_string select_workflow_id {
     SELECT workflow_id FROM cn_workflows WHERE package_id = :package_id
 } -default null]
 
-ns_log Notice "$package_id | $workflow_id"
-
-if {$workflow_id == ""} {
+if {$workflow_id == "null"} {
     ad_returnredirect [export_vars -base workflow-ae {return_url}]
 }
 
 
 set package_id [ad_conn package_id]
+set map_orders_url [export_vars -base map-orders {workflow_id return_url}]
 
 set bulk_actions [list]
-set actions [list]
+set actions {}
 
 
 template::list::create \

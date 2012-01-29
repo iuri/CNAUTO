@@ -14,4 +14,4 @@ set context [list]
 set return_url [ad_conn url]
 set export_url [export_vars -base "ba-file" {return_url}]
 
-set categories_url [export_vars -base "/cnauto-core/categories" {return_url}]
+set categories_url [export_vars -base "categories" {return_url}]

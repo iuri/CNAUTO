@@ -205,7 +205,7 @@ ad_proc -public cn_import::get_provider_options {} {
     set providers [db_list_of_lists select_providers {
 	SELECT cp.pretty_name, cp.person_id 
 	FROM cn_persons cp, cn_categories cc 
-	WHERE cp.type_id = cc.category_id AND cc.name = 'fornecedoresdoexterior';
+	WHERE cp.type_id = cc.category_id AND cc.object_type = 'cn_person';
     }]
 
     lappend providers "{#cn-import.Select_providers#} 0"

@@ -6,7 +6,6 @@
 
 <h1>@title;noquote@</h1>
 
-<a href="@map_url@">Map Order to Workflow</a>
 <table>
 <tr><td>&nbsp;</td></tr>
 
@@ -20,50 +19,48 @@
     </multiple>
   </tr>
 </if>
-<if @order_info:rowcount@ gt 0>
-  <tr>  
-    <multiple name="order_info">
-      <table>
-          <tr><td>
-	    <if @steps.sort_order@ eq 0>
-	      <table border=1>
-                <tr>
-                  <td>@code@ </td>
-	      	  <td>#cnauto-import.Provider#</td>
-		  <td>@incoterm@</td>
-		</tr>
-		<tr>
-		  <td>@creation_date@</td>
-		  <td>@provider@</td>
-		  <td>@incoterm_value@</td>
-		</tr>
-	      </table>	      
-            </if>
-	    <else>
-              <table border=1>
-                <tr>
+<if @columns:rowcount@ gt 0>
+  <tr>
+    <multiple name="columns">
+      <td>
+        <if @columns.sort_order@ eq 0>
+	  <table border=1>
+            <tr>
+              <td>@code@ </td>
+	      <td>#cnauto-import.Provider#</td>
+	      <td>@incoterm@</td>
+	    </tr>
+	    <tr>
+	      <td>@creation_date@</td>
+	      <td>@provider@</td>
+	      <td>@incoterm_value@</td>
+	    </tr>
+	  </table>	      
+        </if>
+	<else>
+	  <table border=1>
+	    <multiple name="columns">
+              <tr>
+                <td>&nbsp;</td>
+                <td>@order.department_id@</td>
+              </tr>
+              <tr>
                   <td></td>
-                  <td>@steps.department_id@</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>@steps.assignee_id@</td>
-                </tr>
-                <tr>
+                  <td>@order.assignee_id@</td>
+              </tr>
+              <tr>
                   <td>#cnauto-inmport.Estimated_date#</td>
-                  <td>@steps.estimated_date@</td>
-                </tr>
-                <tr>
+                  <td>@order.estimated_date@</td>
+              </tr>
+              <tr>
                   <td>#cnauto-import.Executed_date#</td>
-                  <td>@steps.executed_date@</td>
-                </tr>
-              </table>
-            </else>
-          </td></tr>      
-        </table>
-
-
+                  <td>@order.executed_date@</td>
+              </tr>
+	    </multiple>
+          </table>
+        </else>
+      </td>
+    </multiple>
   </tr>
 </if>
-<tr><td>&nbsp;</td></tr>
 </table>
