@@ -9,6 +9,7 @@
     	WHERE co.code = co.code
 	AND co.provider_id = cp.person_id
 	AND co.incoterm_id = cii.incoterm_id
+	AND co.enabled_p = 't'
 	[template::list::filter_where_clauses -and -name "orders"]
 	[template::list::orderby_clause -orderby -name "orders"]
  
@@ -24,6 +25,7 @@
 	AND co.provider_id = cp.person_id
 	AND co.incoterm_id = cii.incoterm_id
 	AND co.order_id = o.object_id
+	AND co.enabled_p = 't'
     	[template::list::filter_where_clauses -and -name "orders"]
     	[template::list::page_where_clause -and -name "orders" -key "co.order_id"]
     	[template::list::orderby_clause -orderby -name "orders"]

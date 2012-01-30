@@ -9,13 +9,13 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>f</inherit-templates-p>
     
-    <version name="0.9d" url="http://openacs.org/repository/download/apm/cnauto-import-0.9d.apm">
+    <version name="0.10d" url="http://openacs.org/repository/download/apm/cnauto-import-0.10d.apm">
         <owner url="mailto:iuri.sampaio@cnauto.com.br">iuri sampaio</owner>
         <summary>Package for import management</summary>
         <description format="text/html">Package for import management</description>
         <maturity>0</maturity>
 
-        <provides url="cnauto-import" version="0.9d"/>
+        <provides url="cnauto-import" version="0.10d"/>
         <requires url="cnauto-core" version="0.1d"/>
         <requires url="cnauto-orders" version="0.1d"/>
 

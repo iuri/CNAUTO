@@ -31,7 +31,8 @@ CREATE TABLE cn_orders (
 			      REFERENCES cn_persons (person_id),
        incoterm_id	      integer,
        incoterm_value	      varchar(255),
-       estimated_days	      integer
+       estimated_days	      integer,
+       enabled_p	      boolean default 't'
 );
 
 ------------------------------------

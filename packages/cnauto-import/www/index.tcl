@@ -24,6 +24,13 @@ set actions {
 set bulk_actions [list]
 
 
+set order_delete_p 1
+#[permission::permission_p -object_id [ad_conn package_id] -privilege order_delete]
+
+if { $order_delete_p } {
+    set bulk_actions {"#cnauto-import.Delete#" "order-bulk-delete" "#cnauto-import.Delete_selected_orders#"}
+} 
+
 template::list::create \
     -name orders \
     -multirow orders \
@@ -31,6 +38,7 @@ template::list::create \
     -actions $actions \
     -row_pretty_plural "orders" \
     -bulk_actions $bulk_actions \
+    -bulk_action_export_vars { return_url } \
     -elements {
 	code {
 	    label "[_ cnauto-import.Code]"

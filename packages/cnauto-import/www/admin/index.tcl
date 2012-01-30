@@ -26,3 +26,5 @@ set resources_url [site_node::get_url -node_id $node_id]
 set type_id [cn_categories::get_category_id -name "fornecedoresdoexterior"]
 
 set person_ae_url [export_vars -base "${resources_url}persons/person-ae"  {return_url type_id}]
+
+set permissions_url [export_vars -base "" {}]

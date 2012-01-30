@@ -55,7 +55,7 @@ ad_form -name order_ae -form {
     
     set type_id [cn_categories::get_category_id -name "importorder" -type "cn_order"]
 
-    set order_id [cn_order::new \
+    set order_id [cn_order::order::new \
 		      -code $code \
 		      -type_id $type_id \
 		      -provider_id $provider_id \
@@ -75,8 +75,10 @@ ad_form -name order_ae -form {
 	SELECT workflow_id FROM cn_workflows WHERE package_id = :context_id
     } -default null]
     
-    if {[info exists $order_id] && [info exists $workflow_id]} {
 
+    if {$order_id != "" && $workflow_id != ""} {
+
+	ns_log Notice "MAP $order_id | $workflow_id"
 	
 	#Maps workflow X order
 	set map_id [db_nextval acs_object_id_seq]
