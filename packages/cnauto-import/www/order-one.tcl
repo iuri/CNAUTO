@@ -14,15 +14,16 @@ set context [list $title]
 set return_url [ad_conn url]
 
 db_multirow -extend {step_order_url} steps select_steps {
-    SELECT cws.step_id, cws.pretty_name FROM cn_workflow_steps cws
+    SELECT cws.step_id, cws.pretty_name FROM cn_workflow_steps cws ORDER BY cws.sort_order
 } {
-    db_1row select_map_id {
+
+    set map_id [db_string select_map_id {
 	SELECT wsom.map_id 
 	FROM cn_workflow_step_order_map wsom 
 	WHERE wsom.workflow_id = :workflow_id
 	AND wsom.step_id = :step_id
 	AND wsom.ordeR_id = :order_id
-    }
+    } -default null]
 
     set step_order_url [export_vars -base "step-order-edit" {return_url map_id}]
 } 
