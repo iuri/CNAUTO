@@ -645,3 +645,94 @@ ad_proc -public cn_resources::person::new {
     
 }
 
+
+
+ad_proc -public cn_resources::person::edit {
+    {-cpf_cnpj}
+    {-legal_name ""}
+    {-pretty_name ""}
+    {-code ""}
+    {-type_id ""}
+    {-contact_id ""}
+    {-email ""}
+    {-phone ""}
+    {-postal_address ""}
+    {-postal_address2 ""}
+    {-postal_code ""}
+    {-state_code ""}
+    {-city_code ""}
+    {-country_code "BR"}
+    {-creation_ip ""}
+    {-creation_user ""}
+    {-context_id ""}    
+} {
+    Edit person info
+
+    @author Iuri Sampaio (iuri.sampaio@iurix.com)
+    @creation-date 2011-12-12
+
+} {
+
+    if {$creation_ip == ""} {
+	set creation_ip [ad_conn peeraddr]
+    }
+    
+    if {$creation_user == ""} {
+	set creation_user [ad_conn user_id]
+    }
+    
+    if {$context_id == ""} {
+	set context_id [ad_conn package_id]
+    }
+
+
+
+    ns_log Notice "
+	-cpf_cnpj $cpf_cnpj \n
+        -legal_name $legal_name \n
+        -pretty_name $pretty_name \n
+        -code $code \n
+	-type_id $type_id \n
+        -contact_id \n
+	-email $email \n
+	-phone $phone \n
+	-postal_address $postal_address \n
+	-postal_address2 $postal_address2 \n
+	-postal_code $postal_code \n
+	-state_code $state_code \n
+	-city_code $city_code \n
+	-country_code $country_code \n
+	-creation_ip $creation_ip \n
+	-creation_user $creation_user \n 
+	-context_id $context_id    
+    "
+
+    db_transaction {
+	db_exec_plsql update_person {
+	    SELECT cn_person__edit (
+				   :cpf_cnpj,
+				   :legal_name,
+				   :pretty_name,
+				   :code,
+				   :type_id,
+				   :contact_id,
+				   :email,
+				   :phone,
+				   :postal_address,
+				   :postal_address2,
+				   :postal_code,
+				   :state_code,
+				   :city_code,
+				   :country_code,
+				   :creation_ip,
+				   :creation_user,
+				   :context_id
+				   );
+	}
+    }
+    
+    
+    
+    return 
+}
+

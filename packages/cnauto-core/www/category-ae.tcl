@@ -20,6 +20,10 @@ if {[exists_and_not_null category_id]} {
 
 ad_form -name category_ae -form {
     {category_id:key}
+    {name:text(text)
+	{label "[_ cnauto-resouces.Code]"}
+	{mode "display"}
+    }
     {pretty_name:text(text)
 	{label "[_ cnauto-resouces.Name]"}
     }
@@ -30,7 +34,7 @@ ad_form -name category_ae -form {
 } -on_submit {
 } -edit_request {
     db_1row category_info {
-	SELECT pretty_name, object_type 
+	SELECT name, pretty_name, object_type 
 	FROM cn_categories WHERE category_id = :category_id
     }
 } -new_data {
@@ -57,6 +61,7 @@ ad_form -name category_ae -form {
 	    }
     }
 } -edit_data {
+
     set name [util_text_to_url -replacement "" -text $pretty_name]
     set package_id [ad_conn package_id]
     

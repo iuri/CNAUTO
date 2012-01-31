@@ -130,6 +130,24 @@ DROP FUNCTION cn_person__new (
 );
 
 
+DROP FUNCTION cn_person__edit (
+       integer,	  	   -- person_id
+       varchar,	  	   -- cpf_cnpj
+       varchar,	  	   -- legal_name
+       varchar,		   -- pretty_name
+       varchar,		   -- code
+       integer,		   -- type_id
+       integer,		   -- contact_id
+       varchar,		   -- email
+       varchar,		   -- phone
+       varchar,		   -- postal_address
+       varchar,		   -- postal_address2
+       varchar,		   -- postal_code
+       varchar,		   -- state_code
+       integer,		   -- city_code
+       varchar		   -- country_code
+) RETURNS integer AS '
+
 
 DROP FUNCTION cn_person__delete (
        integer	  	   -- person_id

@@ -9,7 +9,7 @@ CREATE OR REPLACE FUNCTION cn_workflow_order_map__new (
 ) RETURNS integer AS '
   DECLARE
 	p_map_id			ALIAS FOR $1;
-	p_worflow_id			ALIAS FOR $2;
+	p_workflow_id			ALIAS FOR $2;
 	p_order_id			ALIAS FOR $3;
 	
   BEGIN

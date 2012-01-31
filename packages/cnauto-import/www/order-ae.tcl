@@ -55,57 +55,70 @@ ad_form -name order_ae -form {
     
     set type_id [cn_categories::get_category_id -name "importorder" -type "cn_order"]
 
-    set order_id [cn_order::order::new \
-		      -code $code \
-		      -type_id $type_id \
-		      -provider_id $provider_id \
-		      -incoterm_id $incoterm_id \
-		      -incoterm_value $incoterm_value \
-		      -estimated_days $estimated_days \
-		      -creation_ip [ad_conn peeraddr] \
-		      -creation_user [ad_conn user_id] \
-		      -context_id [ad_conn package_id] \
-		     ]
-    
-
-    set context_id [ad_conn package_id]
-
-
-    set workflow_id [db_string select_workflow_id {
-	SELECT workflow_id FROM cn_workflows WHERE package_id = :context_id
-    } -default null]
-    
-
-    if {$order_id != "" && $workflow_id != ""} {
-
-	ns_log Notice "MAP $order_id | $workflow_id"
+    db_transaction {
 	
-	#Maps workflow X order
-	set map_id [db_nextval acs_object_id_seq]
 	
-	db_exec_plsql workflow_order_mapping {
-	    SELECT cn_workflow_order_map__new (
-					       :map_id,
-					       :workflow_id,
-					       :order_id
-					       )
-	}
-    
-	# Maps Orders X Steps X workflow 
+	set order_id [cn_order::order::new \
+			  -code $code \
+			  -type_id $type_id \
+			  -provider_id $provider_id \
+			  -incoterm_id $incoterm_id \
+			  -incoterm_value $incoterm_value \
+			  -estimated_days $estimated_days \
+			  -creation_ip [ad_conn peeraddr] \
+			  -creation_user [ad_conn user_id] \
+			  -context_id [ad_conn package_id] \
+			 ]
 	
-	set step_id [db_string select_step_id {
-	    SELECT step_id FROM cn_workflow_steps 
-	    WHERE name = 'enviodopedido' 
-	    AND workflow_id = :workflow_id 
-	}]
- 
-	db_exec_plsql update_step {
-	    UPDATE cn_workflow_steps SET 
-	    WHERE step_id = :step_id
-
+	
+	set context_id [ad_conn package_id]
+	
+	
+	set workflow_id [db_string select_workflow_id {
+	    SELECT workflow_id FROM cn_workflows WHERE package_id = :context_id
+	} -default null]
+	
+	
+	if {$order_id != "" && $workflow_id != ""} {
+	    
+	    ns_log Notice "MAP $order_id | $workflow_id"
+	    
+	    # Maps workflow X order
+	    set map_id [db_nextval acs_object_id_seq]
+	    
+	    db_exec_plsql workflow_order_mapping {
+		SELECT cn_workflow_order_map__new (
+						   :map_id,
+						   :workflow_id,
+						   :order_id
+						   )
+	    }
+	    
+	    
+	    # Maps Orders X Steps X workflow 
+	    
+	    set step_id [db_string select_step_id {
+		SELECT step_id FROM cn_workflow_steps 
+		WHERE name = 'enviodopedido' 
+		AND workflow_id = :workflow_id 
+	    }]
+	    
+	    set map_id [db_nextval acs_object_id_seq]
+	    db_exec_plsql insert_mapping  {
+		SELECT cn_wsom__new (
+				     :map_id,
+				     :workflow_id,
+				     :step_id,
+				     :order_id,
+				     null,
+				     null,
+				     null,
+				     null,
+				     null
+		)
+	    }
 	}
     }
-    
     
 } -edit_data {
 } -after_submit {

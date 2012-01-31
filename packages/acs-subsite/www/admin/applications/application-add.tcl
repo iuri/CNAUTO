@@ -76,7 +76,7 @@ ad_form -name application -cancel_url . -form {
                     -folder $folder \
                     -instance_name $instance_name]
 
-    if { [exists_and_not_null folder]} {
+    if { $folder eq ""} {
         form set_error application folder "This folder name is already used"
         break
     }

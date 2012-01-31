@@ -29,10 +29,10 @@ template::list::create \
 
 
 db_multirow -extend {category_ae_url} categories select_categories {
-    SELECT ct.category_id, ct.pretty_name, ot.pretty_name AS type
-    FROM cn_categories ct, acs_object_types ot
-    WHERE ot.object_type = ct.object_type
-
+    SELECT cc.category_id, cc.pretty_name, ot.pretty_name AS type
+    FROM cn_categories cc, acs_object_types ot
+    WHERE ot.object_type = cc.object_type
+    ORDER BY cc.pretty_name
 } {
     set category_ae_url [export_vars -base "category-ae" {category_id return_url}]
 

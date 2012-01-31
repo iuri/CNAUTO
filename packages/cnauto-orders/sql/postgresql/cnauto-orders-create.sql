@@ -121,6 +121,8 @@ CREATE OR REPLACE FUNCTION cn_order__delete (
 
   BEGIN
 
+  
+
 	DELETE FROM cn_orders WHERE order_id = p_order_id;
 	
 	PERFORM acs_object__delete(p_order_id);
