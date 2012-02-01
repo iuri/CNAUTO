@@ -482,8 +482,11 @@ CREATE TABLE cn_vehicles (
        arrival_date	   	timestamptz,
        billing_date	   	timestamptz,
        duration	   	   	varchar(10),
-       person_id	   	integer
-       			   	CONSTRAINT cn_vehicles_person_id_fk
+       distributor_id	   	integer
+       			   	CONSTRAINT cn_vehicles_distributor_id_fk
+			   	REFERENCES cn_persons (person_id),
+       client_id	   	integer
+       			   	CONSTRAINT cn_vehicles_client_id_fk
 			   	REFERENCES cn_persons (person_id),
        resource_id		integer
        				CONSTRAINT cn_vehicles_resource_id_fk
@@ -525,8 +528,9 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
       timestamptz,	   -- arrival_date
       timestamptz,	   -- billing_date
       varchar,		   -- duration
+      integer,		   -- distributor_id
+      integer,		   -- client_id
       integer,		   -- resource_id
-      integer,		   -- person_id
       text,		   -- notes
       varchar,             -- creation_ip
       integer,             -- creation_user
@@ -543,12 +547,13 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
        p_arrival_date		ALIAS FOR $8;
        p_billing_date		ALIAS FOR $9;
        p_duration		ALIAS FOR $10;
-       p_resource_id		ALIAS FOR $11;
-       p_person_id		ALIAS FOR $12;
-       p_notes			ALIAS FOR $13;
-       p_creation_ip		ALIAS FOR $14;
-       p_creation_user		ALIAS FOR $15;
-       p_context_id		ALIAS FOR $16;
+       p_distributor_id		ALIAS FOR $11;
+       p_client_id		ALIAS FOR $12;
+       p_resource_id		ALIAS FOR $13;
+       p_notes			ALIAS FOR $14;
+       p_creation_ip		ALIAS FOR $15;
+       p_creation_user		ALIAS FOR $16;
+       p_context_id		ALIAS FOR $17;
 
        v_id	integer;		
 
@@ -576,7 +581,8 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
 	      arrival_date, 
 	      billing_date, 
 	      duration, 
-	      person_id, 
+	      distributor_id, 
+	      client_id,
 	      resource_id,
 	      notes
        ) VALUES (
@@ -591,7 +597,8 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
               p_arrival_date,
 	      p_billing_date,
        	      p_duration,
-       	      p_person_id,
+	      p_distributor_id, 
+	      p_client_id,
 	      p_resource_id,
 	      p_notes
        );

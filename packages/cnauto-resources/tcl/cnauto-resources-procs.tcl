@@ -226,8 +226,8 @@ ad_proc -public cn_resources::vehicle::new {
     {-billing_date ""}
     {-purchase_date ""}
     {-duration ""}
-    {-distributor_code ""}
-    {-person_id ""}
+    {-distributor_id ""}
+    {-client_id ""}
     {-notes ""}
     {-creation_ip ""}
     {-creation_user ""}
@@ -264,8 +264,8 @@ ad_proc -public cn_resources::vehicle::new {
 				:arrival_date,	
 				:billing_date,
 				:duration,
-				:distributor_code,
-				:person_id,
+				:distributor_id,
+				:client_id,
 				:notes,
 				:creation_ip,
 				:creation_user,
