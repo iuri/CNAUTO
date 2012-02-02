@@ -17,7 +17,9 @@ CREATE TABLE cn_resources (
     name 	varchar(255),
     pretty_name varchar(255),
     description text,
-    class 	varchar(50),
+    class_id 	integer 
+    		CONSTRAINT cn_resources_class_id_fk
+    		REFERENCES cn_categories (category_id),
     unit 	varchar(50),
     ncm_class 	varchar(50)
 );
@@ -38,27 +40,45 @@ RETURNS integer AS '
 
 
 
+
+
 CREATE FUNCTION cn_resource__new(
-       integer,	-- resource_id 
        varchar,	-- code
        varchar,	-- name
        varchar,	-- pretty_name
        text,	-- description
-       varchar,	-- class
+       integer,	-- class_id
        varchar,	-- ncm_class
-       varchar	-- unit
+       varchar,	-- unit
+       varchar, -- creation_ip
+       integer, -- creation_user
+       integer	-- context_id
 ) RETURNS integer AS '
   DECLARE
-	p_resource_id	ALIAS FOR $1;
-	p_code		ALIAS FOR $2;
-	p_name		ALIAS FOR $3;
-	p_pretty_name	ALIAS FOR $4;
-	p_description	ALIAS FOR $5;
-	p_class		ALIAS FOR $6;
-	p_ncm_class	ALIAS FOR $7;
-	p_unit		ALIAS FOR $8;
+	p_code		ALIAS FOR $1;
+	p_name		ALIAS FOR $2;
+	p_pretty_name	ALIAS FOR $3;
+	p_description	ALIAS FOR $4;
+	p_class_id	ALIAS FOR $5;
+	p_ncm_class	ALIAS FOR $6;
+	p_unit		ALIAS FOR $7;
+	p_creation_ip 	ALIAS FOR $8;
+	p_creation_user ALIAS FOR $9;
+	p_context_id	ALIAS FOR $10;
+
+	v_id		integer;
 
   BEGIN
+
+	v_id := acs_object__new (
+       		  null,			-- object_id
+		  ''cn_resource'',	-- object_type
+		  now(),		-- creation_date
+		  p_creation_user,	-- creation_user
+		  p_creation_ip,	-- cretion_ip
+		  p_context_id,		-- context_id
+		  true			-- 
+       );
 
 	INSERT INTO cn_resources (
 	       resource_id,
@@ -66,16 +86,16 @@ CREATE FUNCTION cn_resource__new(
 	       name,
 	       pretty_name,
 	       description,
-	       class,
+	       class_id,
 	       ncm_class,
 	       unit
 	) VALUES (
-	       p_resource_id,
+	       v_id,
 	       p_code,
 	       p_name,
 	       p_pretty_name,
 	       p_description,
-	       p_class,
+	       p_class_id,
 	       p_ncm_class,
 	       p_unit
 	);
@@ -83,6 +103,8 @@ CREATE FUNCTION cn_resource__new(
 	RETURN 0;
 
   END;' LANGUAGE 'plpgsql';
+
+
 
 
 
@@ -248,7 +270,9 @@ CREATE TABLE cn_persons (
        legal_name	varchar(100),
        pretty_name	varchar(100),
        code		varchar(100),
-       type_id		integer,	
+       type_id		integer
+       			CONSTRAINT cn_persons_type_id_fk
+			REFERENCES cn_categories (category_id),	
        contact_id	integer
        			CONSTRAINT cn_persons_contact_id_fk
  		        REFERENCES acs_objects (object_id),
@@ -485,8 +509,8 @@ CREATE TABLE cn_vehicles (
        distributor_id	   	integer
        			   	CONSTRAINT cn_vehicles_distributor_id_fk
 			   	REFERENCES cn_persons (person_id),
-       client_id	   	integer
-       			   	CONSTRAINT cn_vehicles_client_id_fk
+       owner_id			integer
+       			   	CONSTRAINT cn_vehicles_owner_id_fk
 			   	REFERENCES cn_persons (person_id),
        resource_id		integer
        				CONSTRAINT cn_vehicles_resource_id_fk
@@ -529,7 +553,7 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
       timestamptz,	   -- billing_date
       varchar,		   -- duration
       integer,		   -- distributor_id
-      integer,		   -- client_id
+      integer,		   -- owner_id
       integer,		   -- resource_id
       text,		   -- notes
       varchar,             -- creation_ip
@@ -548,7 +572,7 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
        p_billing_date		ALIAS FOR $9;
        p_duration		ALIAS FOR $10;
        p_distributor_id		ALIAS FOR $11;
-       p_client_id		ALIAS FOR $12;
+       p_owner_id		ALIAS FOR $12;
        p_resource_id		ALIAS FOR $13;
        p_notes			ALIAS FOR $14;
        p_creation_ip		ALIAS FOR $15;
@@ -582,7 +606,7 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
 	      billing_date, 
 	      duration, 
 	      distributor_id, 
-	      client_id,
+	      owner_id,
 	      resource_id,
 	      notes
        ) VALUES (
@@ -598,7 +622,7 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
 	      p_billing_date,
        	      p_duration,
 	      p_distributor_id, 
-	      p_client_id,
+	      p_owner_id,
 	      p_resource_id,
 	      p_notes
        );

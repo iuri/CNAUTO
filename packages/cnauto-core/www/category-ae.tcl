@@ -18,6 +18,13 @@ if {[exists_and_not_null category_id]} {
     set context [list $title]
 }    
 
+set parent_options [db_list_of_lists select_parent_info {
+    SELECT pretty_name, category_id FROM cn_categories ORDER BY pretty_name
+}]
+
+
+lappend parent_options "Selecione \"\""  
+
 ad_form -name category_ae -form {
     {category_id:key}
     {name:text(text)
@@ -29,8 +36,14 @@ ad_form -name category_ae -form {
     }
     {object_type:text(select)
 	{label "[_ cnauto-resouces.Type]"}
-	{options {{"Person" cn_person} {"Order" cn_order}}}
+	{options {{"Selecione" 0} {"Person" cn_person} {"Order" cn_order} {"Vehicle" cn_vehicle} {"Resource" cn_resource}}}
     }
+    {parent_id:integer(select),optional
+	{label "[_ cnauto-resouces.Parent]"}
+	{options $parent_options}
+    }
+} -on_request {
+    set parent_id ""
 } -on_submit {
 } -edit_request {
     db_1row category_info {
@@ -48,12 +61,14 @@ ad_form -name category_ae -form {
 		INSERT INTO cn_categories (
 		   category_id,
 		   package_id,
+		   parent_id,
 		   pretty_name,
 		   name,
 		   object_type
 		) VALUES (
 		     :category_id,
 		     :package_id,
+		     :parent_id,
 		     :pretty_name,
 		     :name,
 		     :object_type
@@ -69,6 +84,7 @@ ad_form -name category_ae -form {
 	db_dml update_category {
 	    UPDATE cn_categories SET 
 	    package_id = :package_id,
+	    parent_id = :parent_id,
 	    pretty_name = :pretty_name,
 	    name = :name,
 	    object_type = :object_type

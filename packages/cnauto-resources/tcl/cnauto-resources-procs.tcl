@@ -5,11 +5,56 @@ ad_library {
 
 
 namespace eval cn_resources {}
+
+namespace eval cn_resources::resource {}
+
+ad_proc -public cn_resource::resource::new {
+    {-code:required}
+    {-pretty_name ""}
+    {-description ""}
+    {-class_id:required}
+    {-unit ""}
+} {
+
+
+    set name [util_text_to_url -replacement "" -text $pretty_name]
+
+    if {$creation_ip == ""} {
+	set creation_ip [ad_conn peeraddr]
+    }
+    
+    if {$creation_user == ""} {
+	set creation_user [ad_conn user_id]
+    }
+     
+    if {$context_id == ""} {
+	set context_id [ad_conn package_id]
+    }
+
+    db_exec_plsql insert_resource {
+	SELECT cn_resource__new (
+				 :code,
+				 :name,
+				 :pretty_name,
+				 :description,
+				 :class_id,
+				 :ncm_class,
+				 :unit
+				 :creation_ip,
+				 :creation_user,
+				 :conetxt_id
+				 )
+    }
+    
+    return $resource_id
+}
+
+
 namespace eval cn_resources::vehicle {}
 
 
 ad_proc -public  cn_resources::import_csv_file {
-    {-input_file}
+    {-input_file:required}
 } {
 
     Imports CSV files to add resources

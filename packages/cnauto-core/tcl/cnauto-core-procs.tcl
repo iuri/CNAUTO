@@ -13,7 +13,41 @@ namespace eval cnauto_core {}
 namespace eval cn_core {}
 
 namespace eval cn_core::util {}
+
+
 namespace eval cn_categories {}
+
+namespace eval cn_categories::category {}
+ad_proc -public cn_categories::category::delete {
+    category_id
+} {
+    Deletes category
+} {
+
+    # If category is parent of others remove the children first
+
+    
+
+    set children_ids [db_list select_children_ids {
+	SELECT category_id FROM cn_categories WHERE parent_id = :category_id
+    }]
+
+    if {[exists_and_not_null children_ids]} {
+	foreach child_id $children_ids {
+	    cn_categories::category::delete $child_id 
+	}
+    }
+
+    #if category is a leaf node just remove it
+    db_dml delete_category {
+	DELETE FROM cn_categories WHERE category_id = :category_id
+    }
+    
+
+    return
+}
+
+
 
 ad_proc -public cn_categories::get_category_id {
     {-name}
@@ -28,7 +62,7 @@ ad_proc -public cn_categories::get_category_id {
 
 
 
-ad_proc -public cnauto_core::item_exists {
+ad_proc -public cn_core::item_exists {
     {-items}
     {-chassi}
 } {
@@ -50,7 +84,7 @@ ad_proc -public cnauto_core::item_exists {
 }
 
 
-ad_proc -public cnauto_core::format_output_line {
+ad_proc -public cn_core::format_output_line {
     {-line}
 } {
     Format output line to BA standards
@@ -74,7 +108,7 @@ ad_proc -public cnauto_core::format_output_line {
 
 
 
-ad_proc -public cnauto_core::mount_output_line {
+ad_proc -public cn_core::mount_output_line {
     {-line} 
 } {
     Prepare input line to output
@@ -158,7 +192,7 @@ ad_proc -public cnauto_core::mount_output_line {
 }
 
 
-ad_proc -public cnauto_core::export_csv_to_txt {
+ad_proc -public cn_core::export_csv_to_txt {
     {-input_file}
     {-output_file}
 } {
@@ -200,7 +234,7 @@ ad_proc -public cnauto_core::export_csv_to_txt {
 	    lappend items [lindex $output_line 5]
 	    
 	    # format output to BA standards 
-	    set output_line [cnauto_core::format_output_line -line $output_line]
+	    set output_line [cn_core::format_output_line -line $output_line]
 	    
 	    #inserts line within output file
 	    puts $output_file $output_line    

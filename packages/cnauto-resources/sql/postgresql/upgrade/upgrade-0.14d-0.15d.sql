@@ -1,50 +1,18 @@
--- /packages/cnauto-resources/sql/postgresql/upgrade/upgrade-0.12d-0.13d.sql
+-- /packages/cnauto-resources/sql/postgresql/upgrade/upgrade-0.14d-0.15d.sql
 
-SELECT acs_log__debug ('/packages/cnauto-resources/sql/postgresql/upgrade/upgrade-0.12d-0.13d.sql','');
+SELECT acs_log__debug ('/packages/cnauto-resources/sql/postgresql/upgrade/upgrade-0.14d-0.15d.sql','');
 
--- ALTER TABLE cn_vehicles DROP COLUMN person_id; 
--- ALTER TABLE cn_vehicles ADD COLUMN client_id integer;
+ALTER TABLE cn_vehicles RENAME COLUMN client_id TO owner_id;
 
---ALTER TABLE cn_vehicles DROP CONSTRAINT cn_vehicles_person_id_fk;
+ALTER TABLE cn_vehicles DROP CONSTRAINT cn_vehicles_client_id_fk;
 
-ALTER TABLE cn_vehicles RENAME COLUMN person_id TO client_id;
-ALTER TABLE cn_vehicles ADD CONSTRAINT cn_vehicles_client_id_fk FOREIGN KEY (client_id) REFERENCES cn_persons (person_id);
-
-
-
-
-ALTER TABLE cn_vehicles ADD COLUMN distributor_id integer;
-
-ALTER TABLE cn_vehicles ADD CONSTRAINT cn_vehicles_distributor_id_fk FOREIGN KEY (distributor_id) REFERENCES cn_persons (person_id);
+ALTER TABLE cn_vehicles ADD CONSTRAINT cn_vehicles_owner_id_fk FOREIGN KEY (owner_id) REFERENCES cn_persons (person_id);
 
 
 
 ------------------------------------
 -- cn_vehicles PL/SQL Functions
 ------------------------------------
-
-
-
-DROP FUNCTION cn_vehicle__new (
-      varchar,		   -- chassis vin - vehicle identification number
-      varchar, 		   -- engine
-      varchar,		   -- model
-      integer, 	   	   -- year of model
-      integer,	   	   -- year of fabrication
-      varchar,		   -- color
-      timestamptz,	   -- purchase_date
-      timestamptz,	   -- arrival_date
-      timestamptz,	   -- billing_date
-      varchar,		   -- duration
-      integer,		   -- person_id
-      integer,		   -- resource_id
-      text,		   -- notes
-      varchar,             -- creation_ip
-      integer,             -- creation_user
-      integer		   -- context_id
-);
-
-
 CREATE OR REPLACE FUNCTION cn_vehicle__new (
       varchar,		   -- chassis vin - vehicle identification number
       varchar, 		   -- engine
@@ -57,7 +25,7 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
       timestamptz,	   -- billing_date
       varchar,		   -- duration
       integer,		   -- distributor_id
-      integer,		   -- client_id
+      integer,		   -- owner_id
       integer,		   -- resource_id
       text,		   -- notes
       varchar,             -- creation_ip
@@ -76,7 +44,7 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
        p_billing_date		ALIAS FOR $9;
        p_duration		ALIAS FOR $10;
        p_distributor_id		ALIAS FOR $11;
-       p_client_id		ALIAS FOR $12;
+       p_owner_id		ALIAS FOR $12;
        p_resource_id		ALIAS FOR $13;
        p_notes			ALIAS FOR $14;
        p_creation_ip		ALIAS FOR $15;
@@ -110,7 +78,7 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
 	      billing_date, 
 	      duration, 
 	      distributor_id, 
-	      client_id,
+	      owner_id,
 	      resource_id,
 	      notes
        ) VALUES (
@@ -126,7 +94,7 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
 	      p_billing_date,
        	      p_duration,
 	      p_distributor_id, 
-	      p_client_id,
+	      p_owner_id,
 	      p_resource_id,
 	      p_notes
        );

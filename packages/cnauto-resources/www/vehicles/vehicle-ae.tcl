@@ -36,6 +36,18 @@ set chassis_options [db_list_of_lists select_chassis {
 }]
 
 
+set model_options [db_list_of_lists select_chassis {
+    SELECT c1.pretty_name, c2.category_id 
+    FROM cn_categories c1, cn_categories c2
+    WHERE c1.object_type = 'cn_vehicle'
+    AND c1.parent_id = c2.category_id 
+    AND c2.name = 'models' 
+    LIMIT 20
+}]
+
+
+
+
 set resource_options [db_list_of_lists select_resources {
     SELECT pretty_name, resource_id FROM cn_resources WHERE class = 'vehicles'
 }]
@@ -53,8 +65,9 @@ ad_form -name vehicle_ae -form {
     {chassis:text(text)
 	{label "[_ cnauto-asssurance.Chassis]"}
     }    
-    {model:text(text)
+    {model:text(select)
 	{label "[_ cnauto-asssurance.Model]"}
+	{options $model_options}   
     }    
     {resource_id:integer(select)
 	{label "[_ cnauto-assurance.Resource]"}
