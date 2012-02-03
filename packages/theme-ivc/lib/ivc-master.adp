@@ -1,10 +1,3 @@
-<!-- 
-#----------------------------------------------------------------------
-# /packages/theme-ivc/lib/ivc-master.adp
-# @author Iuri Sampaio (iuri.sampaio@iurix.com)
-# @creation-date 2011-10-08
-#----------------------------------------------------------------------
--->
 <master src="/www/blank-compat">
 <property name="title">@title;noquote@</property>
 <property name="context">@context;noquote@</property>
@@ -61,7 +54,7 @@
   <div class="content">
        <div class="content-left">&nbsp;</div>
        <div class="content-right">
-         <h1>#theme-ivc.under_construction#</h1>
+         <h1>#ivc-core.Under_Construction#</h1>
         <img src="/resources/theme-ivc/images/under-construction.jpg" width="300px"></div>
    </div>
 

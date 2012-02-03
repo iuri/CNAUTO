@@ -44,9 +44,13 @@ ad_form -name step_order_edit -form {
     }
     {estimated_date:date
 	{label "[_ cnauto-import.Estimated_date]"}
+	{format "YYYY MM DD"}
+	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('estimated_date', 'y-m-d');" > \[<b>[_ calendar.y-m-d]</b>\]} } }
     }
     {executed_date:date
 	{label "[_ cnauto-import.Executed_date]"}
+	{format "YYYY MM DD"}
+	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('executed_date', 'y-m-d');" > \[<b>[_ calendar.y-m-d]</b>\]} } }
     }
 } -on_submit {
 } -edit_request {
@@ -58,6 +62,12 @@ ad_form -name step_order_edit -form {
     }
 } -edit_data {
     
+    set estimated_date "[template::util::date::get_property year $estimated_date] [template::util::date::get_property month $estimated_date] [template::util::date::get_property day $estimated_date]"
+
+    set executed_date "[template::util::date::get_property year $executed_date] [template::util::date::get_property month $executed_date] [template::util::date::get_property day $executed_date]"
+
+
+
     db_exec_plpsql edit_step_order {
 	SELECT sn_wsom__edit (
 			      :map_id,
