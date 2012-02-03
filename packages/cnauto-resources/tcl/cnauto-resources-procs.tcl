@@ -24,6 +24,40 @@ ad_proc -public cn_resources::resource::delete {
     return 
 }
 
+ad_proc -public cn_resources::resource::edit {
+    {-resource_id:required}
+    {-code:required}
+    {-pretty_name ""}
+    {-description ""}
+    {-class_id:required}
+    {-ncm_class ""}
+    {-unit ""}
+} {
+    Edit resource info
+} {
+
+
+    set name [util_text_to_url -replacement "" -text $pretty_name]
+
+    db_exec_plsql update_resource {
+	SELECT cn_resource__edit (
+				  :resource_id,
+				  :code,
+				  :name,
+				  :pretty_name,
+				  :description,
+				  :class_id,
+				  :ncm_class,
+				  :unit
+				  )
+    }
+
+    return
+
+}
+
+
+
 ad_proc -public cn_resources::resource::new {
     {-code:required}
     {-pretty_name ""}
@@ -297,8 +331,8 @@ ad_proc -public cn_resources::vehicle::delete {
 }
 
 ad_proc -public cn_resources::vehicle::new { 
-    {-chassis}
-    {-model}
+    {-vin:required}
+    {-model:required}
     {-engine ""}
     {-year_of_model ""}
     {-year_of_fabrication ""}
@@ -309,7 +343,7 @@ ad_proc -public cn_resources::vehicle::new {
     {-duration ""}
     {-distributor_id ""}
     {-owner_id ""}
-    {-resource_id ""}
+    {-resource_id:required}
     {-notes ""}
     {-creation_ip ""}
     {-creation_user ""}
@@ -336,7 +370,7 @@ ad_proc -public cn_resources::vehicle::new {
     db_transaction {
 	set vehicle_id [db_exec_plsql insert_vehicle {
 	    SELECT cn_vehicle__new (
-				    :chassis,
+				    :vin,
 				    :model,
 				    :engine,
 				    :year_of_model,

@@ -1,9 +1,16 @@
 ad_page_contract {
     
     Add/Edit Assurance Requirement
-
+    
 } {
     {assurance_id:integer,optional}
+    {distributor_id ""}
+    {code ""}
+    {client_id ""}
+    {chassis ""}
+    {vehicle ""}
+    {model ""}
+    {year ""}
     {return_url ""}
 }
 
@@ -20,7 +27,7 @@ set distributor_options [db_list_of_lists select_distributor_info {
     SELECT cp.person_id, cp.pretty_name FROM cn_persons cp, cn_categories cc
     WHERE cp.type_id = cc.category_id
     AND cc.name = 'concessionarias'
- 
+    
 }]
 
 set distributor_options_html ""
@@ -35,7 +42,7 @@ set client_options [db_list_of_lists select_client_info {
     SELECT cp.person_id, cp.pretty_name FROM cn_persons cp, cn_categories cc
     WHERE cp.type_id = cc.category_id
     AND cc.name = 'clientes'
- 
+    
 }]
 
 
@@ -60,4 +67,9 @@ foreach vehicle $vehicle_options {
         "
 }
 
+
+
+
+
+template::head::add_javascript -src "/resources/cnauto-assurance/js/form-ajax.js"
 

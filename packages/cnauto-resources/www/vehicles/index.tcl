@@ -12,7 +12,7 @@ set admin_p [permission::permission_p -party_id [ad_conn user_id] -object_id [ad
 if {$admin_p} {
     set admin_url "[apm_package_url_from_id [ad_conn package_id]]admin"	      
 }
-set return_url [ad_return_url]
+set return_url [ad_conn url]
 
 set vehicle_ae_url [export_vars -base "vehicle-ae" {return_url}]
 

@@ -19,7 +19,7 @@ if {[exists_and_not_null category_id]} {
 }    
 
 set parent_options [db_list_of_lists select_parent_info {
-    SELECT pretty_name, category_id FROM cn_categories ORDER BY pretty_name
+    SELECT pretty_name, category_id FROM cn_categories WHERE object_type = 'cn_vehicle' ORDER BY pretty_name
 }]
 
 

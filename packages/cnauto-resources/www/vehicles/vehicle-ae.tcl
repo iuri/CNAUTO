@@ -13,6 +13,7 @@ if { [exists_and_not_null vehicle_id] } {
     #set ad_form_mode edit
 }
 
+
 set color_options [cn_assurance::get_color_options]
 set year_options {"2000 2000" "2001 2001" "2002 2002" "2003 2003" "2004 2004" "2005 2005" "2006 2006" "2007 2007" "2008 2008" "2009 2009" "2010 2010" "2011 2011"}
 
@@ -37,19 +38,19 @@ set chassis_options [db_list_of_lists select_chassis {
 
 
 set model_options [db_list_of_lists select_chassis {
-    SELECT c.pretty_name, c.category_id 
-    FROM cn_categories c WHERE name ='topic'
+    SELECT c1.pretty_name, c1.category_id 
+    FROM cn_categories c1, cn_categories c2
+    WHERE c1.parent_id = c2.category_id AND c2.name ='models' AND c2.object_type = 'cn_vehicle'
 }]
 
 
 
 
 set resource_options [db_list_of_lists select_resources {
-    SELECT cr.pretty_name, cr.resource_id FROM cn_resources cr, cn_categories cc WHERE cr.class_id = cc.category_id AND cc.object_type = 'cn_vehicle'
+    SELECT cr.pretty_name, cr.resource_id FROM cn_resources cr, cn_categories cc WHERE cr.class_id = cc.category_id AND cc.name = 'vehicles'
 }]
 
 
-set return_url [ad_return_url]
 set person_ae_url [export_vars -base "person-ae" {return_url}] 
 
 ad_form -name vehicle_ae -form {
@@ -58,7 +59,7 @@ ad_form -name vehicle_ae -form {
         {label "<h2>[_ cnauto-assurance.Vehicle_info]</h2>"}
         {value ""}
     }
-    {chassis:text(text)
+    {vin:text(text)
 	{label "[_ cnauto-asssurance.Chassis]"}
     }    
     {model:text(select),optional
@@ -119,6 +120,9 @@ ad_form -name vehicle_ae -form {
     {notes:text(textarea),optional
 	{label "[_ cnauto-assurance.Notes]"}
     }
+    {return_url:text(hidden)
+	{value $return_url}
+    }
 } -on_submit {
 } -new_data { 
     set arrival_date "[template::util::date::get_property year $arrival_date] [template::util::date::get_property month $arrival_date] [template::util::date::get_property day $arrival_date]"
@@ -127,7 +131,7 @@ ad_form -name vehicle_ae -form {
 
     db_transaction {
 	cn_resources::vehicle::new \
-	    -chassis $chassis \
+	    -vin $vin \
 	    -model $model \
 	    -engine $engine \
 	    -year_of_model $year_of_model \

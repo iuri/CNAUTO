@@ -36,6 +36,20 @@
       </select>
     </td>
   </tr>
+  <tr>
+    <td>#cnauto-import.Vehicle#</td>
+    <td>
+        <input type="text" name="vehicle" value="">  
+    </td>
+    <td>#cnauto-import.Model#</td>
+    <td>
+        <input type="text" name="model" value="">  
+    </td>
+    <td>#cnauto-import.Year#</td>
+    <td>
+        <input type="text" name="year" value="">  
+    </td>
+  </tr>
 
 
 </table>
