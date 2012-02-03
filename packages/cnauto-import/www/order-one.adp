@@ -19,11 +19,17 @@
     </multiple>
   </tr>
 </if>
+<else>
+  <tr><td>#cnauto-import.There_are_no_lt# <a href="@map_order_url@">#cnauto-import.Click_here#</a></td></tr>
+</else>
+
+
+<if @columns:rowcount@ gt 0>
   <tr>
     <multiple name="columns">
       <td>
         <if @columns.sort_order@ eq 0>
-	  <table border=1>
+      	  <table border=1>
             <tr>
               <td>@code@ </td>
 	      <td>#cnauto-import.Provider#</td>

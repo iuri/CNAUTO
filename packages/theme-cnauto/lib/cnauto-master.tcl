@@ -35,6 +35,9 @@ set system_url [parameter::get -package_id [ad_acs_kernel_id] -parameter SystemU
 set user_id [ad_get_user_id] 
 set untrusted_user_id [ad_conn untrusted_user_id]
 
+set admin_url ""
+
+
 if {$untrusted_user_id == 0} {
     set login_url [ad_get_login_url]
     set login_url [export_vars -base "$login_url" {return_url}]

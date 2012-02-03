@@ -25,12 +25,17 @@ CREATE TABLE cn_assurances (
        lp_2_date		timestamptz,
        service_order		integer, 
        service_order_date   	timestamptz,
+       person_id		integer
+       				CONSTRAINT cn_assurances_person_id_fk
+				REFERENCES cn_persons (person_id) ON DELETE CASCADE,
        vehicle_id		integer
        				CONSTRAINT cn_assurances_vehicle_id_fk
-				REFERENCES cn_vehicles ON DELETE CASCADE,
+				REFERENCES cn_vehicles (vehicle_id) ON DELETE CASCADE,
        kilometers		integer,
        part_group		varchar(10),			
-       part_code		varchar(30),
+       part_id			integer
+       				CONSTRAINT cn_assurances_part_id_fk
+				REFERENCES cn_parts (part_id) ON DELETE CASCADE,
        part_quantity		integer,
        damage_description   	text,
        third_service		varchar(10),

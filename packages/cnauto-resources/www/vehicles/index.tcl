@@ -20,6 +20,15 @@ set vehicle_ae_url [export_vars -base "vehicle-ae" {return_url}]
 set actions ""
 set bulk_actions ""
 
+
+set admin_p [permission::permission_p -object_id [ad_conn package_id] -party_id [ad_conn user_id] -privilege "admin"]
+
+
+
+if {$admin_p} {
+    set bulk_actions {"#cnauto-resources.Delete#" "vehicle-bulk-delete" "#cnauto-resources.Delete_selected_vehicles#"}
+}
+
 template::list::create \
     -name vehicles \
     -multirow vehicles \
@@ -57,13 +66,7 @@ template::list::create \
     } 
 
 
-db_multirow -extend {vehicle_url} vehicles select_vehicle {
-        SELECT cv.vehicle_id, cv.vin, cv.engine, cv.model, cv.year_of_model, cv.year_of_fabrication, cv.color, cv.purchase_date, cv.arrival_date, cv.billing_date, cv.duration, cv.person_id, cv.distributor_code, cv.resource_id 
-	FROM cn_vehicles cv 
-	WHERE cv.vehicle_id = cv.vehicle_id
-
-    
-} {
+db_multirow -extend {vehicle_url} vehicles select_vehicles {} {
 
     set vehicle_url [export_vars -base vehicle-one {return_url vehicle_id}]
 }

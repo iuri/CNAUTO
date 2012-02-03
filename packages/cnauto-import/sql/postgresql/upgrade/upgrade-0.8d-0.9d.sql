@@ -1,4 +1,4 @@
--- /packages/cnauto-assurance/sql/postgresql/upgrade/upgrade-0.8d-0.9d.sql
+-- /packages/cnauto-import/sql/postgresql/upgrade/upgrade-0.8d-0.9d.sql
 
 SELECT acs_log__debug (' /packages/cnauto-assurance/sql/postgresql/upgrade/upgrade-0.8d-0.9d.sql','');
 

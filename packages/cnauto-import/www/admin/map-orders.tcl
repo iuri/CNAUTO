@@ -3,13 +3,16 @@ ad_page_contract {
     Maps orders to workflow steps
 } {
     {workflow_id:integer,notnull}
+    {order_id:integer,optional}
     {return_url ""}
+    
 }
 
 
 set title "[_ cnauto-orders.Order_info]"
 set context [list $title]
 
+set return_url [export_vars -base $return_url {workflow_id order_id}]
 
 # Organize the Map in a matrix
 
@@ -25,7 +28,7 @@ db_multirow -extend {} steps select_workflow_steps {
 set html ""
 
 db_foreach order {
-    SELECT order_id, code FROM cn_orders
+    SELECT order_id, code FROM cn_orders WHERE enabled_p = 't'
 } {
     set order_url [export_vars -base "../order-one" {workflow_id order_id return_url}]
 

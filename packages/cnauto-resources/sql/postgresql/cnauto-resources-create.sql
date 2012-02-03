@@ -17,7 +17,9 @@ CREATE TABLE cn_resources (
     name 	varchar(255),
     pretty_name varchar(255),
     description text,
-    class 	varchar(50),
+    class_id 	integer 
+    		CONSTRAINT cn_resources_class_id_fk
+    		REFERENCES cn_categories (category_id),
     unit 	varchar(50),
     ncm_class 	varchar(50)
 );
@@ -38,27 +40,45 @@ RETURNS integer AS '
 
 
 
+
+
 CREATE FUNCTION cn_resource__new(
-       integer,	-- resource_id 
        varchar,	-- code
        varchar,	-- name
        varchar,	-- pretty_name
        text,	-- description
-       varchar,	-- class
+       integer,	-- class_id
        varchar,	-- ncm_class
-       varchar	-- unit
+       varchar,	-- unit
+       varchar, -- creation_ip
+       integer, -- creation_user
+       integer	-- context_id
 ) RETURNS integer AS '
   DECLARE
-	p_resource_id	ALIAS FOR $1;
-	p_code		ALIAS FOR $2;
-	p_name		ALIAS FOR $3;
-	p_pretty_name	ALIAS FOR $4;
-	p_description	ALIAS FOR $5;
-	p_class		ALIAS FOR $6;
-	p_ncm_class	ALIAS FOR $7;
-	p_unit		ALIAS FOR $8;
+	p_code		ALIAS FOR $1;
+	p_name		ALIAS FOR $2;
+	p_pretty_name	ALIAS FOR $3;
+	p_description	ALIAS FOR $4;
+	p_class_id	ALIAS FOR $5;
+	p_ncm_class	ALIAS FOR $6;
+	p_unit		ALIAS FOR $7;
+	p_creation_ip 	ALIAS FOR $8;
+	p_creation_user ALIAS FOR $9;
+	p_context_id	ALIAS FOR $10;
+
+	v_id		integer;
 
   BEGIN
+
+	v_id := acs_object__new (
+       		  null,			-- object_id
+		  ''cn_resource'',	-- object_type
+		  now(),		-- creation_date
+		  p_creation_user,	-- creation_user
+		  p_creation_ip,	-- cretion_ip
+		  p_context_id,		-- context_id
+		  true			-- 
+       );
 
 	INSERT INTO cn_resources (
 	       resource_id,
@@ -66,16 +86,16 @@ CREATE FUNCTION cn_resource__new(
 	       name,
 	       pretty_name,
 	       description,
-	       class,
+	       class_id,
 	       ncm_class,
 	       unit
 	) VALUES (
-	       p_resource_id,
+	       v_id,
 	       p_code,
 	       p_name,
 	       p_pretty_name,
 	       p_description,
-	       p_class,
+	       p_class_id,
 	       p_ncm_class,
 	       p_unit
 	);
@@ -83,6 +103,8 @@ CREATE FUNCTION cn_resource__new(
 	RETURN 0;
 
   END;' LANGUAGE 'plpgsql';
+
+
 
 
 
@@ -248,7 +270,9 @@ CREATE TABLE cn_persons (
        legal_name	varchar(100),
        pretty_name	varchar(100),
        code		varchar(100),
-       type_id		integer,	
+       type_id		integer
+       			CONSTRAINT cn_persons_type_id_fk
+			REFERENCES cn_categories (category_id),	
        contact_id	integer
        			CONSTRAINT cn_persons_contact_id_fk
  		        REFERENCES acs_objects (object_id),
@@ -380,6 +404,65 @@ END;' language 'plpgsql';
 
 
 
+CREATE OR REPLACE FUNCTION cn_person__edit (
+       integer,	  	   -- person_id
+       varchar,	  	   -- cpf_cnpj
+       varchar,	  	   -- legal_name
+       varchar,		   -- pretty_name
+       varchar,		   -- code
+       integer,		   -- type_id
+       integer,		   -- contact_id
+       varchar,		   -- email
+       varchar,		   -- phone
+       varchar,		   -- postal_address
+       varchar,		   -- postal_address2
+       varchar,		   -- postal_code
+       varchar,		   -- state_code
+       integer,		   -- city_code
+       varchar		   -- country_code
+) RETURNS integer AS '
+  DECLARE
+	p_person_id		ALIAS FOR $1;
+	p_cpf_cnpj		ALIAS FOR $2;
+	p_legal_name		ALIAS FOR $3;
+	p_pretty_name		ALIAS FOR $4;
+	p_code			ALIAS FOR $5;
+	p_type_id		ALIAS FOR $6;
+	p_contact_id		ALIAS FOR $7;
+	p_email			ALIAS FOR $8;
+       	p_phone		   	ALIAS FOR $9;
+       	p_postal_address    	ALIAS FOR $10;
+       	p_postal_address2   	ALIAS FOR $11;
+       	p_postal_code 	   	ALIAS FOR $12;
+       	p_state_code 	   	ALIAS FOR $13;    		    	 
+       	p_city_code 	   	ALIAS FOR $14;
+       	p_country_code 	   	ALIAS FOR $15;
+
+  BEGIN
+
+       UPDATE cn_persons SET 
+	      cpf_cnpj = p_cpf_cnpj,
+	      legal_name = p_legal_name,
+	      pretty_name = p_pretty_name,
+	      code = p_code,
+	      type_id = p_type_id,
+	      contact_id = p_contact_id,
+	      email = p_email,
+	      phone = p_phone,
+	      postal_address = p_postal_address,
+	      postal_address2 = p_postal_address2,
+	      postal_code = p_postal_code,
+	      state_code = p_state_code,
+	      city_code = p_city_code,
+	      country_code = p_country_code
+	WHERE person_id = p_person_id;
+
+	RETURN 0;
+
+END;' language 'plpgsql';
+
+
+
 CREATE OR REPLACE FUNCTION cn_person__delete (
        integer	  	   -- person_id
 ) RETURNS integer AS '
@@ -410,8 +493,7 @@ CREATE TABLE cn_vehicles (
        				CONSTRAINT cn_vehicles_vehicle_id_fk
 				REFERENCES acs_objects ON DELETE CASCADE,
        vin			varchar(50)
-       				CONSTRAINT cn_vehicles_vin_nn NOT NULL
-				CONSTRAINT cn_vehicles_vin_un UNIQUE,
+       				CONSTRAINT cn_vehicles_vin_nn NOT NULL,
        engine			varchar(100),
        model			varchar(100),
        year_of_model		integer,
@@ -423,8 +505,11 @@ CREATE TABLE cn_vehicles (
        arrival_date	   	timestamptz,
        billing_date	   	timestamptz,
        duration	   	   	varchar(10),
-       person_id	   	integer
-       			   	CONSTRAINT cn_vehicles_person_id_fk
+       distributor_id	   	integer
+       			   	CONSTRAINT cn_vehicles_distributor_id_fk
+			   	REFERENCES cn_persons (person_id),
+       owner_id			integer
+       			   	CONSTRAINT cn_vehicles_owner_id_fk
 			   	REFERENCES cn_persons (person_id),
        resource_id		integer
        				CONSTRAINT cn_vehicles_resource_id_fk
@@ -466,8 +551,9 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
       timestamptz,	   -- arrival_date
       timestamptz,	   -- billing_date
       varchar,		   -- duration
+      integer,		   -- distributor_id
+      integer,		   -- owner_id
       integer,		   -- resource_id
-      integer,		   -- person_id
       text,		   -- notes
       varchar,             -- creation_ip
       integer,             -- creation_user
@@ -484,12 +570,13 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
        p_arrival_date		ALIAS FOR $8;
        p_billing_date		ALIAS FOR $9;
        p_duration		ALIAS FOR $10;
-       p_resource_id		ALIAS FOR $11;
-       p_person_id		ALIAS FOR $12;
-       p_notes			ALIAS FOR $13;
-       p_creation_ip		ALIAS FOR $14;
-       p_creation_user		ALIAS FOR $15;
-       p_context_id		ALIAS FOR $16;
+       p_distributor_id		ALIAS FOR $11;
+       p_owner_id		ALIAS FOR $12;
+       p_resource_id		ALIAS FOR $13;
+       p_notes			ALIAS FOR $14;
+       p_creation_ip		ALIAS FOR $15;
+       p_creation_user		ALIAS FOR $16;
+       p_context_id		ALIAS FOR $17;
 
        v_id	integer;		
 
@@ -517,7 +604,8 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
 	      arrival_date, 
 	      billing_date, 
 	      duration, 
-	      person_id, 
+	      distributor_id, 
+	      owner_id,
 	      resource_id,
 	      notes
        ) VALUES (
@@ -532,7 +620,8 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
               p_arrival_date,
 	      p_billing_date,
        	      p_duration,
-       	      p_person_id,
+	      p_distributor_id, 
+	      p_owner_id,
 	      p_resource_id,
 	      p_notes
        );

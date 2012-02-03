@@ -6,8 +6,23 @@ ad_library {
 
 
 namespace eval cn_order {}
+namespace eval cn_order::order {}
 
-ad_proc -public cn_order::new {
+ad_proc -public cn_order::order::delete {
+    order_id
+} {
+    We don't want to actually delete the order, just disable it
+} {
+
+    db_dml disable_order {
+        UPDATE cn_orders SET enabled_p = 'f' WHERE order_id = :order_id
+    }
+    
+    return 0
+
+}
+
+ad_proc -public cn_order::order::new {
     {-code}
     {-type_id ""}
     {-provider_id ""}

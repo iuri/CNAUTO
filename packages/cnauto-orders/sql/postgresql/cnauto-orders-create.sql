@@ -31,7 +31,8 @@ CREATE TABLE cn_orders (
 			      REFERENCES cn_persons (person_id),
        incoterm_id	      integer,
        incoterm_value	      varchar(255),
-       estimated_days	      integer
+       estimated_days	      integer,
+       enabled_p	      boolean default 't'
 );
 
 ------------------------------------
@@ -119,6 +120,8 @@ CREATE OR REPLACE FUNCTION cn_order__delete (
 	p_order_id			ALIAS FOR $1;
 
   BEGIN
+
+  
 
 	DELETE FROM cn_orders WHERE order_id = p_order_id;
 	

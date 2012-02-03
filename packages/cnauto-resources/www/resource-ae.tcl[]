@@ -1,0 +1,17 @@
+ad_page_contract {
+
+    Add/Edit resource
+} {
+    {resource_id:integer,optional}
+    {type_id ""}
+    {state_code ""}
+    {return_url ""}
+}
+
+if {[exists_and_not_null person_id]} {
+    set title "[_ cnauto-resources.Edit_person]"
+    set context [list $title]
+} else {
+    set title "[_ cnauto-resources.Add_person]"
+    set context [list $title]
+}

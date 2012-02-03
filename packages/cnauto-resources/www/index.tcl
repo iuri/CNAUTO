@@ -16,7 +16,15 @@ set return_url [ad_return_url]
 
 
 set actions ""
+
+set admin_p [permission::permission_p -object_id [ad_conn package_id] -party_id [ad_conn user_id] -privilege "admin"]
+
+
 set bulk_actions ""
+
+if {$admin_p} {
+    set bulk_actions {"#cnauto-resources.Delete#" "resource-bulk-delete" "#cnauto-resources.Delete_selected_resources#"}
+}
 
 template::list::create \
     -name resources \

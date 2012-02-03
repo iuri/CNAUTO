@@ -5,11 +5,78 @@ ad_library {
 
 
 namespace eval cn_resources {}
-namespace eval cn_resources::vehicle {}
+
+namespace eval cn_resources::resource {}
+
+ad_proc -public cn_resources::resource::delete {
+    resource_id
+} {
+    Delete a resource
+} {
+
+    db_transaction {
+	
+	db_exec_plsql delete_resource {
+	    SELECT cn_resource__delete ( :resource_id )
+	}
+    }
+    
+    return 
+}
+
+ad_proc -public cn_resources::resource::new {
+    {-code:required}
+    {-pretty_name ""}
+    {-description ""}
+    {-class_id:required}
+    {-ncm_class ""}
+    {-unit ""}
+    {-creation_ip ""}
+    {-creation_user ""}
+    {-context_id ""}
+} {
+    Creates a new resoruce and returns its resource_id
+} {
+
+    
+    set name [util_text_to_url -replacement "" -text $pretty_name]
+    
+    if {$creation_ip == ""} {
+	set creation_ip [ad_conn peeraddr]
+    }
+    
+    if {$creation_user == ""} {
+	set creation_user [ad_conn user_id]
+    }
+     
+    if {$context_id == ""} {
+	set context_id [ad_conn package_id]
+    }
+
+    db_transaction {
+	set resource_id [db_exec_plsql insert_resource {
+	    SELECT cn_resource__new (
+				     :code,
+				     :name,
+				     :pretty_name,
+				     :description,
+				     :class_id,
+				     :ncm_class,
+				     :unit,
+				     :creation_ip,
+				     :creation_user,
+				     :context_id
+				     )
+	}]
+    }
+
+    return $resource_id
+}
+
 
 
 ad_proc -public  cn_resources::import_csv_file {
-    {-input_file}
+    {-input_file:required}
 } {
 
     Imports CSV files to add resources
@@ -214,20 +281,35 @@ ad_proc -public  cn_resources::vehicles::import_csv_file {
     return
 }
 
+namespace eval cn_resources::vehicle {}
+
+ad_proc -public cn_resources::vehicle::delete { 
+    vehicle_id
+} {
+    Deletes a vehicle
+} {
+
+    db_exec_plsql delete_vehicle {
+	SELECT cn_vehicle__delete ( :vehicle_id )
+    }
+
+    return
+}
 
 ad_proc -public cn_resources::vehicle::new { 
     {-chassis}
     {-model}
+    {-engine ""}
     {-year_of_model ""}
     {-year_of_fabrication ""}
-    {-engine ""}
     {-color ""}
     {-arrival_date ""}
     {-billing_date ""}
     {-purchase_date ""}
     {-duration ""}
-    {-distributor_code ""}
-    {-person_id ""}
+    {-distributor_id ""}
+    {-owner_id ""}
+    {-resource_id ""}
     {-notes ""}
     {-creation_ip ""}
     {-creation_user ""}
@@ -251,28 +333,29 @@ ad_proc -public cn_resources::vehicle::new {
 
    #set vehicle_id [db_nextval acs_object_id_seq]
 	
-    set vehicle_id [db_exec_plsql insert_vehicle {
-	SELECT cn_vehicle__new (
-				null,
-				:chassis,
-				:engine,
-				:model,
-				:year_of_model,
-				:year_of_fabrication,
-				:color,
-				:purchase_date,
-				:arrival_date,	
-				:billing_date,
-				:duration,
-				:distributor_code,
-				:person_id,
-				:notes,
-				:creation_ip,
-				:creation_user,
-				:context_id
-				)
-    }]
-    
+    db_transaction {
+	set vehicle_id [db_exec_plsql insert_vehicle {
+	    SELECT cn_vehicle__new (
+				    :chassis,
+				    :model,
+				    :engine,
+				    :year_of_model,
+				    :year_of_fabrication,
+				    :color,
+				    :purchase_date,
+				    :arrival_date,	
+				    :billing_date,
+				    :duration,
+				    :distributor_id,
+				    :owner_id,
+				    :resource_id,
+				    :notes,
+				    :creation_ip,
+				    :creation_user,
+				    :context_id
+				    )
+	}]
+    }
     return $vehicle_id
 }
 
@@ -643,5 +726,96 @@ ad_proc -public cn_resources::person::new {
 
     return $person_id
     
+}
+
+
+
+ad_proc -public cn_resources::person::edit {
+    {-cpf_cnpj}
+    {-legal_name ""}
+    {-pretty_name ""}
+    {-code ""}
+    {-type_id ""}
+    {-contact_id ""}
+    {-email ""}
+    {-phone ""}
+    {-postal_address ""}
+    {-postal_address2 ""}
+    {-postal_code ""}
+    {-state_code ""}
+    {-city_code ""}
+    {-country_code "BR"}
+    {-creation_ip ""}
+    {-creation_user ""}
+    {-context_id ""}    
+} {
+    Edit person info
+
+    @author Iuri Sampaio (iuri.sampaio@iurix.com)
+    @creation-date 2011-12-12
+
+} {
+
+    if {$creation_ip == ""} {
+	set creation_ip [ad_conn peeraddr]
+    }
+    
+    if {$creation_user == ""} {
+	set creation_user [ad_conn user_id]
+    }
+    
+    if {$context_id == ""} {
+	set context_id [ad_conn package_id]
+    }
+
+
+
+    ns_log Notice "
+	-cpf_cnpj $cpf_cnpj \n
+        -legal_name $legal_name \n
+        -pretty_name $pretty_name \n
+        -code $code \n
+	-type_id $type_id \n
+        -contact_id \n
+	-email $email \n
+	-phone $phone \n
+	-postal_address $postal_address \n
+	-postal_address2 $postal_address2 \n
+	-postal_code $postal_code \n
+	-state_code $state_code \n
+	-city_code $city_code \n
+	-country_code $country_code \n
+	-creation_ip $creation_ip \n
+	-creation_user $creation_user \n 
+	-context_id $context_id    
+    "
+
+    db_transaction {
+	db_exec_plsql update_person {
+	    SELECT cn_person__edit (
+				   :cpf_cnpj,
+				   :legal_name,
+				   :pretty_name,
+				   :code,
+				   :type_id,
+				   :contact_id,
+				   :email,
+				   :phone,
+				   :postal_address,
+				   :postal_address2,
+				   :postal_code,
+				   :state_code,
+				   :city_code,
+				   :country_code,
+				   :creation_ip,
+				   :creation_user,
+				   :context_id
+				   );
+	}
+    }
+    
+    
+    
+    return 
 }
 

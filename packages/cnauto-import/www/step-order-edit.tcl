@@ -34,23 +34,25 @@ ad_form -name step_order_edit -form {
     {order_id:integer(hidden)
 	{value $order_id}
     }
-    {department_id:integer(select)
+    {department_id:integer(select),optional
 	{label "[_ cnauto-import.Department]"}
 	{options $department_options}
     }
-    {assignee_id:integer(select)
+    {assignee_id:integer(select),optional
 	{label "[_ cnauto-import.Assignee]"}
 	{options $assignee_options}
     }
-    {estimated_date:date
+    {assigner_id:integer(hidden)
+	{value "[ad_conn user_id]"}
+    }	
+    {estimated_date:date,optional
 	{label "[_ cnauto-import.Estimated_date]"}
 	{format "YYYY MM DD"}
 	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('estimated_date', 'y-m-d');" > \[<b>[_ calendar.y-m-d]</b>\]} } }
     }
-    {executed_date:date
+    {executed_date:date,optional
 	{label "[_ cnauto-import.Executed_date]"}
-	{format "YYYY MM DD"}
-	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('executed_date', 'y-m-d');" > \[<b>[_ calendar.y-m-d]</b>\]} } }
+	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('executed_date', 'y-m-d');" > \[<b>[_ calendar.y-m-d]</b>\]} } 
     }
 } -on_submit {
 } -edit_request {
@@ -62,14 +64,15 @@ ad_form -name step_order_edit -form {
     }
 } -edit_data {
     
+
     set estimated_date "[template::util::date::get_property year $estimated_date] [template::util::date::get_property month $estimated_date] [template::util::date::get_property day $estimated_date]"
 
     set executed_date "[template::util::date::get_property year $executed_date] [template::util::date::get_property month $executed_date] [template::util::date::get_property day $executed_date]"
 
 
 
-    db_exec_plpsql edit_step_order {
-	SELECT sn_wsom__edit (
+    db_exec_plsql edit_step_order {
+	SELECT cn_wsom__edit (
 			      :map_id,
 			      :workflow_id,
 			      :step_id,

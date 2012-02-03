@@ -3,7 +3,7 @@ ad_page_contract {
     Order's Info page
 } {
     {order_id:integer,notnull}
-    {workflow_id:integer,notnull}
+    {workflow_id:integer,optional}
     {return_url ""}
 }
 
@@ -12,9 +12,21 @@ set context [list $title]
 
 
 set return_url [ad_conn url]
+set map_order_url [export_vars -base "admin/map-orders" {return_url workflow_id order_id}]
+
+if {![info exists workflow_id]} {
+    set workflow_id [db_string select_workflow_id {
+	SELECT workflow_id FROM cn_workflows WHERE order_id = :order_id
+    } -default null]
+}
+
 
 db_multirow -extend {step_order_url} steps select_steps {
-    SELECT cws.step_id, cws.pretty_name FROM cn_workflow_steps cws ORDER BY cws.sort_order
+    SELECT cws.step_id, cws.pretty_name 
+    FROM cn_workflow_steps cws, cn_workflow_step_order_map wsom 
+    WHERE cws.step_id = wsom.step_id
+    AND wsom.order_id = :order_id
+    ORDER BY cws.sort_order
 } {
 
     set map_id [db_string select_map_id {
@@ -22,7 +34,7 @@ db_multirow -extend {step_order_url} steps select_steps {
 	FROM cn_workflow_step_order_map wsom 
 	WHERE wsom.workflow_id = :workflow_id
 	AND wsom.step_id = :step_id
-	AND wsom.ordeR_id = :order_id
+	AND wsom.order_id = :order_id
     } -default null]
 
     set step_order_url [export_vars -base "step-order-edit" {return_url map_id}]

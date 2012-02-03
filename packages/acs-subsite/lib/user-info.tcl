@@ -176,6 +176,8 @@ ad_form -extend -name user_info -form $elms_list -on_request {
         }
     }
 
+    ns_log Notice "[parray user_info]"
+
     array set result [auth::update_local_account \
                           -authority_id $user(authority_id) \
                           -username $user(username) \
