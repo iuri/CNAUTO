@@ -4,7 +4,6 @@ SELECT acs_log__debug ('/packages/cnauto-core/sql/postgresql/upgrade/upgrade-0.1
 
 
 ALTER TABLE cn_categories ADD COLUMN parent_id integer;
-
 ALTER TABLE cn_categories ADD CONSTRAINT cn_categories_parent_id_fk FOREIGN KEY (parent_id) REFERENCES cn_categories (category_id);
 
 

@@ -493,8 +493,7 @@ CREATE TABLE cn_vehicles (
        				CONSTRAINT cn_vehicles_vehicle_id_fk
 				REFERENCES acs_objects ON DELETE CASCADE,
        vin			varchar(50)
-       				CONSTRAINT cn_vehicles_vin_nn NOT NULL
-				CONSTRAINT cn_vehicles_vin_un UNIQUE,
+       				CONSTRAINT cn_vehicles_vin_nn NOT NULL,
        engine			varchar(100),
        model			varchar(100),
        year_of_model		integer,

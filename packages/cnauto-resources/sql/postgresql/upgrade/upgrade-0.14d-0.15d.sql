@@ -2,10 +2,11 @@
 
 SELECT acs_log__debug ('/packages/cnauto-resources/sql/postgresql/upgrade/upgrade-0.14d-0.15d.sql','');
 
-ALTER TABLE cn_vehicles RENAME COLUMN client_id TO owner_id;
+-- ALTER TABLE cn_vehicles RENAME COLUMN client_id TO owner_id;
 
-ALTER TABLE cn_vehicles DROP CONSTRAINT cn_vehicles_client_id_fk;
+-- ALTER TABLE cn_vehicles DROP CONSTRAINT cn_vehicles_client_id_fk;
 
+ALTER TABLE cn_vehicles ADD COLUMN owner_id integer;
 ALTER TABLE cn_vehicles ADD CONSTRAINT cn_vehicles_owner_id_fk FOREIGN KEY (owner_id) REFERENCES cn_persons (person_id);
 
 

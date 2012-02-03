@@ -20,6 +20,15 @@ set vehicle_ae_url [export_vars -base "vehicle-ae" {return_url}]
 set actions ""
 set bulk_actions ""
 
+
+set admin_p [permission::permission_p -object_id [ad_conn package_id] -party_id [ad_conn user_id] -privilege "admin"]
+
+
+
+if {$admin_p} {
+    set bulk_actions {"#cnauto-resources.Delete#" "vehicle-bulk-delete" "#cnauto-resources.Delete_selected_vehicles#"}
+}
+
 template::list::create \
     -name vehicles \
     -multirow vehicles \

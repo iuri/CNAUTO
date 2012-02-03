@@ -11,7 +11,7 @@ DROP FUNCTION cn_resource__new(
        varchar,	-- class
        varchar,	-- ncm_class
        varchar	-- unit
-) 
+) ;
 
 
 CREATE FUNCTION cn_resource__new(

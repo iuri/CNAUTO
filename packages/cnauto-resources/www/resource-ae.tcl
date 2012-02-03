@@ -19,7 +19,7 @@ if {[exists_and_not_null person_id]} {
 set class_options [db_list_of_lists select_classes {
     SELECT cc.pretty_name, cc.category_id
     FROM cn_categories cc 
-    WHERE object_type = 'cn_resource' 
+    WHERE object_type = 'cn_resource'
 }]
 
 
@@ -44,13 +44,16 @@ ad_form -name resource_ae -form {
 
 } -new_data {
     
-    set resource_id [cn_resource::resource::new \
+    set resource_id [cn_resources::resource::new \
 			 -code $code \
-			 -name $name \
 			 -pretty_name $pretty_name \
 			 -description "" \
 			 -class_id $class_id \
-			 -unit $unit]
+			 -unit $unit \
+			 -creation_ip [ad_conn peeraddr] \
+			 -creation_user [ad_conn user_id] \
+			 -context_id [ad_conn package_id]
+		    ]
 
 } -after_submit {
 

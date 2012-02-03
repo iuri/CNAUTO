@@ -29,14 +29,17 @@ db_foreach category_type {
 	     [lc_numeric $num]]
 }
     
-
-
+set actions {
+    "#cnauto-core.Add_category#" "category-ae" "#cnauto-core.Add_category#"
+    "#cnauto-resources.Import_person_cat_lt#" "categories-import-csv-file"
+}
 set bulk_actions {"#cnauto-core.Delete#" "category-bulk-delete" "#cnauto-core.Delete_selected_cat#"}
 
 template::list::create \
     -name categories \
     -multirow categories \
     -key category_id \
+    -actions $actions \
     -bulk_actions $bulk_actions \
     -bulk_action_export_vars { return_url } \
     -row_pretty_plural "categories" \
