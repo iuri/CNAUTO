@@ -14,6 +14,8 @@ ad_page_contract {
     {return_url ""}
 }
 
+#template::head::add_javascript -src "/resources/cnauto-assurance/js/form-ajax.js"
+
 
 if { [exists_and_not_null assurance_id] } {
     set page_title [_ cnauto-assurance.Edit_assurance]
@@ -22,6 +24,20 @@ if { [exists_and_not_null assurance_id] } {
     set page_title [_ cnauto-assurance.Add_assurance]
     #set ad_form_mode edit
 }
+
+
+set vehicle_options [db_list_of_lists select_vehicle_info {
+    SELECT cv.vehicle_id, cv.vin FROM cn_vehicles cv ORDER BY cv.vin
+}]
+
+set vehicle_options_html ""
+foreach vehicle $vehicle_options {
+    lappend vehicle_options_html "
+          <option value='[lindex $vehicle 0]'>[lindex $vehicle 1]</option>
+        "
+}
+
+
 
 set distributor_options [db_list_of_lists select_distributor_info {
     SELECT cp.person_id, cp.pretty_name FROM cn_persons cp, cn_categories cc
@@ -55,21 +71,4 @@ foreach client $client_options {
 }
 
 
-
-set vehicle_options [db_list_of_lists select_vehicle_info {
-    SELECT cv.vehicle_id, cv.vin FROM cn_vehicles cv ORDER BY cv.vin
-}]
-
-set vehicle_options_html ""
-foreach vehicle $vehicle_options {
-    lappend vehicle_options_html "
-          <option value='[lindex $vehicle 0]'>[lindex $vehicle 1]</option>
-        "
-}
-
-
-
-
-
-template::head::add_javascript -src "/resources/cnauto-assurance/js/form-ajax.js"
 

@@ -6,6 +6,7 @@
 <ul>
   <li>  <a href="persons/">#cnauto-resources.Persons#</a> </li>
   <li><a href="vehicles/">#cnauto-resources.Vehicles#</a> </li>
+  <li>  <a href="parts/">#cnauto-resources.Parts#</a> </li>
   <li>  <a href="resource-ae">#cnauto-resources.Add_resource#</a> </li>
 
 <if @admin_p@>

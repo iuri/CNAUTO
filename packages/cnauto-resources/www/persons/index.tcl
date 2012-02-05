@@ -61,7 +61,7 @@ db_multirow -extend {person_url} persons select_persons {
     
 } {
 
-    set person_url [export_vars -base person-one {return_url person_id}]
+    set person_url [export_vars -base person-one {return_url person_id type_id}]
 }
 
 

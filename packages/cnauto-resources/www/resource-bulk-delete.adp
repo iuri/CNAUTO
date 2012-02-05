@@ -1,6 +1,6 @@
 <master>
 <property name="context">@context_bar;noquote@</property>
-<property name="title">#cnauto-import.Confirm_categories_delete#</property>
+<property name="title">#cnauto-import.Confirm_resources_delete#</property>
 
 <form method="post" action="resources-delete">	
   <p>#cnauto-resources.Are_you_sure_you_want_to_delete#?</p> 

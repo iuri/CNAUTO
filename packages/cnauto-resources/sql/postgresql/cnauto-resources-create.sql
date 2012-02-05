@@ -157,20 +157,23 @@ CREATE TABLE cn_parts (
     		      CONSTRAINT cn_resources_resoure_id_pk PRIMARY KEY
     		      CONSTRAINT cn_parts_part_id_fk 
 		      REFERENCES acs_objects(object_id),
-    code 	      varchar(10)
+    code 	      varchar(255)
 		      CONSTRAINT cn_parts_code_un UNIQUE,
-    name 	      varchar(50),
+    name 	      varchar(255),
+    pretty_name	      varchar(255),
     resource_id       integer
     		      CONSTRAINT cn_parts_resource_id_fk
 		      REFERENCES cn_resources(resource_id),
-    quantity 	      varchar(10),
-    price 	      varchar(10),
-    width 	      varchar(10),
-    height 	      varchar(10),
-    depth 	      varchar(10),
-    weight 	      varchar(10),
-    volume 	      varchar(10),
-    dimensions 	      varchar(10)
+    model_id	      CONSTRAINT cn_parts_model_id_fk
+    		      REFERENCES cn_categories (category_id),
+    quantity 	      integer,
+    price 	      varchar(100),
+    width 	      varchar(100),
+    height 	      varchar(100),
+    depth 	      varchar(100),
+    weight 	      varchar(100),
+    volume 	      varchar(100),
+    dimensions 	      varchar(100)
 );
 
 
@@ -217,8 +220,10 @@ END;' language 'plpgsql';
 CREATE OR REPLACE FUNCTION cn_part__new(
        varchar, -- code
        varchar, -- name
-       varchar, -- resource_id
-       varchar, -- quantity
+       varchar, -- pretty_name
+       integer, -- resource_id
+       integer, -- model_id
+       integer, -- quantity
        varchar, -- price
        varchar, -- width
        varchar, -- height
@@ -233,18 +238,20 @@ CREATE OR REPLACE FUNCTION cn_part__new(
   DECLARE
        p_code		ALIAS FOR $1;
        p_name		ALIAS FOR $2;
-       p_resource_id	ALIAS FOR $3;
-       p_quantity	ALIAS FOR $4;
-       p_price		ALIAS FOR $5;
-       p_width		ALIAS FOR $6;
-       p_height 	ALIAS FOR $7;
-       p_depth		ALIAS FOR $8;
-       p_weight	   	ALIAS FOR $9;
-       p_volume	   	ALIAS FOR $10;
-       p_dimensions	ALIAS FOR $11;
-       p_context_id	ALIAS FOR $12;
-       p_creation_user  ALIAS FOR $13;
-       p_creation_ip	ALIAS FOR $14;
+       p_pretty_name	ALIAS FOR $3;
+       p_resource_id	ALIAS FOR $4;
+       p_model_id	ALIAS FOR $5;
+       p_quantity	ALIAS FOR $6;
+       p_price		ALIAS FOR $7;
+       p_width		ALIAS FOR $8;
+       p_height 	ALIAS FOR $9;
+       p_depth		ALIAS FOR $10;
+       p_weight	   	ALIAS FOR $11;
+       p_volume	   	ALIAS FOR $12;
+       p_dimensions	ALIAS FOR $13;
+       p_context_id	ALIAS FOR $14;
+       p_creation_user  ALIAS FOR $15;
+       p_creation_ip	ALIAS FOR $16;
      
        v_id	integer;
        
@@ -265,7 +272,9 @@ CREATE OR REPLACE FUNCTION cn_part__new(
        	      part_id,
 	      code,
 	      name,
-	      resource,
+	      pretty_name,
+	      resource_id,
+	      model_id,
 	      quantity,
 	      price,
 	      width,
@@ -278,7 +287,9 @@ CREATE OR REPLACE FUNCTION cn_part__new(
        	      v_id,
 	      p_code,
 	      p_name,
-	      p_resource,
+	      p_pretty_name,
+	      p_resource_id,
+	      p_model_id,
 	      p_quantity,
 	      p_price,
 	      p_width,
@@ -289,9 +300,66 @@ CREATE OR REPLACE FUNCTION cn_part__new(
 	      p_dimensions
        );
        
-       return v_id;
+       RETURN v_id;
 
   END;' LANGUAGE 'plpgsql';
+
+
+
+CREATE OR REPLACE FUNCTION cn_part__edit(
+       integer,	  -- part_id	  
+       varchar,   -- code
+       varchar,   -- name
+       varchar,   -- pretty_name
+       integer,   -- resource_id
+       integer,   -- model_id
+       integer,   -- quantity
+       varchar,   -- price
+       varchar,   -- width
+       varchar,   -- height
+       varchar,	  -- depth
+       varchar,	  -- weight
+       varchar,	  -- volume
+       varchar	  -- dimensions
+) RETURNS integer AS '
+  DECLARE
+	p_part_id	ALIAS FOR $1;	
+       	p_code		ALIAS FOR $2;
+       	p_name		ALIAS FOR $3;
+       	p_pretty_name	ALIAS FOR $4;
+       	p_resource_id	ALIAS FOR $5;
+       	p_model_id	ALIAS FOR $6;
+       	p_quantity	ALIAS FOR $7;
+       	p_price		ALIAS FOR $8;
+       	p_width		ALIAS FOR $9;
+       	p_height 	ALIAS FOR $10;
+       	p_depth		ALIAS FOR $11;
+       	p_weight	ALIAS FOR $12;
+       	p_volume	ALIAS FOR $13;
+       	p_dimensions	ALIAS FOR $14;  
+
+  BEGIN
+
+       UPDATE cn_parts SET     	      
+ 	      code = p_code,
+	      name = p_name,
+	      pretty_name = p_pretty_name,
+	      resource_id = p_resource_id,
+	      model_id = p_model_id,
+	      quantity = p_quantity,
+	      price = p_price,
+	      width = p_width,
+	      height = p_height,
+	      depth = p_depth,
+	      weight = p_weight,
+	      volume = p_volume,
+	      dimensions = p_dimensions
+       WHERE part_id = p_part_id;
+       
+       RETURN 0;
+
+  END;' LANGUAGE 'plpgsql';
+
 
 
 
@@ -533,8 +601,13 @@ CREATE TABLE cn_vehicles (
 				REFERENCES acs_objects (object_id) ON DELETE CASCADE,
        vin			varchar(50)
        				CONSTRAINT cn_vehicles_vin_nn NOT NULL,
+       resource_id		integer
+       				CONSTRAINT cn_vehicles_resource_id_fk
+				REFERENCES cn_resources (resource_id),
+       model_id			integer
+       				CONSTRAINT cn_vehicles_model_id_fk
+				REFERENCES cn_categories (category_id),
        engine			varchar(100),
-       model			varchar(100),
        year_of_model		integer,
        year_of_fabrication 	integer,
        color			varchar(10)
@@ -550,9 +623,6 @@ CREATE TABLE cn_vehicles (
        owner_id			integer
        			   	CONSTRAINT cn_vehicles_owner_id_fk
 			   	REFERENCES cn_persons (person_id),
-       resource_id		integer
-       				CONSTRAINT cn_vehicles_resource_id_fk
-				REFERENCES cn_resources (resource_id),
        notes		   	text
 );
 
@@ -581,8 +651,9 @@ SELECT acs_object_type__create_type (
 ------------------------------------
 CREATE OR REPLACE FUNCTION cn_vehicle__new (
       varchar,		   -- chassis vin - vehicle identification number
+      integer,		   -- resource_id
+      integer,		   -- model_id
       varchar, 		   -- engine
-      varchar,		   -- model
       integer, 	   	   -- year of model
       integer,	   	   -- year of fabrication
       varchar,		   -- color
@@ -592,7 +663,6 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
       varchar,		   -- duration
       integer,		   -- distributor_id
       integer,		   -- owner_id
-      integer,		   -- resource_id
       text,		   -- notes
       varchar,             -- creation_ip
       integer,             -- creation_user
@@ -600,18 +670,18 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
 ) RETURNS integer AS '
   DECLARE
        p_vin			ALIAS FOR $1; 
-       p_model		      	ALIAS FOR $2;
-       p_engine		      	ALIAS FOR $3;
-       p_year_of_model	      	ALIAS FOR $4;		
-       p_year_of_fabrication 	ALIAS FOR $5;
-       p_color			ALIAS FOR $6;
-       p_purchase_date		ALIAS FOR $7;
-       p_arrival_date		ALIAS FOR $8;
-       p_billing_date		ALIAS FOR $9;
-       p_duration		ALIAS FOR $10;
-       p_distributor_id		ALIAS FOR $11;
-       p_owner_id		ALIAS FOR $12;
-       p_resource_id		ALIAS FOR $13;
+       p_resource_id		ALIAS FOR $2;
+       p_model_id	      	ALIAS FOR $3;
+       p_engine		      	ALIAS FOR $4;
+       p_year_of_model	      	ALIAS FOR $5;		
+       p_year_of_fabrication 	ALIAS FOR $6;
+       p_color			ALIAS FOR $7;
+       p_purchase_date		ALIAS FOR $8;
+       p_arrival_date		ALIAS FOR $9;
+       p_billing_date		ALIAS FOR $10;
+       p_duration		ALIAS FOR $11;
+       p_distributor_id		ALIAS FOR $12;
+       p_owner_id		ALIAS FOR $13;
        p_notes			ALIAS FOR $14;
        p_creation_ip		ALIAS FOR $15;
        p_creation_user		ALIAS FOR $16;
@@ -634,8 +704,9 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
        INSERT INTO cn_vehicles (
        	      vehicle_id,
 	      vin,
+	      resource_id,
+	      model_id,
 	      engine,
-	      model,
 	      year_of_model,
 	      year_of_fabrication,
 	      color,
@@ -645,13 +716,13 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
 	      duration, 
 	      distributor_id, 
 	      owner_id,
-	      resource_id,
 	      notes
        ) VALUES (
        	      v_id,
 	      p_vin,
+	      p_resource_id,
+	      p_model_id,
 	      p_engine,
-	      p_model,
 	      p_year_of_model,
 	      p_year_of_fabrication,
 	      p_color,
@@ -661,11 +732,67 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
        	      p_duration,
 	      p_distributor_id, 
 	      p_owner_id,
-	      p_resource_id,
 	      p_notes
        );
 
        RETURN v_id;
+  END;' language 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION cn_vehicle__edit (
+       integer,	  	   -- vehicle_id
+       varchar,		   -- chassis vin - vehicle identification number
+       integer,		   -- resource_id
+       integer,		   -- model_id
+       varchar, 	   -- engine
+       integer, 	   -- year of model
+       integer,	   	   -- year of fabrication
+       varchar,		   -- color
+       timestamptz,	   -- purchase_date
+       timestamptz,	   -- arrival_date
+       timestamptz,	   -- billing_date
+       varchar,		   -- duration
+       integer,		   -- distributor_id
+       integer,		   -- owner_id
+       text		   -- notes
+) RETURNS integer AS '
+  DECLARE
+	p_vehicle_id		ALIAS FOR $1;	
+	p_vin			ALIAS FOR $2; 
+       	p_resource_id		ALIAS FOR $3;
+       	p_model_id	      	ALIAS FOR $4;
+       	p_engine		ALIAS FOR $5;
+       	p_year_of_model	      	ALIAS FOR $6;		
+       	p_year_of_fabrication 	ALIAS FOR $7;
+       	p_color			ALIAS FOR $8;
+       	p_purchase_date		ALIAS FOR $9;
+       	p_arrival_date		ALIAS FOR $10;
+       	p_billing_date		ALIAS FOR $11;
+       	p_duration		ALIAS FOR $12;
+       	p_distributor_id	ALIAS FOR $13;
+       	p_owner_id		ALIAS FOR $14;
+       	p_notes			ALIAS FOR $15;
+       
+  BEGIN
+
+       UPDATE cn_vehicles SET 
+	      vin = p_vin,
+	      resource_id = p_resource_id,
+	      model_id = p_model_id,
+	      engine = p_engine,
+	      year_of_model = p_year_of_model,
+	      year_of_fabrication = p_year_of_fabrication,
+	      color = p_color,
+	      purchase_date = p_purchase_date, 
+	      arrival_date = p_arrival_date, 
+	      billing_date = p_billing_date, 
+	      duration = p_duration, 
+	      distributor_id = p_distributor_id, 
+	      owner_id = p_owner_id,
+	      notes = p_notes;
+
+       RETURN 0;
+
   END;' language 'plpgsql';
 
 

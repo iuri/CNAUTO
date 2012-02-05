@@ -52,10 +52,10 @@ template::list::create \
 		@vehicles.model;noquote@</a>
 	    }
 	}
-	engine {
+	purchase_date {
 	    label "[_ cnauto-resources.Engine]"
 	    display_template {
-		<a href="@vehicles.vehicle_url@">@vehicles.engine;noquote@</a>
+		<a href="@vehicles.vehicle_url@">@vehicles.purchase_date;noquote@</a>
 	    }
 	}
     } -orderby {
