@@ -54,7 +54,7 @@ foreach distributor $distributor_options {
         "
 }
 
-set client_options [db_list_of_lists select_client_info {
+set owner_options [db_list_of_lists select_owner_info {
     SELECT cp.person_id, cp.pretty_name FROM cn_persons cp, cn_categories cc
     WHERE cp.type_id = cc.category_id
     AND cc.name = 'clientes'
@@ -62,11 +62,11 @@ set client_options [db_list_of_lists select_client_info {
 }]
 
 
-set  client_options_html ""
+set  owner_options_html ""
 
-foreach client $client_options {
-    lappend client_options_html "
-          <option value='[lindex $client 0]'>[lindex $client 1]</option>
+foreach owner $owner_options {
+    lappend owner_options_html "
+          <option value='[lindex $owner 0]'>[lindex $owner 1]</option>
         "
 }
 
