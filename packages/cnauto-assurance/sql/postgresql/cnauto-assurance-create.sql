@@ -14,37 +14,33 @@
 -- vin (vehicle identification number) - chassi
 CREATE TABLE cn_assurances (
        assurance_id		integer 
-       				CONSTRAINT cn_assurances_assurance_id PRIMARY KEY,
+       				CONSTRAINT cn_assurances_assurance_id_pk PRIMARY KEY,
        dcn			integer,
        assurance_number		integer,
        assurance_date		timestamptz,
-       status			varchar(50),
+       service_order		integer, 
+       service_order_date   	timestamptz,
        lp			varchar(50),
        lp_date			timestamptz,
        lp_2			varchar(50),
        lp_2_date		timestamptz,
-       service_order		integer, 
-       service_order_date   	timestamptz,
-       person_id		integer
-       				CONSTRAINT cn_assurances_person_id_fk
+       owner_id			integer
+       				CONSTRAINT cn_assurances_owner_id_fk
+				REFERENCES cn_persons (person_id) ON DELETE CASCADE,
+       distributor_id		integer
+       				CONSTRAINT cn_assurances_distributor_id_fk
 				REFERENCES cn_persons (person_id) ON DELETE CASCADE,
        vehicle_id		integer
        				CONSTRAINT cn_assurances_vehicle_id_fk
 				REFERENCES cn_vehicles (vehicle_id) ON DELETE CASCADE,
        kilometers		integer,
-       part_group		varchar(10),			
-       part_id			integer
-       				CONSTRAINT cn_assurances_part_id_fk
-				REFERENCES cn_parts (part_id) ON DELETE CASCADE,
-       part_quantity		integer,
-       damage_description   	text,
-       third_service		varchar(10),
-       cost_price		varchar(10),
-       assurance_price		varchar(10),
-       tmo_code			varchar(20),
-       tmo_duration		varchar(10),
-       cost			varchar(10),
-       ttl_sg			varchar(10)
+       description   		text,
+       status			varchar(50),
+       parts_total_cost		numeric,
+       assurance_total_cost	numeric,
+       third_total_cost		numeric,
+       mo_total_cost		numeric,
+       total_cost		numeric
 );
 
 

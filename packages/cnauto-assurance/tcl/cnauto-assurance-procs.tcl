@@ -8,6 +8,113 @@ ad_library {
 namespace eval cn_assurance {}
 
 
+ad_proc -public cn_assurance::input_date_html {
+    {-name ""}
+    {-value ""}
+} {
+
+    Generates a date input widget
+} {
+
+    set html_format "<input type=\"hidden\" name=\"${name}.format\" value=\"YYYY MM DD\" >"
+
+    
+    set year [db_string select_year { SELECT EXTRACT(YEAR FROM TIMESTAMP 'now()')}] 
+    set month [db_string select_year { SELECT EXTRACT(MONTH FROM TIMESTAMP 'now()')}] 
+    set day [db_string select_year { SELECT EXTRACT(DAY FROM TIMESTAMP 'now()')}] 
+
+    set html_year "
+	<input type=\"text\" name=\"${name}.year\" id=\"${name}.year\" size=\"4\" maxlength=\"4\" value=\"${year}\">
+    "
+
+    set html_month "
+	&nbsp;<select name=\"${name}.month\" id=\"${name}.month\" >
+	<option value=\"${month}\" selected=\"selected\">${month}</option>
+	<option value=\"1\">01</option>
+	<option value=\"2\">02</option>
+	<option value=\"3\">03</option>
+	<option value=\"4\">04</option>
+	<option value=\"5\">05</option>
+	<option value=\"6\">06</option>
+	<option value=\"7\">07</option>
+	<option value=\"8\">08</option>
+	<option value=\"9\">09</option>
+	<option value=\"10\">10</option>
+	<option value=\"11\">11</option>
+	<option value=\"12\">12</option>
+	</select>
+    "
+
+    set html_day "
+	&nbsp;<select name=\"${name}.day\" id=\"${name}.day\" >
+	<option value=\"${day}\" selected=\"selected\">${day}</option>
+	<option value=\"1\">01</option>
+	<option value=\"2\">02</option>
+	<option value=\"3\">03</option>
+	<option value=\"4\">04</option>
+	<option value=\"5\">05</option>
+	<option value=\"6\">06</option>
+	<option value=\"7\">07</option>
+	<option value=\"8\">08</option>
+	<option value=\"9\">09</option>
+	<option value=\"10\">10</option>
+	<option value=\"11\">11</option>
+	<option value=\"12\">12</option>
+	<option value=\"13\">13</option>
+	<option value=\"14\">14</option>
+	<option value=\"15\">15</option>
+	<option value=\"16\">16</option>
+	<option value=\"17\">17</option>
+	<option value=\"18\">18</option>
+	<option value=\"19\">19</option>
+	<option value=\"20\">20</option>
+	<option value=\"21\">21</option>
+	<option value=\"22\">22</option>
+	<option value=\"23\">23</option>
+	<option value=\"24\">24</option>
+	<option value=\"25\">25</option>
+	<option value=\"26\">26</option>
+	<option value=\"27\">27</option>
+	<option value=\"28\">28</option>
+	<option value=\"29\">29</option>
+	<option value=\"30\">30</option>
+	<option value=\"31\">31</option>
+	</select>
+    "
+
+    set javascript_button "
+	<input type=\"button\" style=\"height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');\" onclick=\"return showCalendarWithDateWidget('${name}', 'y-m-d');\">
+
+    "
+
+    set date_html "$html_format\n $html_year \n $html_month \n $html_day \n $javascript_button"
+
+    return $date_html
+
+}
+
+
+ad_proc -public cn_assurance::generate_assurance_number {
+    {-vehicle_id}
+} {
+
+    Generates the next assurance number
+} {
+
+    set count [db_string select_assurances { 
+	SELECT COUNT(assurance_id) FROM cn_assurances WHERE vehicle_id = :vehicle_id
+    }]
+    
+    set year [db_string select_year { SELECT EXTRACT(year from timestamp 'now()')}] 
+    
+    set seq [db_nextval cn_assurance_id_seq]
+    
+    set number "${year}${count}${seq}"
+
+    return $number
+}
+
+
 ad_proc -public  cn_assurance::import_csv_file {
     {-input_file}
 } {

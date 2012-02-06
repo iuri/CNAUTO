@@ -5,20 +5,12 @@
 
 <h1>@page_title;noquote@</h1>
 
-<form name="assurance_ae" action="" method="post">
+<form name="assurance_ae" action="assurance-ae2" method="post">
 <table>
-  <tr>
-    <td>#cnauto-assurance.Assurance_number#</td>
-    <td><input type="text" name="assurance_number" id="assurance_number"></td>
-    <td>#cnauto-assurance.Assurance_date#</td>
-    <td><input type="date" name="purchase_date" id="purchase_date"></td>
-    <td>#cnauto-assurance.Service_order_number#</td>
-    <td><input type="date" name="servcice_order_number" id="service_order_number"></td>
-  </tr>
   <tr>
     <td>#cnauto-assurance.Chassis#</td>
     <td>
-      <select name="vehicle_id" id="vehicle_id" onChange="return VehicleListOnChange()">
+      <select name="vehicle_id" id="vehicle_id" onChange="javascript:document.assurance_ae.__refreshing_p.value='1';document.assurance_ae.submit();">
         <option value="0">#cnauto-assurance.Select#</option>
         @vehicle_options_html;noquote@  
       </select>
@@ -27,6 +19,21 @@
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>#cnauto-assurance.Assurance_number#</td>
+    <td><input type="text" name="assurance_number" id="assurance_number" value="@assurance_number@"></td>
+    <td>#cnauto-assurance.Assurance_date#</td>
+    <td width="50%">
+        <!-- date purchase_date begin -->
+    	@assurance_date_html;noquote@
+        <!-- date purchase_date end -->
+    </td>
+  </tr>
+  <tr>
+        <td>#cnauto-assurance.Service_order_number#</td>
+    <td><input type="date" name="servcice_order_number" id="service_order_number"></td>
+
   </tr>
   <tr>
     <td>#cnauto-assurance.Distributor#</td>
@@ -57,11 +64,11 @@
   <tr>
     <td>#cnauto-assurance.Vehicle#</td>
     <td>
-        <input type="text" name="resource" id="resource">  
+        <input type="text" name="resource_id" id="resource_id">  
     </td>
     <td>#cnauto-assurance.Model#</td>
     <td>
-        <input type="text" name="model" id="model">  
+        <input type="text" name="model_id" id="model_id">  
     </td>
     <td>#cnauto-assurance.Year#</td>
     <td>
@@ -149,7 +156,7 @@
     <td>#cnauto-assurance.Diagnostics_Solution#</td>
   </tr>
   <tr>
-    <td><textarea rows="5" cols="200" name="diagnostics_solution" id="diagnostics_solution"></textarea></td>
+    <td><textarea rows="5" cols="200" name="description" id="description"></textarea></td>
   </tr>
 </table>
 <table>

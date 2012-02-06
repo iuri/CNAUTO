@@ -4,13 +4,8 @@ ad_page_contract {
     
 } {
     {assurance_id:integer,optional}
-    {distributor_id ""}
-    {code ""}
-    {client_id ""}
-    {chassis ""}
-    {vehicle ""}
-    {model ""}
-    {year ""}
+    {vehicle_id ""}
+    {assurance_number ""}
     {return_url ""}
 }
 
@@ -36,6 +31,18 @@ foreach vehicle $vehicle_options {
           <option value='[lindex $vehicle 0]'>[lindex $vehicle 1]</option>
         "
 }
+
+
+ns_log Notice "VEHICLE $vehicle_id"
+if {$vehicle_id != ""} {
+    set assurance_number [cn_assurance::generate_assurance_number -vehicle_id $vehicle_id]
+
+}
+
+set assurance_date_html [cn_assurance::input_date_html -name "assurance_date"]
+
+
+
 
 
 
