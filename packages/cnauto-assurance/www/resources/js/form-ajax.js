@@ -29,20 +29,30 @@ function CreateXmlHttpObj()
 }
 
 // called from onChange or onClick event of the continent dropdown list
-function VehicleListOnChange() 
-{
-    var vehicletList = document.getElementById("vehicleList");
+function FillFieldsOnChange() {
+    var vehicleID = document.getElementById("vehicle_id");
     
     // get selected continent from dropdown list
-    var selectedVehicle = vehicleList.options[vehicleList.selectedIndex].value;
+    var selectedVehicle = vehicleID.options[vehicleID.selectedIndex].value;
     
     // url of page that will send xml data back to client browser
     var requestUrl;
     // use the following line if using asp
-    requestUrl = "get-vehicle-info" + "?vehicle_id=" + encodeURIComponent(selectedVehicle);
+    requestUrl = "assurance-ae" + "?vehicle_id=" + encodeURIComponent(selectedVehicle);
+    window.location.href = requestUrl;
+
+
     // use the following line if using php
     // requestUrl = "xml_data_provider.php" + "?filter=" + encodeURIComponent(selectedContinent);
     
+
+    
+
+
+
+
+
+
     CreateXmlHttpObj();
     
     // verify XmlHttpObj variable was successfully initialized

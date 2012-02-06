@@ -43,6 +43,7 @@ CREATE TABLE cn_assurances (
        total_cost		numeric
 );
 
+CREATE SEQUENCE cn_assurance_id_seq cache 1000; 
 
 ------------------------------------
 -- Object Type: cn_assurance

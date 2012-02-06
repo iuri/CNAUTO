@@ -29,6 +29,7 @@ ALTER TABLE cn_assurances ADD COLUMN mo_total_cost numeric;
 ALTER TABLE cn_assurances ADD COLUMN total_cost numeric;
 
 
+CREATE SEQUENCE cn_assurance_id_seq cache 1000; 
 
 ------------------------------------
 -- Table cn_assurance_part_requests

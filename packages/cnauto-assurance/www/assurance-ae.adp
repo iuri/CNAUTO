@@ -9,12 +9,34 @@
 <table>
   <tr>
     <td>#cnauto-assurance.Chassis#</td>
+    <td>@vehicle_select_html;noquote@</td>
+    <td>#cnauto-assurance.Model#</td>
+    <td>@model_select_html;noquote@</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  <tr>
+    <td>#cnauto-assurance.Purchase_date#</td>
+    <td>@purchase_date_html;noquote@</td>
+    <td>#cnauto-assurance.KM#</td>
     <td>
-      <select name="vehicle_id" id="vehicle_id" onChange="javascript:document.assurance_ae.__refreshing_p.value='1';document.assurance_ae.submit();">
-        <option value="0">#cnauto-assurance.Select#</option>
-        @vehicle_options_html;noquote@  
-      </select>
+        <input type="text" name="km" id="km">  
     </td>
+    <td>#cnauto-assurance.Year#</td>
+    <td>
+        <input type="text" name="yom" id="yom">  
+    </td>
+  </tr>
+  <tr>
+    <td>#cnauto-assurance.Distributor#</td>
+    <td>@distributor_select_html;noquote@</td>
+    <td>#cnauto-assurance.Code#</td>
+    <td><input type="text" name="code" value=""></td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>#cnauto-assurance.Owner#</td>
+    <td>@owner_select_html;noquote@</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
@@ -34,56 +56,6 @@
         <td>#cnauto-assurance.Service_order_number#</td>
     <td><input type="date" name="servcice_order_number" id="service_order_number"></td>
 
-  </tr>
-  <tr>
-    <td>#cnauto-assurance.Distributor#</td>
-    <td>
-      <select name="distributor_id" id="distributor_id">
-        <option value="0">#cnauto-assurance.Select#</option>
-        @distributor_options_html;noquote@  
-      </select>
-    </td>
-    <td>#cnauto-assurance.Code#</td>
-    <td><input type="text" name="code" value=""></td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <td>#cnauto-assurance.Owner#</td>
-    <td>
-      <select name="owner_id" id="owner_id">
-        <option value="0">#cnauto-assurance.Select#</option>
-        @owner_options_html;noquote@  
-      </select>
-    </td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-  </tr>
-  <tr>
-    <td>#cnauto-assurance.Vehicle#</td>
-    <td>
-        <input type="text" name="resource_id" id="resource_id">  
-    </td>
-    <td>#cnauto-assurance.Model#</td>
-    <td>
-        <input type="text" name="model_id" id="model_id">  
-    </td>
-    <td>#cnauto-assurance.Year#</td>
-    <td>
-        <input type="text" name="yom" id="yom">  
-    </td>
-  </tr>
-  <tr>
-    <td>#cnauto-assurance.Purchase_date#</td>
-    <td><input type="date" name="purchase_date" id="purchase_date"></td>
-    <td>#cnauto-assurance.KM#</td>
-    <td>
-        <input type="text" name="km" id="km">  
-    </td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
   </tr>
 </table>
 

@@ -7,10 +7,228 @@ ad_library {
 
 namespace eval cn_assurance {}
 
+#####################
+### BEGIN HTML FORM API
+#####################
+
+
+ad_proc -public cn_assurance::model_select_widget_html {
+    {-name}
+    {-key ""}
+} {
+
+    Generates a html select widget 
+} {
+
+
+    set html_select "<select name=\"${name}\" id=\"${name}\">"
+    
+    if {$key == ""} {
+	set html_options "<option value=\"0\">#cnauto-assurance.Select#</option>"
+    } else {
+
+	db_1row select_pretty_name {
+	    SELECT cc.category_id, cc.pretty_name FROM cn_categories cc, cn_vehicles cv
+	    WHERE cc.category_id = cv.model_id
+	    AND cv.vehicle_id = :key
+	}
+
+	set html_options "<option value=\"${category_id}\">${pretty_name}</option>"
+    }
+
+    set element_options [db_list_of_lists select_model_info {
+	SELECT c1.category_id, c1.pretty_name FROM cn_categories c1, cn_categories c2 
+	WHERE c1.parent_id = c2.category_id
+	AND c2.name = 'models' AND c1.object_type = 'cn_vehicle'
+	AND c1.category_id != :category_id
+	ORDER BY c1.pretty_name
+    }]
+    
+    foreach element $element_options {
+	append html_options "
+          <option value='[lindex $element 0]'>[lindex $element 1]</option>
+        "
+    }
+    
+   
+    append html_select $html_options
+    append html_select "</select>"
+
+    return $html_select
+}
+
+
+
+
+ad_proc -public cn_assurance::vehicle_select_widget_html {
+    {-name}
+    {-key ""}
+} {
+
+    Generates a html select widget 
+} {
+
+
+    set html_select "<select name=\"${name}\" id=\"${name}\" onChange=\"return FillFieldsOnChange();\">"
+    
+    if {$key == ""} {
+	set html_options "<option value=\"0\">#cnauto-assurance.Select#</option>"
+    } else {
+
+	db_1row select_vehicle {
+	    SELECT cv.vehicle_id, cv.vin FROM cn_vehicles cv WHERE vehicle_id = :key
+	}
+
+	set html_options "<option value=\"${vehicle_id}\">${vin}</option>"
+    }
+
+    set element_options [db_list_of_lists select_vehicle_info {
+	SELECT cv.vehicle_id, cv.vin FROM cn_vehicles cv 
+	WHERE vehicle_id != :vehicle_id ORDER BY cv.vin
+    }]
+    
+    foreach element $element_options {
+	append html_options "
+          <option value='[lindex $element 0]'>[lindex $element 1]</option>
+        "
+    }
+    
+   
+    append html_select $html_options
+    append html_select "</select>"
+
+    return $html_select
+}
+
+
+
+ad_proc -public cn_assurance::distributor_select_widget_html {
+    {-name}
+    {-key ""}
+} {
+
+    Generates a html select widget 
+} {
+
+
+    set html_select "<select name=\"${name}\" id=\"${name}\">"
+    
+    if {$key == ""} {
+	set html_options "<option value=\"0\">#cnauto-assurance.Select#</option>"
+    } else {
+	
+	set count [db_string select_person_id {
+	    SELECT COUNT(cp.person_id) FROM cn_persons cp, cn_vehicles cv 
+	    WHERE cp.person_id = cv.distributor_id 
+	    AND vehicle_id = :key
+	} -default null ]
+
+	if {$count == 1 } {
+	    db_1row select_info {
+		SELECT cp.person_id, cp.pretty_name FROM cn_persons cp, cn_vehicles cv 
+		WHERE cp.person_id = cv.distributor_id 
+		AND cv.vehicle_id = :key
+		
+	    }
+	    
+	    set html_options "<option value=\"$person_id\">$pretty_name</option>"
+	} else {
+	    set html_options "<option value=\"0\">#cnauto-assurance.Select#</option>" 
+	}
+	ns_log Notice "$html_options"
+    }
+
+    set element_options [db_list_of_lists select_person_info {
+	SELECT cp.person_id, cp.pretty_name FROM cn_persons cp, cn_categories cc
+	WHERE cp.type_id = cc.category_id
+	AND cc.name = 'concessionarias'
+	AND cp.person_id != :person_id
+    }]
+    
+    foreach element $element_options {
+	append html_options "
+          <option value=\"[lindex $element 0]\">[lindex $element 1]</option>
+        "
+    }
+    
+    
+    append html_select $html_options
+    
+    append html_select "</select>"
+    
+    
+    return $html_select
+    
+}
+
+
+
+ad_proc -public cn_assurance::owner_select_widget_html {
+    {-name}
+    {-key ""}
+} {
+
+    Generates a html select widget 
+} {
+
+
+    set html_select "<select name=\"${name}\" id=\"${name}\">"
+    
+    if {$key == ""} {
+	set html_options "<option value=\"0\">#cnauto-assurance.Select#</option>"
+    } else {
+	
+	set count [db_string select_person_id {
+	    SELECT COUNT(cp.person_id) FROM cn_persons cp, cn_vehicles cv 
+	    WHERE cp.person_id = cv.owner_id 
+	    AND cv.vehicle_id = :key
+	} -default null ]
+
+	if {$count == 1} {
+	    db_1row select_info {
+		SELECT cp.person_id, cp.pretty_name FROM cn_persons cp, cn_vehicles cv 
+		WHERE cp.person_id = cv.owner_id 
+		AND cv.vehicle_id = :key
+		
+	    }
+	    
+	    set html_options "<option value=\"${person_id}\">${pretty_name}</option>"
+	} else {
+	    set html_options "<option value=\"0\">#cnauto-assurance.Select#</option>" 
+	}
+    }
+
+    set element_options [db_list_of_lists select_person_info {
+	SELECT cp.person_id, cp.pretty_name FROM cn_persons cp, cn_categories cc
+	WHERE cp.type_id = cc.category_id
+	AND cc.name = 'pessoafisica'
+	AND cp.person_id != :person_id
+	
+    }]
+    
+    foreach element $element_options {
+	append html_options "
+          <option value=\"[lindex $element 0]\">[lindex $element 1]</option>
+        "
+    }
+    
+    
+    append html_select $html_options
+    
+    append html_select "</select>"
+    
+    
+    return $html_select
+    
+}
+
+
+
+
 
 ad_proc -public cn_assurance::input_date_html {
-    {-name ""}
-    {-value ""}
+    {-name}
+    {-date ""}
 } {
 
     Generates a date input widget
@@ -18,10 +236,20 @@ ad_proc -public cn_assurance::input_date_html {
 
     set html_format "<input type=\"hidden\" name=\"${name}.format\" value=\"YYYY MM DD\" >"
 
-    
-    set year [db_string select_year { SELECT EXTRACT(YEAR FROM TIMESTAMP 'now()')}] 
-    set month [db_string select_year { SELECT EXTRACT(MONTH FROM TIMESTAMP 'now()')}] 
-    set day [db_string select_year { SELECT EXTRACT(DAY FROM TIMESTAMP 'now()')}] 
+    ns_log Notice "$name | $date fdfd"
+    if {[exists_and_not_null date]} {
+	
+	set year [db_string select_year { SELECT EXTRACT(YEAR FROM TIMESTAMP :date)}] 
+	set month [db_string select_year { SELECT EXTRACT(MONTH FROM TIMESTAMP :date)}] 
+	set day [db_string select_year { SELECT EXTRACT(DAY FROM TIMESTAMP :date)}] 
+
+    } else {
+	
+	set year [db_string select_year { SELECT EXTRACT(YEAR FROM TIMESTAMP 'now()')}] 
+	set month [db_string select_year { SELECT EXTRACT(MONTH FROM TIMESTAMP 'now()')}] 
+	set day [db_string select_year { SELECT EXTRACT(DAY FROM TIMESTAMP 'now()')}] 
+    }
+
 
     set html_year "
 	<input type=\"text\" name=\"${name}.year\" id=\"${name}.year\" size=\"4\" maxlength=\"4\" value=\"${year}\">
@@ -92,6 +320,11 @@ ad_proc -public cn_assurance::input_date_html {
     return $date_html
 
 }
+
+
+###########################
+### End HTML Form API
+###########################
 
 
 ad_proc -public cn_assurance::generate_assurance_number {
