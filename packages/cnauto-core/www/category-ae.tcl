@@ -19,7 +19,7 @@ if {[exists_and_not_null category_id]} {
 }    
 
 set parent_options [db_list_of_lists select_parent_info {
-    SELECT pretty_name, category_id FROM cn_categories ORDER BY pretty_name
+    SELECT pretty_name, category_id FROM cn_categories WHERE object_type = 'cn_vehicle' ORDER BY pretty_name
 }]
 
 
@@ -36,7 +36,7 @@ ad_form -name category_ae -form {
     }
     {object_type:text(select)
 	{label "[_ cnauto-resouces.Type]"}
-	{options {{"Selecione" 0} {"Person" cn_person} {"Order" cn_order} {"Vehicle" cn_vehicle} {"Resource" cn_resource}}}
+	{options {{"Selecione" 0} {"Part" cn_part} {"Person" cn_person} {"Order" cn_order}  {"Resource" cn_resource} {"Vehicle" cn_vehicle}}}
     }
     {parent_id:integer(select),optional
 	{label "[_ cnauto-resouces.Parent]"}

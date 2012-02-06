@@ -24,6 +24,40 @@ ad_proc -public cn_resources::resource::delete {
     return 
 }
 
+ad_proc -public cn_resources::resource::edit {
+    {-resource_id:required}
+    {-code:required}
+    {-pretty_name ""}
+    {-description ""}
+    {-class_id:required}
+    {-ncm_class ""}
+    {-unit ""}
+} {
+    Edit resource info
+} {
+
+
+    set name [util_text_to_url -replacement "" -text $pretty_name]
+
+    db_exec_plsql update_resource {
+	SELECT cn_resource__edit (
+				  :resource_id,
+				  :code,
+				  :name,
+				  :pretty_name,
+				  :description,
+				  :class_id,
+				  :ncm_class,
+				  :unit
+				  )
+    }
+
+    return
+
+}
+
+
+
 ad_proc -public cn_resources::resource::new {
     {-code:required}
     {-pretty_name ""}
@@ -142,6 +176,134 @@ ad_proc -public  cn_resources::import_csv_file {
     
     return
 }
+
+
+
+
+namespace eval cn_resources::part {}
+
+ad_proc -public cn_resources::part::delete {
+    part_id
+} {
+    Delete a part
+} {
+
+    db_transaction {
+	
+	db_exec_plsql delete_part {
+	    SELECT cn_part__delete ( :part_id )
+	}
+    }
+    
+    return 
+}
+
+ad_proc -public cn_resources::part::edit {
+    {-part_id:required}
+    {-code:required}
+    {-name ""}
+    {-pretty_name ""}
+    {-resource_id ""}
+    {-model_id ""}
+    {-quantity ""}
+    {-price ""}
+    {-width ""}
+    {-height ""}
+    {-depth ""}
+    {-weight ""}
+    {-volume ""}
+    {-dimensions ""}
+} {
+    
+    Edits part 
+} {
+    
+    db_transaction {
+	db_exec_plsql update_part {
+	    SELECT cn_part__edit (
+				  :part_id,
+				  :code,
+				  :name,
+				  :pretty_name,
+				  :resource_id,
+				  :model_id,
+				  :quantity,
+				  :price,
+				  :width,
+				  :height,
+				  :depth,
+				  :weight,
+				  :volume,
+				  :dimensions
+				  )
+	}
+    }		     
+
+    return
+}
+
+
+
+ad_proc -public cn_resources::part::new {
+    {-code:required}
+    {-name ""}
+    {-pretty_name ""}
+    {-resource_id ""}
+    {-model_id ""}
+    {-quantity ""}
+    {-price ""}
+    {-width ""}
+    {-height ""}
+    {-depth ""}
+    {-weight ""}
+    {-volume ""}
+    {-dimensions ""}
+    {-creation_ip ""}
+    {-creation_user ""}
+    {-context_id ""}
+} {
+    
+    Adds a new part 
+} {
+     
+    if {$creation_ip == ""} {
+	set creation_ip [ad_conn peeraddr]
+    }
+    
+    if {$creation_user == ""} {
+	set creation_user [ad_conn user_id]
+    }
+     
+    if {$context_id == ""} {
+	set context_id [ad_conn package_id]
+    }
+
+    db_transaction {
+	set part_id [db_exec_plsql insert_part {
+	    SELECT cn_part__new (
+				 :code,
+				 :name,
+				 :pretty_name,
+				 :resource_id,
+				 :model_id,
+				 :quantity,
+				 :price,
+				 :width,
+				 :height,
+				 :depth,
+				 :weight,
+				 :volume,
+				 :dimensions,
+				 :context_id,
+				 :creation_user,
+				 :creation_ip
+				 )
+	}]	
+    }
+    
+    return $part_id
+}
+
 
 
 
@@ -296,9 +458,11 @@ ad_proc -public cn_resources::vehicle::delete {
     return
 }
 
-ad_proc -public cn_resources::vehicle::new { 
-    {-chassis}
-    {-model}
+ad_proc -public cn_resources::vehicle::edit { 
+    {-vehicle_id:required}
+    {-vin:required}
+    {-resource_id:required}
+    {-model_id ""}
     {-engine ""}
     {-year_of_model ""}
     {-year_of_fabrication ""}
@@ -309,13 +473,59 @@ ad_proc -public cn_resources::vehicle::new {
     {-duration ""}
     {-distributor_id ""}
     {-owner_id ""}
-    {-resource_id ""}
+    {-notes ""}
+} {
+    Edit vehicle info
+} {
+    
+
+    db_transaction {
+	db_exec_plsql update_vehicle {
+	    SELECT cn_vehicle__edit (
+				     :vehicle_id,
+				     :vin,
+				     :resource_id,
+				     :model_id,
+				     :engine,
+				     :year_of_model,
+				     :year_of_fabrication,
+				     :color,
+				     :arrival_date,
+				     :purchase_date,
+				     :billing_date,
+				     :duration,
+				     :distributor_id,
+				     :owner_id,
+				     :notes
+				     )
+	}
+    }
+
+    return
+
+}
+
+
+ad_proc -public cn_resources::vehicle::new { 
+    {-vin:required}
+    {-resource_id:required}
+    {-model_id ""}
+    {-engine ""}
+    {-year_of_model ""}
+    {-year_of_fabrication ""}
+    {-color ""}
+    {-arrival_date ""}
+    {-billing_date ""}
+    {-purchase_date ""}
+    {-duration ""}
+    {-distributor_id ""}
+    {-owner_id ""}
     {-notes ""}
     {-creation_ip ""}
     {-creation_user ""}
     {-context_id ""}
 } {
-    Add a new vehicle 
+    Adds a new vehicle 
 } {
      
     if {$creation_ip == ""} {
@@ -336,8 +546,9 @@ ad_proc -public cn_resources::vehicle::new {
     db_transaction {
 	set vehicle_id [db_exec_plsql insert_vehicle {
 	    SELECT cn_vehicle__new (
-				    :chassis,
-				    :model,
+				    :vin,
+				    :resource_id,
+				    :model_id,
 				    :engine,
 				    :year_of_model,
 				    :year_of_fabrication,
@@ -348,7 +559,6 @@ ad_proc -public cn_resources::vehicle::new {
 				    :duration,
 				    :distributor_id,
 				    :owner_id,
-				    :resource_id,
 				    :notes,
 				    :creation_ip,
 				    :creation_user,
@@ -356,6 +566,7 @@ ad_proc -public cn_resources::vehicle::new {
 				    )
 	}]
     }
+
     return $vehicle_id
 }
 
@@ -731,6 +942,7 @@ ad_proc -public cn_resources::person::new {
 
 
 ad_proc -public cn_resources::person::edit {
+    {-person_id}
     {-cpf_cnpj}
     {-legal_name ""}
     {-pretty_name ""}
@@ -793,24 +1005,22 @@ ad_proc -public cn_resources::person::edit {
     db_transaction {
 	db_exec_plsql update_person {
 	    SELECT cn_person__edit (
-				   :cpf_cnpj,
-				   :legal_name,
-				   :pretty_name,
-				   :code,
-				   :type_id,
-				   :contact_id,
-				   :email,
-				   :phone,
-				   :postal_address,
-				   :postal_address2,
-				   :postal_code,
-				   :state_code,
-				   :city_code,
-				   :country_code,
-				   :creation_ip,
-				   :creation_user,
-				   :context_id
-				   );
+				    :person_id,
+				    :cpf_cnpj,
+				    :legal_name,
+				    :pretty_name,
+				    :code,
+				    :type_id,
+				    :contact_id,
+				    :email,
+				    :phone,
+				    :postal_address,
+				    :postal_address2,
+				    :postal_code,
+				    :state_code,
+				    :city_code,
+				    :country_code
+				    )
 	}
     }
     

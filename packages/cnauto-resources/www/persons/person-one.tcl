@@ -2,6 +2,7 @@ ad_page_contract {
     Shows person's info
 } {
     {person_id:integer,optional}
+    {type_id:integer,notnull}
     {email ""}
     {return_url ""}
 }
@@ -12,57 +13,69 @@ ns_log Notice "$return_url"
 
 ad_form -name person_one -action person-ae -export {return_url person_id} -has_submit 1 -has_edit 1 -mode display -form {
     {inform1:text(inform)
-        {label "<h2>[_ cnauto-assurance.Company_info]</h2>"}
+        {label "<h2>[_ cnauto-resources.Company_info]</h2>"}
     }
     {cpf_cnpj:text(text)
-	{label "[_ cnauto-asssurance.CPF_CNPJ]"}
+	{label "[_ cnauto-resources.CPF_CNPJ]"}
     }
     {pretty_name:text(text)
-	{label "[_ cnauto-asssurance.Name]"}
+	{label "[_ cnauto-resources.Name]"}
     }
     {legal_name:text(text)
-	{label "[_ cnauto-assurance.Legal_name]"}
+	{label "[_ cnauto-resources.Legal_name]"}
     }	
     {type:text(text)
-	{label "[_ cnauto-assurance.Type]"}
+	{label "[_ cnauto-resources.Type]"}
     }
+    {inform2:text(inform)
+	{label "<h2>[_ cnauto-resources.Contact_info]</h2>"}
+    }
+    {email:text(text)
+	{label "[_ cnauto-resources.Email]"}
+    }
+
 }
 
+set type [db_string select_type {
+    SELECT name FROM cn_categories WHERE category_id = :type_id
+} -default null]
+
+
+if {$type != "pessoafisica"} {
+
     ad_form -extend -name person_one -form {
-	{inform2:text(inform)
-	    {label "<h2>[_ cnauto-assurance.Contact_info]</h2>"}
-	}
-	{email:text(text)
-	    {label "[_ cnauto-assurance.Email]"}
-	} 
 	{first_names:text(text),optional
 	    {label "[_ cnauto-resources.First_names]"}
 	}
 	{last_name:text(text),optional
 	    {label "[_ cnauto-resources.Last_names]"}
 	}
-	{phone:text(text)
-	    {label "[_ cnauto-assurance.Phone]"}
-	} 
-	{postal_address:text(text)
-	    {label "[_ cnauto-assurance.Postal_address]"}
-	} 
-	{postal_address2:text(text)
-	    {label "[_ cnauto-assurance.Postal_address]"}
-	} 
-	{postal_code:text(text)
-	    {label "[_ cnauto-assurance.Postal_code]"}
-	} 
-	{state:text(text)
-	    {label "[_ cnauto-assurance.State]"}
-	} 
-	{city:text(text)
-	{label "[_ cnauto-assurance.Municipality]"}
-	} 
-	{country:text(text)
-	    {label "[_ cnauto-assurance.Country]"}
-	}
     }
+}
+
+ad_form -extend -name person_one -form {
+    {phone:text(text)
+	{label "[_ cnauto-resources.Phone]"}
+    } 
+    {postal_address:text(text)
+	{label "[_ cnauto-resources.Postal_address]"}
+    } 
+    {postal_address2:text(text)
+	{label "[_ cnauto-resources.Postal_address]"}
+    } 
+    {postal_code:text(text)
+	{label "[_ cnauto-resources.Postal_code]"}
+    } 
+    {state:text(text)
+	{label "[_ cnauto-resources.State]"}
+    } 
+    {city:text(text)
+	{label "[_ cnauto-resources.Municipality]"}
+    } 
+    {country:text(text)
+	{label "[_ cnauto-resources.Country]"}
+    }
+}
 
 ad_form -extend -name person_one -on_request {
     

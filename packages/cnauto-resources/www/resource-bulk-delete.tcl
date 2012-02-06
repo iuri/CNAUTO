@@ -24,7 +24,7 @@ if {$delete_p eq 0} {
 
 set resource_ids $resource_id
 foreach element $resource_ids {
-    lappend order_ids "'[DoubleApos $element]'"
+    lappend resource_ids "'[DoubleApos $element]'"
 }
 
 set resource_ids [join $resource_ids ","]

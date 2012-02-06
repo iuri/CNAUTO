@@ -27,9 +27,11 @@ ad_form -name resource_ae -form {
     {resource_id:key}
     {code:text(text)
 	{label "[_ cnauto-resources.Code]"}
+	{html {size 30} }
     }
     {pretty_name:text(text)
 	{label "[_ cnauto-resources.Name]"}
+	{html {size 50} }
     }
     {class_id:integer(select)
 	{label "[_ cnauto-resources.Class]"}
@@ -54,6 +56,26 @@ ad_form -name resource_ae -form {
 			 -creation_user [ad_conn user_id] \
 			 -context_id [ad_conn package_id]
 		    ]
+
+
+} -edit_request {
+
+    db_1row select_resource_info {
+	SELECT cr.code, cr.pretty_name, cr.class_id, cr.unit
+	FROM cn_resources cr
+	WHERE cr.resource_id = :resource_id
+    }
+
+} -edit_data {
+
+    cn_resources::resource::edit \
+	-resource_id $resource_id \
+	-code $code \
+	-pretty_name $pretty_name \
+	-description "" \
+	-class_id $class_id \
+	-unit $unit 
+    
 
 } -after_submit {
 

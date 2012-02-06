@@ -1,11 +1,11 @@
 <master>
 <property name="context">@context_bar;noquote@</property>
-<property name="title">#cnauto-import.Confirm_resources_delete#</property>
+<property name="title">#cnauto-import.Confirm_parts_delete#</property>
 
-<form method="post" action="resources-delete">	
+<form method="post" action="parts-delete">	
   <p>#cnauto-resources.Are_you_sure_you_want_to_delete#?</p> 
-  <multiple name="resources">
-    @resources.pretty_name@<br>
+  <multiple name="parts">
+    @parts.code@ - @parts.pretty_name@<br>
   </multiple>
 
 <div>
