@@ -1,0 +1,10 @@
+ad_page_contract {
+    Grid to show and manage parts
+}
+
+
+template::head::add_css -href "/cnauto-assurance/sigma/grid/gt_grid.css"
+
+template::head::add_javascript -src "/cnauto-assurance/sigma/grid/gt_msg_eng.js" -order 0
+template::head::add_javascript -src "/cnauto-assurance/sigma/grid/gt_grid_all.js" -order 1
+template::head::add_javascript -src "/resources/cnauto-assurance/js/grid.js" -order 2
