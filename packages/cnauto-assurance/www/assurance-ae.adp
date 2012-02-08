@@ -64,6 +64,10 @@
     <td>#cnauto-assurance.Parts#</td>
   </tr>
   <tr>
+    <td> <include src="/packages/cnauto-assurance/lib/parts-grid"></td>  
+  </tr>
+
+  <tr>
     <td>
       <table border=1>
         <tr>
