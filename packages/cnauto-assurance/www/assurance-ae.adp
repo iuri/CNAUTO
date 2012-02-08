@@ -15,30 +15,22 @@
     <td>&nbsp;</td>
     <td>&nbsp;</td>
   <tr>
-    <td>#cnauto-assurance.Purchase_date#</td>
-    <td>@purchase_date_html;noquote@</td>
-    <td>#cnauto-assurance.KM#</td>
-    <td>
-        <input type="text" name="km" id="km">  
-    </td>
     <td>#cnauto-assurance.Year#</td>
     <td>
-        <input type="text" name="yom" id="yom">  
+         <input type="text" name="yom" id="yom" value="@year;noquote@">  
     </td>
-  </tr>
-  <tr>
-    <td>#cnauto-assurance.Distributor#</td>
-    <td>@distributor_select_html;noquote@</td>
-    <td>#cnauto-assurance.Code#</td>
-    <td><input type="text" name="code" value=""></td>
+    <td>#cnauto-assurance.Purchase_date#</td>
+    <td>@purchase_date_html;noquote@</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
   </tr>
   <tr>
     <td>#cnauto-assurance.Owner#</td>
     <td>@owner_select_html;noquote@</td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
+    <td>#cnauto-assurance.Distributor#</td>
+    <td>@distributor_select_html;noquote@</td>
+    <td>#cnauto-assurance.Code#</td>
+    <td><input type="text" name="code" value=""></td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
   </tr>
@@ -50,6 +42,10 @@
         <!-- date purchase_date begin -->
     	@assurance_date_html;noquote@
         <!-- date purchase_date end -->
+    </td>
+    <td>#cnauto-assurance.KM#</td>
+    <td>
+        <input type="text" name="km" id="km">  
     </td>
   </tr>
   <tr>
@@ -67,8 +63,8 @@
     <td>
       <table border=1>
         <tr>
-    	  <td>#cnauto-assurance.Pretty_name#</td>
     	  <td>#cnauto-assurance.Code#</td>
+    	  <td>#cnauto-assurance.Pretty_name#</td>
     	  <td>#cnauto-assurance.Cost#</td>
     	  <td>#cnauto-assurance.Quantity#</td>
     	  <td>#cnauto-assurance.Oil_Incomes#</td>
@@ -78,7 +74,7 @@
     	  <td>#cnauto-assurance.Third_services#</td>
     	</tr>
 	<tr>
-	  <td><input type="text" name="part_name" id="part_name"></td>
+	  <td>@part_select_html;noquote@</td>
     	  <td><input type="text" name="part_code" id="part_code"></td>
     	  <td><input type="text" name="part_cost" id="part_cost"></td>
     	  <td><input type="text" name="part_quantity" id="parts_quantity"></td>

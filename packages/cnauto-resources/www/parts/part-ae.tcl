@@ -24,7 +24,7 @@ lappend model_options {"Selecione" 0}
 
 
 set resource_options [db_list_of_lists select_resources {
-    SELECT cr.pretty_name, cr.resource_id FROM cn_resources cr, cn_categories cc WHERE cr.class_id = cc.category_id AND cc.name = 'part'
+    SELECT cr.pretty_name, cr.resource_id FROM cn_resources cr, cn_categories cc WHERE cr.class_id = cc.category_id AND cc.name = 'parts'
 }]
 
 lappend resource_options {"Selecione" 0}
@@ -114,28 +114,37 @@ ad_form -name part_ae -form {
     
     
 } -new_data {
-    
-    set name [util_text_to_url -replacement "" -text $pretty_name]
-    
-    set part_id [cn_resources::part::new \
-		     -code $code \
-		     -name $name \
-		     -pretty_name $pretty_name \
-		     -resource_id $resource_id \
-		     -model_id $model_id \
-		     -quantity $quantity \
-		     -price $price \
-		     -width $width \
-		     -height $height \
-		     -depth $depth \
-		     -weight $weight \
-		     -volume $volume \
-		     -dimensions $dimensions \
-		     -creation_ip [ad_conn peeraddr] \
-		     -creation_user [ad_conn user_id] \
-		     -context_id [ad_conn package_id] \
-		 ]
 
+    set part_exists_p [db_0or1row select_part_id {
+	SELECT part_id FROM cn_parts WHERE code = :code
+    }]
+    
+    
+    if {$part_exists_p} {
+	ad_return_complaint 1 "The chassis already exists on the database! Please <a href=\"javascript:history.go(-1);\">go back and fix it!</a> "
+    } else {
+	
+	set name [util_text_to_url -replacement "" -text $pretty_name]
+	
+	set part_id [cn_resources::part::new \
+			 -code $code \
+			 -name $name \
+			 -pretty_name $pretty_name \
+			 -resource_id $resource_id \
+			 -model_id $model_id \
+			 -quantity $quantity \
+			 -price $price \
+			 -width $width \
+			 -height $height \
+			 -depth $depth \
+			 -weight $weight \
+			 -volume $volume \
+			 -dimensions $dimensions \
+			 -creation_ip [ad_conn peeraddr] \
+			 -creation_user [ad_conn user_id] \
+			 -context_id [ad_conn package_id] \
+			]
+    }
 } -after_submit {
     ad_returnredirect $return_url
     ad_script_abort

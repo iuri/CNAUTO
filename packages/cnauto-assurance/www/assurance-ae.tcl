@@ -29,25 +29,30 @@ set model_select_html [cn_assurance::model_select_widget_html -name "model_id" -
 
 set purchase_date [db_string select_purchase_date {
     SELECT cv.purchase_date FROM cn_vehicles cv WHERE vehicle_id = :vehicle_id
-} -default null]
+} -default 0]
 
 set purchase_date_html [cn_assurance::input_date_html -name "purchase_date" -date $purchase_date]
-
-
-ns_log Notice "VEHICLE $vehicle_id"
-if {$vehicle_id != ""} {
-    set assurance_number [cn_assurance::generate_assurance_number -vehicle_id $vehicle_id]
-
-    ns_log Notice "ASSURANCE $assurance_number"
-}
-
-
-set assurance_date_html [cn_assurance::input_date_html -name "assurance_date"]
-
 
 
 set distributor_select_html [cn_assurance::distributor_select_widget_html -name "distributor_id" -key $vehicle_id]
 
 
 set owner_select_html [cn_assurance::owner_select_widget_html -name "owner_id" -key $vehicle_id]
+
+
+set year [db_string select_year {
+    SELECT year_of_fabrication || '/' || year_of_model AS year FROM cn_vehicles WHERE vehicle_id = :vehicle_id
+} -default null]
+
+ns_log Notice "VEHICLE $vehicle_id"
+if {$vehicle_id != ""} {
+    set assurance_number [cn_assurance::generate_assurance_number -vehicle_id $vehicle_id] 
+    
+    ns_log Notice "ASSURANCE $assurance_number"
+}
+
+set assurance_date_html [cn_assurance::input_date_html -name "assurance_date"]
+
+
+set part_select_html [cn_assurance::part_select_widget_html -name "part_id"]
 

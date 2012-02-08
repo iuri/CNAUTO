@@ -54,7 +54,7 @@ lappend model_options {"Selecione" 0}
 
 
 set resource_options [db_list_of_lists select_resources {
-    SELECT cr.pretty_name, cr.resource_id FROM cn_resources cr, cn_categories cc WHERE cr.class_id = cc.category_id AND cc.name = 'vehicle'
+    SELECT cr.pretty_name, cr.resource_id FROM cn_resources cr, cn_categories cc WHERE cr.class_id = cc.category_id AND cc.name = 'vehicles'
 }]
 
 lappend resource_options {"Selecione" 0}
@@ -176,30 +176,39 @@ ad_form -name vehicle_ae -form {
 
 } -new_data { 
 
-    set arrival_date "[template::util::date::get_property year $arrival_date] [template::util::date::get_property month $arrival_date] [template::util::date::get_property day $arrival_date]"
-    set billing_date "[template::util::date::get_property year $billing_date] [template::util::date::get_property month $billing_date] [template::util::date::get_property day $billing_date]"
-    set purchase_date "[template::util::date::get_property year $purchase_date] [template::util::date::get_property month $purchase_date] [template::util::date::get_property day $purchase_date]"
+    set vehicle_exists_p [db_0or1row select_vehicle_id {
+	SELECT vehicle_id FROM cn_vehicles WHERE vin = :vin
+    }]
 
-    cn_resources::vehicle::new \
-	-vin $vin \
-	-model_id $model_id \
-	-engine $engine \
-	-year_of_model $year_of_model \
-	-year_of_fabrication $year_of_fabrication \
-	-color $color \
-	-purchase_date $purchase_date \
-	-arrival_date $arrival_date \
-	-billing_date $billing_date \
-	-duration $duration \
-	-distributor_id $distributor_id \
-	-owner_id $owner_id \
-	-resource_id $resource_id \
-	-notes $notes \
-	-creation_ip [ad_conn peeraddr] \
-	-creation_user [ad_conn user_id] \
-	-context_id [ad_conn package_id]
+    if {$vehicle_exists_p} {
+	ad_return_complaint 1 "The chassis already exists on the database! Please <a href=\"javascript:history.go(-1);\">go back and fix it!</a> "
+    } else {
+			  
 
-
+	set arrival_date "[template::util::date::get_property year $arrival_date] [template::util::date::get_property month $arrival_date] [template::util::date::get_property day $arrival_date]"
+	set billing_date "[template::util::date::get_property year $billing_date] [template::util::date::get_property month $billing_date] [template::util::date::get_property day $billing_date]"
+	set purchase_date "[template::util::date::get_property year $purchase_date] [template::util::date::get_property month $purchase_date] [template::util::date::get_property day $purchase_date]"
+	
+	cn_resources::vehicle::new \
+	    -vin $vin \
+	    -model_id $model_id \
+	    -engine $engine \
+	    -year_of_model $year_of_model \
+	    -year_of_fabrication $year_of_fabrication \
+	    -color $color \
+	    -purchase_date $purchase_date \
+	    -arrival_date $arrival_date \
+	    -billing_date $billing_date \
+	    -duration $duration \
+	    -distributor_id $distributor_id \
+	    -owner_id $owner_id \
+	    -resource_id $resource_id \
+	    -notes $notes \
+	    -creation_ip [ad_conn peeraddr] \
+	    -creation_user [ad_conn user_id] \
+	    -context_id [ad_conn package_id]
+    }
+	
 } -after_submit {
     ad_returnredirect $return_url
     ad_script_abort

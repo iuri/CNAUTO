@@ -225,63 +225,72 @@ ad_form -extend -name person_ae -form {
     
     
 } -new_data {
-    
-    
-    if {$email != ""} {
-	
-	
-	set contact_id [db_nextval acs_object_id_seq]
-	
-	array set creation_info [auth::create_user \
-				     -user_id $contact_id \
-				     -email $email \
-				     -first_names $first_names \
-				     -last_name $last_name \
-				    ]
 
-	if { $creation_info(creation_status) ne "ok"} {
-	    ad_return_complaint 1 " The email: <b> $email </b> already exists on our database!"
-	}
-				    	
+    set person_exists_p [db_0or1row select_person_id {
+	SELECT person_id FROM cn_persons WHERE cpf_cnpj = :cpf_cnpj
+    }]
+
+    if {$person_exists_p} {
+	ad_return_complaint 1 "The $type already exists on the database! Please <a href=\"javascript:history.go(-1);\">go back and fix it!</a> "
     } else {
-	set contact_id ""
-    }
-    
-    
-    set type [db_string select_type {
-	SELECT name FROM cn_categories WHERE category_id = :type_id
-    } -default null]
-    
-    
-    
-    if {$type == "pessoafisica"} {
 	
-	set code [util_text_to_url -replacement "" -text $cpf_cnpj]
-	set pretty_name "$first_names $last_name"
-	set legal_name "$first_names $last_name"
+	
+	if {$email != ""} {
+	    
+	    
+	    set contact_id [db_nextval acs_object_id_seq]
+	    
+	    array set creation_info [auth::create_user \
+					 -user_id $contact_id \
+					 -email $email \
+					 -first_names $first_names \
+					 -last_name $last_name \
+					]
+	    
+	    if { $creation_info(creation_status) ne "ok"} {
+		ad_return_complaint 1 " The email: <b> $email </b> already exists on our database!"
+	    }
+	    
+	} else {
+	    set contact_id ""
+	}
+	
+	
+	set type [db_string select_type {
+	    SELECT name FROM cn_categories WHERE category_id = :type_id
+	} -default null]
+	
+	
+	
+	if {$type == "pessoafisica"} {
+	    
+	    set code [util_text_to_url -replacement "" -text $cpf_cnpj]
+	    set pretty_name "$first_names $last_name"
+	    set legal_name "$first_names $last_name"
+	    
+	}
+	
+	cn_resources::person::new \
+	    -cpf_cnpj $cpf_cnpj \
+	    -legal_name $legal_name \
+	    -pretty_name $pretty_name \
+	    -code $code \
+	    -type_id $type_id \
+	    -contact_id $contact_id \
+	    -email $email \
+	    -phone $phone \
+	    -postal_address $postal_address \
+	    -postal_address2 $postal_address2 \
+	    -postal_code $postal_code \
+	    -state_code $state_code \
+	    -city_code $city_code \
+	    -country_code $country_code \
+	    -creation_ip [ad_conn peeraddr] \
+	    -creation_user [ad_conn user_id] \
+	    -context_id [ad_conn package_id]         	
+	
+    }
 
-    }
-    
-    cn_resources::person::new \
-	-cpf_cnpj $cpf_cnpj \
-	-legal_name $legal_name \
-	-pretty_name $pretty_name \
-	-code $code \
-	-type_id $type_id \
-	-contact_id $contact_id \
-	-email $email \
-	-phone $phone \
-	-postal_address $postal_address \
-	-postal_address2 $postal_address2 \
-	-postal_code $postal_code \
-	-state_code $state_code \
-	-city_code $city_code \
-	-country_code $country_code \
-	-creation_ip [ad_conn peeraddr] \
-	-creation_user [ad_conn user_id] \
-	-context_id [ad_conn package_id]         	
-	
-    
 } -after_submit {
     ad_returnredirect $return_url
     ad_script_abort
