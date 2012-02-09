@@ -22,39 +22,7 @@
     	  <td>#cnauto-assurance.MO_time#</td>
     	  <td>#cnauto-assurance.Third_services#</td>
     	</tr>
-	<tr>
-	  <td><input type="text" name="part_name" id="part_name"></td>
-    	  <td><input type="text" name="part_code" id="part_code"></td>
-    	  <td><input type="text" name="part_cost" id="part_cost"></td>
-    	  <td><input type="text" name="part_quantity" id="parts_quantity"></td>
-    	  <td><input type="text" name="part_incomes" id="part_incomes"></td>
-    	  <td><input type="text" name="part_assurance_cost" id="part_assurance_cost"></td>
-    	  <td><input type="text" name="part_mo_code" id="part_mo_code"></td>
-    	  <td><input type="text" name="part_mo_time" id="part_mo_time"></td>
-    	  <td><input type="text" name="part_third_cost" id="part_third_cost"></td>
-	</tr>
-	<tr>
-	  <td><input type="text" name="part_name" id="part_name"></td>
-    	  <td><input type="text" name="part_code" id="part_code"></td>
-    	  <td><input type="text" name="part_cost" id="part_cost"></td>
-    	  <td><input type="text" name="part_quantity" id="parts_quantity"></td>
-    	  <td><input type="text" name="part_incomes" id="part_incomes"></td>
-    	  <td><input type="text" name="part_assurance_cost" id="part_assurance_cost"></td>
-    	  <td><input type="text" name="part_mo_code" id="part_mo_code"></td>
-    	  <td><input type="text" name="part_mo_time" id="part_mo_time"></td>
-    	  <td><input type="text" name="part_third_cost" id="part_third_cost"></td>
-	</tr>
-	<tr>
-	  <td><input type="text" name="part_name" id="part_name"></td>
-    	  <td><input type="text" name="part_code" id="part_code"></td>
-    	  <td><input type="text" name="part_cost" id="part_cost"></td>
-    	  <td><input type="text" name="part_quantity" id="parts_quantity"></td>
-    	  <td><input type="text" name="part_incomes" id="part_incomes"></td>
-    	  <td><input type="text" name="part_assurance_cost" id="part_assurance_cost"></td>
-    	  <td><input type="text" name="part_mo_code" id="part_mo_code"></td>
-    	  <td><input type="text" name="part_mo_time" id="part_mo_time"></td>
-    	  <td><input type="text" name="part_third_cost" id="part_third_cost"></td>
-	</tr>
+	@parts_html;noquote@
       </table>
     </td>
   </tr>
