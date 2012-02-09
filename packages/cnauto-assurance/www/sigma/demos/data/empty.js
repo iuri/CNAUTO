@@ -1,9 +1,0 @@
-{
-	
-data : [],
-
-pageInfo : {	},
-
-exception:''
-
-}
