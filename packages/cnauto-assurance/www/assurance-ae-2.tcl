@@ -2,6 +2,16 @@ ad_page_contract {
 
 } {
     {assurance_id}
+    {part_code:array,optional}
+    {part_name:array,optional}
+    {part_cost:array,optional}
+    {part_quantity:array,optional}
+    {part_incomes:array,optional}
+    {part_assurance_cost:array,optional}
+    {part_mo_code:array,optional}
+    {part_mo_time:array,optional}
+    {part_third_cost:array,optional}
+
 } 
 
 
@@ -18,51 +28,18 @@ if {[string equal "" $myform]} {
 
 set title [_ cnauto-assurance.Add_parts]
 
-
-set part_select_html [cn_assurance::part_select_widget_html -name "part_id"]
-
 set parts_html ""
 
 for {set i 0} {$i < 5} {incr i} {
     
-    append parts_html "
-	<tr>
-    	  <td>
-            <input type=\"text\" name=\"part_code.${i}\" id=\"part_code.${i}\">
-          </td>
-	  <td>
-            <input type=\"text\" name=\"part_name.${i}\" id=\"part_name.${i}\">
-          </td>
-    	  <td>
-            <input type=\"text\" name=\"part_cost.${i}\" id=\"part_cost.${i}\">
-          </td>
-    	  <td>
-             <input type=\"text\" name=\"part_quantity.${i}\" id=\"parts_quantity.${i}\">
-          </td>
-    	  <td>
-            <input type=\"text\" name=\"part_incomes.${i}\" id=\"part_incomes.${i}\">
-          </td>
-    	  <td>
-            <input type=\"text\" name=\"part_assurance_cost.${i}\" id=\"part_assurance_cost.${i}\">
-          </td>
-    	  <td>
-            <input type=\"text\" name=\"part_mo_code.${i}\" id=\"part_mo_code.${i}\">
-          </td>
-    	  <td>
-            <input type=\"text\" name=\"part_mo_time.${i}\" id=\"part_mo_time.${i}\">
-          </td>
-    	  <td>
-            <input type=\"text\" name=\"part_third_cost.${i}\" id=\"part_third_cost.${i}\">
-          </td>
-	</tr>
-	
-"
+    append parts_html [cn_assurance::part_html_input -name "part_id_${i}" -count $i -assurance_id $assurance_id]
+    
 }
 
 template::head::add_javascript -script {
     
-    function FillFieldsOnChange() {
-	var partId = document.getElementById("part_id");
+    function FillFieldsOnChange(i,assuranceId) {
+	var partId = document.getElementById("part_id." + i);
 	
 	// get selected continent from dropdown list
 	var selectedPart = partId.options[partId.selectedIndex].value;
@@ -70,7 +47,8 @@ template::head::add_javascript -script {
 	// url of page that will send xml data back to client browser
 	var requestUrl;
 	// use the following line if using asp
-	requestUrl = "assurance-ae-2" + "?part_id=" + encodeURIComponent(selectedPart);
-	window.location.href = requestUrl;
+	requestUrl = "assurance-ae-2" + "?assurance_id=" + encodeURIComponent(selectedPart);
+
+	//window.location.href = requestUrl;
     }
 }

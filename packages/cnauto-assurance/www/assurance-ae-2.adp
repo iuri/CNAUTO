@@ -5,8 +5,8 @@
 
 <h1>@title;noquote@</h1>
 
-<form name="assurance_ae_2" action="assurance-ae-3" method="post">
-
+<form name="assurance_ae_2" action="assurance-ae-2" method="post">
+<input type="hidden" name="assurance_id" value="@assurance_id@">
 <table>
   <tr>
     <td>

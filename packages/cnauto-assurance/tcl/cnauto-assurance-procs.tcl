@@ -64,18 +64,21 @@ ad_proc -public cn_assurance::new {
 ### BEGIN HTML FORM API
 #####################
 
-ad_proc -public cn_assurance::part_select_widget_html {
+ad_proc -public cn_assurance::part_html_input {
     {-name}
-    {-key ""}
+    {-count}
+    {-assurance_id}
 } {
 
-    Generates a html select widget 
+    Generates a html input block for parts 
 } {
 
 
-    set html_select "<select name=\"${name}\" id=\"${name}\" onChange=\"return FillFieldsOnChange();\">"
+    set html_select "<select name=\"${name}\" id=\"${name}\" onChange=\"document.assurance_ae_2.submit();\">"
     
-    if {$key == ""} {
+    set part_id ""
+    
+    if {$part_id == ""} {
 	set html_options "<option value=\"0\">#cnauto-assurance.Select#</option>"
     }
 
@@ -93,8 +96,48 @@ ad_proc -public cn_assurance::part_select_widget_html {
    
     append html_select $html_options
     append html_select "</select>"
+    
 
-    return $html_select
+
+
+    set i $count
+
+    append parts_html "
+	<tr>
+    	  <td>
+              $html_select
+          </td>
+	  <td>
+            <input type=\"text\" name=\"part_name.${i}\" id=\"part_name.${i}\">
+          </td>
+    	  <td>
+            <input type=\"text\" name=\"part_cost.${i}\" id=\"part_cost.${i}\">
+          </td>
+    	  <td>
+             <input type=\"text\" name=\"part_quantity.${i}\" id=\"parts_quantity.${i}\">
+          </td>
+    	  <td>
+            <input type=\"text\" name=\"part_incomes.${i}\" id=\"part_incomes.${i}\">
+          </td>
+    	  <td>
+            <input type=\"text\" name=\"part_assurance_cost.${i}\" id=\"part_assurance_cost.${i}\">
+          </td>
+    	  <td>
+            <input type=\"text\" name=\"part_mo_code.${i}\" id=\"part_mo_code.${i}\">
+          </td>
+    	  <td>
+            <input type=\"text\" name=\"part_mo_time.${i}\" id=\"part_mo_time.${i}\">
+          </td>
+    	  <td>
+            <input type=\"text\" name=\"part_third_cost.${i}\" id=\"part_third_cost.${i}\">
+          </td>
+	</tr>
+	
+"
+
+ 
+
+    return $parts_html
 }
 
 
