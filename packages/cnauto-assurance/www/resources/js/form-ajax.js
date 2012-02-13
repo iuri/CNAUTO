@@ -30,15 +30,15 @@ function CreateXmlHttpObj()
 
 // called from onChange or onClick event of the continent dropdown list
 function FillFieldsOnChange() {
-    var vehicleID = document.getElementById("vehicle_id");
+    var partsTotalCost = document.getElementById("parts_total_cost");
     
     // get selected continent from dropdown list
-    var selectedVehicle = vehicleID.options[vehicleID.selectedIndex].value;
+    var selectedParts = partsTotalCost.options[partsTotalCost.selectedIndex].value;
     
     // url of page that will send xml data back to client browser
     var requestUrl;
     // use the following line if using asp
-    requestUrl = "assurance-ae" + "?vehicle_id=" + encodeURIComponent(selectedVehicle);
+    requestUrl = "assurance-ae" + "?part_id=" + encodeURIComponent(selectedParts);
     window.location.href = requestUrl;
 
 

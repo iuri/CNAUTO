@@ -19,6 +19,13 @@ ad_proc -public cn_assurance::new {
     {-context_id ""}    
 } { 
     Add a new assurance
+
+    @status pending, unapproved, approved, closed
+    pending: the assurance request lacks input information from the CN Auto distributor
+    unapproved: the assurance request is waiting for the CN Auto staff analyst
+    approved: the assurance request is approved by the CN Auto staff analyst
+    close: the assurance request was paid and finished by both parts
+
 } {
     
 
@@ -58,6 +65,136 @@ ad_proc -public cn_assurance::new {
     return $assurance_id
 }
 
+ad_proc -public cn_assurance::edit { 
+    {-assurance_id:required}
+    {-assurance_date ""}
+    {-service_order ""} 
+    {-vehicle_id ""}
+    {-kilometers ""}
+    {-owner_id ""}
+    {-distributor_id ""}
+} { 
+    Edit assurance info
+    
+    
+} {
+    
+    db_transaction {
+	db_exec_plsql update_assurance {
+	    SELECT cn_assurance__edit (
+				       :assurance_id,
+				       :assurance_date,
+				       :service_order, 
+				       :vehicle_id,
+				       :kilometers,
+				       :owner_id,
+				       :distributor_id
+				       )
+	}
+    }
+    
+    return
+}
+
+
+ad_proc -public cn_assurance::update_costs { 
+    {-assurance_id:required}
+    {-description ""}
+    {-parts_total_cost ""}
+    {-assurance_total_cost ""}
+    {-third_total_cost ""}
+    {-mo_total_cost ""}
+    {-total_cost ""}
+} { 
+    Update assurance costs
+    
+    
+} {
+    
+    db_trasncation {
+	db_exec_plsql update_assurance {
+	    SELECT cn_assurance__update_costs (
+				       :assurance_id,
+				       :description,
+				       :parts_total_cost, 
+				       :assurance_total_cost,
+				       :third_total_cost,
+				       :mo_total_cost,
+				       :total_cost
+				       )
+	}
+    }
+
+    return
+}
+
+
+
+
+
+
+ad_proc -public cn_assurance::attach_parts { 
+    {-assurance_id:required}
+    {-code ""}
+    {-cost ""}
+    {-quantity ""}
+    {-assurance ""}
+    {-income ""}
+    {-mo_code ""}
+    {-mo_time ""}
+    {-third_cost ""}
+} { 
+    Create assurances part's list on cn_assurance_parts_requests
+    
+    @code@ array of part codes
+    @cost@ array of cost
+    @quantity@ array of quantity
+    @assurance_cost@ array of assurance cost
+    @income@ array of incomes
+    @mo_code@ array of mode_code
+    @mo_time@ array of mo_time
+    @third_cost@ array of third cost
+    
+} {
+    
+    ns_log Notice "Running ad_proc cn_assurance::attach_parts"
+    
+    ns_log Notice "$code"
+    
+    array set codes $code
+    array set costs $cost 
+    array set quantities $quantity
+    array set assurances $assurance
+    array set incomes $income
+    array set mo_codes $mo_code
+    array set mo_times $mo_time
+    array set third_costs $third_cost
+    
+    for {set i 0} {$i < [array size codes]} {incr i} {
+	ns_log Notice "$codes($i) | $costs($i) | $quantities($i) | $assurances($i) | $incomes($i) | $mo_codes($i) | $mo_times($i) | $third_costs($i)"
+
+	set map_id [db_nextval acs_object_id_seq]
+	
+	db_transaction {
+	    db_exec_plsql map_assurance_parts {
+		SELECT cn_aprm__new (
+				     :map_id,
+				     :assurance_id
+				     );
+	    }
+	}
+    }
+    
+    
+	ns_log Notice "$r"
+	
+
+
+
+    return
+}
+
+
 
 
 #####################
@@ -66,7 +203,7 @@ ad_proc -public cn_assurance::new {
 
 ad_proc -public cn_assurance::part_select_widget_html {
     {-name}
-    {-key ""}
+    {-part_id ""}
 } {
 
     Generates a html select widget 
@@ -75,7 +212,7 @@ ad_proc -public cn_assurance::part_select_widget_html {
 
     set html_select "<select name=\"${name}\" id=\"${name}\" onChange=\"return FillFieldsOnChange();\">"
     
-    if {$key == ""} {
+    if {$part_id == ""} {
 	set html_options "<option value=\"0\">#cnauto-assurance.Select#</option>"
     }
 
