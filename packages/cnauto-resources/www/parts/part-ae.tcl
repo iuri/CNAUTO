@@ -20,14 +20,14 @@ set model_options [db_list_of_lists select_model {
 	FROM cn_categories WHERE object_type = 'cn_part' ORDER BY pretty_name
 }]
     
-lappend model_options {"Selecione" 0}
+lappend model_options {"Selecione" ""}
 
 
 set resource_options [db_list_of_lists select_resources {
     SELECT cr.pretty_name, cr.resource_id FROM cn_resources cr, cn_categories cc WHERE cr.class_id = cc.category_id AND cc.name = 'parts'
 }]
 
-lappend resource_options {"Selecione" 0}
+lappend resource_options {"Selecione" ""}
 
 ad_form -name part_ae -form {
     {part_id:key}
@@ -84,13 +84,13 @@ ad_form -name part_ae -form {
 
     db_1row select_part_info {
 	
+	
 	SELECT cp.code, cp.pretty_name, cr.pretty_name AS resource, cc.pretty_name AS model, cp.quantity, cp.price, cp.width, cp.height, cp.depth, cp.weight, cp.volume, cp.dimensions 
-	FROM cn_categories cc, cn_parts cp 
+	FROM cn_parts cp 
 	LEFT OUTER JOIN cn_resources cr ON (cr.resource_id = cp.resource_id)
+	LEFT JOIN cn_categories cc ON (cc.category_id = cp.model_id)
 	WHERE cp.part_id = :part_id
-	AND cp.model_id = cc.category_id
     }
-    
 } -edit_data {
     
     set name [util_text_to_url -replacement "" -text $pretty_name]
@@ -131,7 +131,7 @@ ad_form -name part_ae -form {
 			 -name $name \
 			 -pretty_name $pretty_name \
 			 -resource_id $resource_id \
-			 -model_id $model_id \
+			 -model_id  $model_id \
 			 -quantity $quantity \
 			 -price $price \
 			 -width $width \

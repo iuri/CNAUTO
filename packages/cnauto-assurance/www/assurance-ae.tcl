@@ -3,15 +3,17 @@ ad_page_contract {
     Add/Edit Assurance Requirement
     
 } {
-    {assurance_id:integer,optional}
+    {assurance_id ""}
     {vehicle_id ""}
     {distributor_id ""}
+    {owner_id ""}
     {assurance_number ""}
     {assurance_date:array,optional}
     {service_order ""}
     {km ""}
     {status ""}
-    {submit.x:optional}
+    {new.x:optional}
+    {edit.x:optional}
     {return_url ""}
 }
 	
@@ -26,7 +28,7 @@ if { [exists_and_not_null assurance_id] } {
 }
 
 
-if {[info exists submit.x]} { 
+if {[info exists new.x]} { 
 
     set date "$assurance_date(year) $assurance_date(month) $assurance_date(day)"
     
@@ -48,6 +50,42 @@ if {[info exists submit.x]} {
 
 
 
+if {[info exists edit.x]} { 
+
+    set date "$assurance_date(year) $assurance_date(month) $assurance_date(day)"
+
+
+    ns_log Notice "$assurance_id \n $date \n $service_order \n $vehicle_id \n $km"
+    cn_assurance::edit \
+	-assurance_id $assurance_id \
+	-assurance_date $date \
+	-service_order $service_order \
+	-vehicle_id $vehicle_id \
+	-kilometers $km \
+	-owner_id $owner_id \
+	-distributor_id $distributor_id
+       
+    
+    ad_returnredirect [export_vars -base "assurance-one" {return_url assurance_id}]
+    
+}
+
+
+
+
+if {$assurance_id != ""} {
+    set submit_name "edit"
+    set submit_value "#cnauto-assurance.Edit#"
+
+    db_1row select_assurance_info {
+	SELECT ca.assurance_number, ca.service_order, ca.vehicle_id, ca.kilometers AS km
+	FROM cn_assurances ca
+	WHERE assurance_id = :assurance_id
+    }
+} else {
+    set submit_name "new"
+    set submit_value "#cnauto-assurance.New#"
+}
 
 
 set vehicle_select_html [cn_assurance::vehicle_select_widget_html -name "vehicle_id" -key $vehicle_id]

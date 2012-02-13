@@ -19,6 +19,13 @@ ad_proc -public cn_assurance::new {
     {-context_id ""}    
 } { 
     Add a new assurance
+
+    @status pending, unapproved, approved, closed
+    pending: the assurance request lacks input information from the CN Auto distributor
+    unapproved: the assurance request is waiting for the CN Auto staff analyst
+    approved: the assurance request is approved by the CN Auto staff analyst
+    close: the assurance request was paid and finished by both parts
+
 } {
     
 
@@ -58,6 +65,116 @@ ad_proc -public cn_assurance::new {
     return $assurance_id
 }
 
+ad_proc -public cn_assurance::edit { 
+    {-assurance_id:required}
+    {-assurance_date ""}
+    {-service_order ""} 
+    {-vehicle_id ""}
+    {-kilometers ""}
+    {-owner_id ""}
+    {-distributor_id ""}
+} { 
+    Edit assurance info
+    
+    
+} {
+    
+    db_transaction {
+	db_exec_plsql update_assurance {
+	    SELECT cn_assurance__edit (
+				       :assurance_id,
+				       :assurance_date,
+				       :service_order, 
+				       :vehicle_id,
+				       :kilometers,
+				       :owner_id,
+				       :distributor_id
+				       )
+	}
+    }
+    
+    return
+}
+
+
+ad_proc -public cn_assurance::update_costs { 
+    {-assurance_id:required}
+    {-description ""}
+    {-parts_total_cost ""}
+    {-assurance_total_cost ""}
+    {-third_total_cost ""}
+    {-mo_total_cost ""}
+    {-total_cost ""}
+} { 
+    Update assurance costs
+    
+    
+} {
+    
+    db_transaction {
+	db_exec_plsql update_assurance {
+	    SELECT cn_assurance__update_costs (
+				       :assurance_id,
+				       :description,
+				       :parts_total_cost, 
+				       :assurance_total_cost,
+				       :third_total_cost,
+				       :mo_total_cost,
+				       :total_cost
+				       )
+	}
+    }
+
+    return
+}
+
+
+
+
+
+
+ad_proc -public cn_assurance::attach_parts { 
+    {-assurance_id:required}
+    {-part_id:required}
+    {-cost ""}
+    {-quantity ""}
+    {-assurance ""}
+    {-income ""}
+    {-mo_code ""}
+    {-mo_time ""}
+    {-third_cost ""}
+} { 
+    Create assurances part's list on cn_assurance_parts_requests
+    
+    
+} {
+    
+    ns_log Notice "Running ad_proc cn_assurance::attach_parts"
+    
+    
+    db_transaction {
+	set map_id [db_nextval acs_object_id_seq]
+	
+	db_exec_plsql map_assurance_parts {
+	    SELECT cn_apr__new (
+				 :map_id,
+				 :assurance_id,
+				 :part_id,
+				 :cost,
+				 :quantity,
+				 :assurance,
+				 :income,
+				 :mo_code,
+				 :mo_time,
+				 :third_cost
+				 );
+	}
+    }
+    
+    return
+}
+
+
 
 
 #####################
@@ -68,6 +185,7 @@ ad_proc -public cn_assurance::part_html_input {
     {-name}
     {-count}
     {-assurance_id}
+    {-part_id ""}
 } {
 
     Generates a html input block for parts 

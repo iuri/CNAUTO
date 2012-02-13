@@ -42,14 +42,14 @@ set city_options [db_list_of_lists select_city_info "
     SELECT name, ibge_code FROM br_ibge_municipality $where_clause2 ORDER BY name
 "]
 
-lappend city_options {"Selecione" 0}
+lappend city_options {"Selecione" ""}
 
 set type_options [db_list_of_lists select_types {
 	SELECT pretty_name, category_id
 	FROM cn_categories WHERE object_type = 'cn_person' ORDER BY pretty_name
 }]
     
-lappend type_options {"Selecione" 0}
+lappend type_options {"Selecione" ""}
 
 ad_form -name person_ae -form {
     {person_id:key}

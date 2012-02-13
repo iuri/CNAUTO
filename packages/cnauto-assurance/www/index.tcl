@@ -11,7 +11,7 @@ ad_page_contract {
     title:onevalue
 }
 
-set title "[_ cnauto-assurances.Assurances]"
+set title "[_ cnauto-assurance.Assurances]"
 set context [list $title]
 
 set return_url [ad_return_url]

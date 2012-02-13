@@ -25,7 +25,7 @@ set owner_options [db_list_of_lists select_owners {
     WHERE cp.type_id = cc.category_id AND cc.name = 'pessoafisica'
 }]
 
-lappend owner_options {"Selecione" 0}
+lappend owner_options {"Selecione" ""}
 
 set distributor_options [db_list_of_lists select_clients {
     SELECT cp.pretty_name, cp.person_id 
@@ -33,14 +33,14 @@ set distributor_options [db_list_of_lists select_clients {
     WHERE cp.type_id = cc.category_id AND cc.name = 'concessionarias'
 }]
 
-lappend distributor_options {"Selecione" 0}
+lappend distributor_options {"Selecione" ""}
 
 set chassis_options [db_list_of_lists select_chassis {
     SELECT vin, vehicle_id FROM cn_vehicles LIMIT 20
 }]
 
 
-lappend chassis_options {"Selecione" 0}
+lappend chassis_options {"Selecione" ""}
 
 set model_options [db_list_of_lists select_chassis {
     SELECT c1.pretty_name, c1.category_id 
@@ -57,7 +57,7 @@ set resource_options [db_list_of_lists select_resources {
     SELECT cr.pretty_name, cr.resource_id FROM cn_resources cr, cn_categories cc WHERE cr.class_id = cc.category_id AND cc.name = 'vehicles'
 }]
 
-lappend resource_options {"Selecione" 0}
+lappend resource_options {"Selecione" ""}
 
 set person_ae_url [export_vars -base "person-ae" {return_url}] 
 
