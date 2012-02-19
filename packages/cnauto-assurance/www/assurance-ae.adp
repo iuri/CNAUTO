@@ -6,6 +6,8 @@
 <h1>@page_title;noquote@</h1>
 
 <form name="assurance_ae" action="assurance-ae" method="post">
+<input type="hidden" id="assurance_id" name="assurance_id" value="@assurance_id@">
+ 
 <table>
   <tr>
     <td>#cnauto-assurance.Chassis#</td>

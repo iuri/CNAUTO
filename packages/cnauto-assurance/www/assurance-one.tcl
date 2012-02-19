@@ -53,22 +53,22 @@ ad_form -name assurance -mode display -has_edit 1  -form {
         {value ""}
     }
     {parts_total_cost:text
-	{label "[_ cnauto-assurance.Kilometers]"}
+	{label "[_ cnauto-assurance.Total_portals]"}
     }
     {assurance_total_cost:text
-	{label "[_ cnauto-assurance.Kilometers]"}
+	{label "[_ cnauto-assurance.Total_assurance]"}
     }
     {third_total_cost:text
-	{label "[_ cnauto-assurance.Kilometers]"}
+	{label "[_ cnauto-assurance.Total_third]"}
     }
     {mo_total_cost:text
-	{label "[_ cnauto-assurance.Kilometers]"}
+	{label "[_ cnauto-assurance.Total_MO]"}
     }
     {total_cost:text
-	{label "[_ cnauto-assurance.Kilometers]"}
+	{label "[_ cnauto-assurance.Total]"}
     }
     {description:text(textarea)
-	{label "[_ cnauto-assurance.Kilometers]"}
+	{label "[_ cnauto-assurance.Description]"}
 	{html {rows 50 cols 100}}
     }
 

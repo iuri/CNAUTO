@@ -92,7 +92,7 @@ ad_proc -public cn_core::format_output_line {
     #ns_log Notice "FORMAT LINE: $line"
 
     set suplemento [format "%15d" 0]
-    set tipomov [format "%1s" "A"]
+    set tipomov [format "%1s" "I"]
 
     set numero [format "%-15s" [lindex $line 0]]
     set vigencia [format "%-16s" [lindex $line 1]]
@@ -268,19 +268,3 @@ ad_proc -public cn_core::export_csv_to_txt {
 }
 
 
-
-
-
-ad_proc -public cn_core::util::treat_string {
-    {-str}
-} {
-    Removes special chars from the string
-} {
-
-
-
-
-    set str [string map {à á â ã ç é ê í óôõú-" "" " " ""} [string tolower $str]]
-
-    return $str 
-}

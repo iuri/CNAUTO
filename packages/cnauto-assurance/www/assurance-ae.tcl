@@ -132,6 +132,7 @@ template::head::add_javascript -script {
     
     function FillFieldsOnChange() {
 	var vehicleID = document.getElementById("vehicle_id");
+	var assuranceID = document.getElementById("assurance_id").value;
 	
 	// get selected continent from dropdown list
 	var selectedVehicle = vehicleID.options[vehicleID.selectedIndex].value;
@@ -139,7 +140,8 @@ template::head::add_javascript -script {
 	// url of page that will send xml data back to client browser
 	var requestUrl;
 	// use the following line if using asp
-	requestUrl = "assurance-ae" + "?vehicle_id=" + encodeURIComponent(selectedVehicle);
+	requestUrl = "assurance-ae" + "?vehicle_id=" + encodeURIComponent(selectedVehicle) + "&assurance_id=" + encodeURIComponent(assuranceID);
+
 	window.location.href = requestUrl;
     }
 }

@@ -114,6 +114,23 @@ END;' language 'plpgsql';
 
 
 
+
+
+CREATE TABLE cn_spreadsheet_fields (
+           field_id		integer PRIMARY KEY
+                                CONSTRAINT cn_spreadsheet_fields_field_id_pk
+                                CONSTRAINT cn_spreadsheet_fields_field_id_fk
+				REFERENCES acs_objects (object_id),
+	   spreadsheet_id	integer NOT NULL
+                                constraint cn_spreadsheet_fields_spreadsheet_id_fk
+				references cn_spreadsheets on delete cascade,
+	   name			varchar(40) NOT NULL,
+	   label		varchar(40),
+	   sort_order		integer,
+	   required_p		boolean
+);
+
+
 ------------------------------------
 -- CN SpreadSheet Fields
 ------------------------------------
@@ -130,24 +147,6 @@ SELECT acs_object_type__create_type (
     null,
     null
 );
-
-
-
-
-CREATE TABLE cn_spreadsheet_fields (
-           field_id		integer primary key
-                                constraint cn_spreadsheet_fields_field_id_fk 
-                                references acs_objects on delete cascade,
-	   spreadsheet_id	integer NOT NULL
-                                constraint cn_spreadsheet_fields_spreadsheet_id_fk
-				references cn_spreadsheets on delete cascade,
-	   name			varchar(40) NOT NULL,
-	   label		varchar(40),
-	   sort_order		integer,
-	   required_p		boolean,
-);
-
-
 
 CREATE OR REPLACE FUNCTION cn_spreadsheet_fields__new (
     integer, -- spreadsheet_id, context_id
@@ -336,16 +335,18 @@ END;' language 'plpgsql';
 -- CN SpreadSheet Elements
 ------------------------------------
 
+CREATE SEQUENCE cn_spreadsheet_element_id_seq cache 1000;
 
 CREATE TABLE cn_spreadsheet_elements (
-           element	        varchar NOT NULL,
-	   spreadsheet_id	integer NOT NULL
-                                constraint spreadsheet_elements_spreadsheet_id_fk
-				references cn_spreadsheets on delete cascade,
-	   name		        varchar,
-	   valid		boolean NOT NULL default true,
-	   constraint cn_spreadsheet_elements_un
-	   unique (element, spreadsheet_id)
+       element_id		     integer 
+       				     CONSTRAINT cn_spreadsheet_elements_element_id_pk PRIMARY KEY,
+       element			     varchar NOT NULL,
+       spreadsheet_id		     integer NOT NULL
+                              	     constraint spreadsheet_elements_spreadsheet_id_fk
+				     references cn_spreadsheets ON DELETE CASCADE
+       name		             varchar,
+       valid		     	     boolean NOT NULL default true,
+       CONSTRAINT cn_spreadsheet_elements_un UNIQUE (element, spreadsheet_id)
 );
 
 
@@ -354,17 +355,22 @@ CREATE OR REPLACE FUNCTION cn_spreadsheet_element__new (
     integer, -- spreadsheet_id
     varchar, -- name
     varchar  -- element
-) RETURNS integer AS '
-DECLARE
-    p_spreadsheet_id      alias for $1;
-    p_name                 alias for $2;
-    p_element              alias for $3;
-BEGIN
+) RETURNS varchar AS '
+  DECLARE
+    p_spreadsheet_id	alias for $1;
+    p_name              alias for $2;
+    p_element           alias for $3;
+
+    v_id		integer;
+  BEGIN
+  
+	SELECT INTO v_id NEXTVAL(''cn_spreadsheet_element_id_seq'');
+	
 
 	INSERT INTO cn_spreadsheet_elements
-	   (name, spreadsheet_id, element) 
+	   (element_id, name, spreadsheet_id, element) 
 	VALUES
-	   (p_name, p_spreadsheet_id, p_element);
+	   (v_id, p_name, p_spreadsheet_id, p_element);
 
 
 	RETURN p_element;
@@ -379,11 +385,10 @@ END;' language 'plpgsql';
 CREATE TABLE cn_spreadsheet_data (
            element		varchar NOT NULL,
 	   field_id		integer NOT NULL 
-                                constraint cn_spreadsheet_data_field_id_fk
-				references cn_spreadsheet_fields on delete cascade,
+                                CONSTRAINT cn_spreadsheet_data_field_id_fk
+				REFERENCES cn_spreadsheet_fields on delete cascade,
 	   data		        varchar,
-	   constraint cn_spreadsheet_data_un
-	   unique (field_id, element)
+	   			UNIQUE (field_id, element)
 );
 
 
@@ -398,6 +403,7 @@ DECLARE
     p_field_id        	   alias for $1;
     p_element              alias for $2;
     p_data                 alias for $3;
+
 BEGIN
 
 	insert into cn_spreadsheet_data

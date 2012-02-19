@@ -9,13 +9,13 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>f</inherit-templates-p>
     
-    <version name="0.5d" url="http://openacs.org/repository/download/apm/cn-spreadsheet-0.5d.apm">
+    <version name="0.6d" url="http://openacs.org/repository/download/apm/cn-spreadsheet-0.6d.apm">
         <owner url="mailto:iuri.sampaio@iurix.com">Iuri Sampaio</owner>
         <summary>package to manage excel spreadsheets</summary>
         <description format="text/html">package to manages spreadsheets</description>
         <maturity>0</maturity>
 
-        <provides url="cn-spreadsheet" version="0.5d"/>
+        <provides url="cn-spreadsheet" version="0.6d"/>
 
         <callbacks>
         </callbacks>
