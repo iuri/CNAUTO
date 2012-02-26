@@ -55,29 +55,11 @@ ad_form -name category_ae -form {
     }
 } -new_data {
     
-    set category_id [db_nextval acs_object_id_seq]
-    set name [util_text_to_url -replacement "" -text $pretty_name]
-    set package_id [ad_conn package_id]
+    cn_core::category::new \
+	-pretty_name $pretty_name \
+	-parent_id $parent_id \
+	-object_type $object_type
 
-    db_transaction {
-	    db_dml insert_category {
-		INSERT INTO cn_categories (
-		   category_id,
-		   package_id,
-		   parent_id,
-		   pretty_name,
-		   name,
-		   object_type
-		) VALUES (
-		     :category_id,
-		     :package_id,
-		     :parent_id,
-		     :pretty_name,
-		     :name,
-		     :object_type
-		)
-	    }
-    }
 } -edit_data {
 
     set name [util_text_to_url -replacement "" -text $pretty_name]

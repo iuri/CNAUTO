@@ -1,33 +1,45 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <message_catalog package_key="cnauto-assurance" locale="en_US" charset="ISO-8859-1">
 
+  <msg key="Add">Add</msg>
   <msg key="Add_a_new_assurance">Add a new assurance</msg>
+  <msg key="Add_a_new_part">Add a new part</msg>
   <msg key="Add_assurance">Add assurance</msg>
+  <msg key="Add_part">Add part
+</msg>
   <msg key="Add_parts">Add parts</msg>
   <msg key="Assurance">Assurance</msg>
   <msg key="Assurance_cost">Assurance Cost</msg>
   <msg key="Assurance_date">Assurance Date</msg>
+  <msg key="Assurance_info">Assurance Info</msg>
   <msg key="Assurance_number">Assurance Number</msg>
+  <msg key="Assurance_total">Assurance Total</msg>
   <msg key="Assurance_total_cost">Assurance Total Cost</msg>
   <msg key="Assurances">Assurances</msg>
   <msg key="Cancel">Cancel</msg>
   <msg key="Chassis">Chassis</msg>
   <msg key="Code">Code</msg>
   <msg key="Cost">Cost</msg>
+  <msg key="Description">Description</msg>
   <msg key="Diagnostics_Solution">Diagnostics &amp; Solution</msg>
   <msg key="Distributor">Distributor</msg>
+  <msg key="Edit">Edit</msg>
+  <msg key="Edit_assurance">Edit assurance</msg>
   <msg key="Import_CSV_file">Import CSV file</msg>
   <msg key="Import_csv_file">Import CSV file</msg>
   <msg key="Incomes">Incomes</msg>
+  <msg key="Kilometers">Kilometers</msg>
   <msg key="KM">KM</msg>
   <msg key="MO_code">MO Code</msg>
   <msg key="MO_time">MO Time</msg>
   <msg key="MO_total_cost">MO Total Cost</msg>
   <msg key="Model">Model</msg>
+  <msg key="Name">Name</msg>
   <msg key="New">New</msg>
   <msg key="Number">Number</msg>
   <msg key="Owner">Owner</msg>
   <msg key="Part_cost">Part Cost</msg>
+  <msg key="Parts_total">Parts_total</msg>
   <msg key="Parts_total_cost">Part Total Cost</msg>
   <msg key="Person">Person</msg>
   <msg key="Pretty_name">Name</msg>
@@ -36,8 +48,18 @@
   <msg key="Search">Search</msg>
   <msg key="Select">Select</msg>
   <msg key="Service_order">S.O. Number</msg>
+  <msg key="SO_date">S.O. Date</msg>
+  <msg key="Status">Status</msg>
   <msg key="Third_services">Third Services</msg>
+  <msg key="Third_services_cost">Third service cost</msg>
   <msg key="third_total_cost">Third Total Cost</msg>
+  <msg key="Total">Total</msg>
+  <msg key="Total_assurance">Assurance Total</msg>
   <msg key="Total_cost">Total Cost</msg>
+  <msg key="Total_MO">MO Total</msg>
+  <msg key="Total_parts">Parts Total</msg>
+  <msg key="Total_third">Third Services</msg>
+  <msg key="Unit_cost">Unit</msg>
+  <msg key="y-m-d">YYYY-MM-DD</msg>
   <msg key="Year">Year</msg>
 </message_catalog>

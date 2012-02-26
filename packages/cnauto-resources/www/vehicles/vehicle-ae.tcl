@@ -149,6 +149,7 @@ ad_form -name vehicle_ae -form {
 
 } -edit_data {
 
+    set vin [string trim $vin]
 
     set arrival_date "[template::util::date::get_property year $arrival_date] [template::util::date::get_property month $arrival_date] [template::util::date::get_property day $arrival_date]"
     set billing_date "[template::util::date::get_property year $billing_date] [template::util::date::get_property month $billing_date] [template::util::date::get_property day $billing_date]"
@@ -184,10 +185,13 @@ ad_form -name vehicle_ae -form {
 	ad_return_complaint 1 "The chassis already exists on the database! Please <a href=\"javascript:history.go(-1);\">go back and fix it!</a> "
     } else {
 			  
+	set vin [string trim $vin]
 
 	set arrival_date "[template::util::date::get_property year $arrival_date] [template::util::date::get_property month $arrival_date] [template::util::date::get_property day $arrival_date]"
 	set billing_date "[template::util::date::get_property year $billing_date] [template::util::date::get_property month $billing_date] [template::util::date::get_property day $billing_date]"
 	set purchase_date "[template::util::date::get_property year $purchase_date] [template::util::date::get_property month $purchase_date] [template::util::date::get_property day $purchase_date]"
+	
+	
 	
 	cn_resources::vehicle::new \
 	    -vin $vin \

@@ -142,7 +142,7 @@ ad_form -extend -name person_ae -form {
 	{label "[_ cnauto-resources.Country]"}
 	{options {{"Select" ""} {"Brazil" "BR"} {"Foreign Country" "EX"}}}
     }
-    {contact_id:integer(hidden) }
+    {contact_id:integer(hidden),optional }
     {return_url:text(hidden)
 	{value $return_url}
     }

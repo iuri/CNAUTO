@@ -24,7 +24,7 @@ lappend model_options {"Selecione" ""}
 
 
 set resource_options [db_list_of_lists select_resources {
-    SELECT cr.pretty_name, cr.resource_id FROM cn_resources cr, cn_categories cc WHERE cr.class_id = cc.category_id AND cc.name = 'parts'
+    SELECT cr.pretty_name, cr.resource_id FROM cn_resources cr, cn_categories cc WHERE cr.class_id = cc.category_id AND cc.name = 'part'
 }]
 
 lappend resource_options {"Selecione" ""}

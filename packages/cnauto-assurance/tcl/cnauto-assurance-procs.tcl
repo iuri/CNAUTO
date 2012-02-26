@@ -14,6 +14,8 @@ ad_proc -public cn_assurance::new {
     {-vehicle_id ""}
     {-kilometers ""}
     {-status ""}
+    {-owner_id ""}
+    {-distributor_id ""}
     {-creation_ip ""}
     {-creation_user ""}
     {-context_id ""}    
@@ -56,6 +58,8 @@ ad_proc -public cn_assurance::new {
 				  :vehicle_id,
 				  :kilometers,
 				  :status,
+				  :owner_id,
+				  :distributor_id,
 				  :creation_ip,
 				  :creation_user,
 				  :context_id
@@ -99,6 +103,7 @@ ad_proc -public cn_assurance::edit {
 
 ad_proc -public cn_assurance::update_costs { 
     {-assurance_id:required}
+    {-status ""}
     {-description ""}
     {-parts_total_cost ""}
     {-assurance_total_cost ""}
@@ -106,8 +111,8 @@ ad_proc -public cn_assurance::update_costs {
     {-mo_total_cost ""}
     {-total_cost ""}
 } { 
-    Update assurance costs
-    
+
+    Update assurance costs    
     
 } {
     
@@ -115,6 +120,7 @@ ad_proc -public cn_assurance::update_costs {
 	db_exec_plsql update_assurance {
 	    SELECT cn_assurance__update_costs (
 				       :assurance_id,
+				       :status,
 				       :description,
 				       :parts_total_cost, 
 				       :assurance_total_cost,
@@ -124,13 +130,53 @@ ad_proc -public cn_assurance::update_costs {
 				       )
 	}
     }
-
+    
     return
 }
 
 
 
+ad_proc -public cn_assurance::attach_file {
+    {-assurance_id:required}
+    {-tmp_filename:required}
+    {-filename ""}
+} {
 
+    Attach files to a assurance requirement
+} {
+
+    set item_id [db_nextval acs_object_id_seq]
+
+    db_transaction {
+	content::item::new \
+	    -item_id $item_id \
+	    -name "${filename}-${item_id}" \
+	    -parent_id $assurance_id \
+	    -package_id [ad_conn package_id] \
+	    -content_type "assurance_file_object" \
+	    -creation_user [ad_conn user_id] \
+	    -creation_ip [ad_conn peeraddr]
+	
+	set n_bytes [file size $tmp_filename]
+	set mime_type [ns_guesstype $tmp_filename]
+	set revision_id [cr_import_content \
+			     -item_id $item_id \
+			     -storage_type file \
+			     -creation_user [ad_conn user_id] \
+			     -creation_ip [ad_conn peeraddr] \
+			     -description $filename \
+			     -package_id [ad_conn package_id] \
+			     $assurance_id \
+			     $tmp_filename \
+			     $n_bytes \
+			     $mime_type \
+			     "assurance-${assurance_id}-file-${filename}-${item_id}-$n_bytes"
+			]
+	
+	item::publish -item_id $item_id -revision_id $revision_id
+    }
+    return
+}
 
 
 ad_proc -public cn_assurance::attach_parts { 
@@ -174,12 +220,155 @@ ad_proc -public cn_assurance::attach_parts {
     return
 }
 
+ad_proc -public cn_assurance::detach_parts { 
+    {-assurance_id:required}
+} {
+    Remoevs all parts attached to the assurance
+} {
+    
+    set map_ids [db_list select_map_id {
+	SELECT map_id FROM cn_assurance_part_requests WHERE assurance_id = :assurance_id
+    }]
+		 
+    db_transaction {
+	foreach map_id $map_ids {
+	    db_exec_plsql delete_map {
+		SELECT cn_apr__delete (:map_id)
+	    }
+	}
+    }
+
+    return
+}
+
+
+
+ad_proc -public cn_assurance::change_status {
+    {-assurance_id:required}
+    {-status:required}
+} {
+    Changes assurance status
+} {
+    
+    db_transaction {
+	db_dml update_status {
+	    UPDATE cn_assurances SET status = :status
+	}
+    }
+    
+    return
+}
+
+#####################
+### BEGIN HTML API
+#####################
+
+ad_proc -public cn_assurance::workflow_cicle_html {
+    {-status:required}
+} {
+    Returns HTML code for the workflow cicle
+} {
+
+    switch $status {
+	pending {
+	    set workflow_html "
+		<div id=\"timeline\"> <hr style=\"width:900px;position:relative;\">
+		<span style=\"color:red;margin-left:5%;\">Pending</span>
+		<span style=\"margin-left:21%;\">Unapproved</span>
+		<span style=\"margin-left:21%;\">Approved</span>
+		<span style=\"margin-left:22%;\">Closed</span>
+		</div></div
+		
+		<ul class=\"list\">
+		
+		<li class=\"selected\">&nbsp;</li>
+		<li class=\"line\">&nbsp;</li>
+		<li class=\"line\">&nbsp;</li>
+		<li class=\"line\">&nbsp;</li>
+		<div>
+		
+		</ul>
+	    "
+
+
+	}
+
+	unapproved {
+	    set workflow_html "
+		<div id=\"timeline\"> <hr style=\"width:900px;position:relative;\">
+		<span style=\"margin-left:5%;\">Pending</span>
+		<span style=\"color:red;margin-left:21%;\">Unapproved</span>
+		<span style=\"margin-left:21%;\">Approved</span>
+		<span style=\"margin-left:22%;\">Closed</span>
+		</div></div
+		
+		<ul class=\"list\">
+		
+		<li class=\"past\">&nbsp;</li>
+		<li class=\"selected\">&nbsp;</li>
+		<li class=\"line\">&nbsp;</li>
+		<li class=\"line\">&nbsp;</li>
+		<div>
+		
+		</ul>
+	    "
+
+	}
+	approved {
+
+	    set workflow_html "
+		<div id=\"timeline\"> <hr style=\"width:900px;position:relative;\">
+		<span style=\"margin-left:5%;\">Pending</span>
+		<span style=\"margin-left:21%;\">Unapproved</span>
+		<span style=\"color:red;margin-left:21%;\">Approved</span>
+		<span style=\"margin-left:22%;\">Closed</span>
+		</div></div
+		
+		<ul class=\"list\">
+		
+		<li class=\"past\">&nbsp;</li>
+		<li class=\"past\">&nbsp;</li>
+		<li class=\"selected\">&nbsp;</li>
+		<li class=\"line\">&nbsp;</li>
+		<div>
+		
+		</ul>
+	    "
+
+	}
+	closed {
+
+	    set workflow_html "
+		<div id=\"timeline\"> <hr style=\"width:900px;position:relative;\">
+		<span style=\"margin-left:5%;\">Pending</span>
+		<span style=\"margin-left:21%;\">Unapproved</span>
+		<span style=\"margin-left:21%;\">Approved</span>
+		<span style=\"color:red;margin-left:22%;\">Closed</span>
+		</div></div
+		
+		<ul class=\"list\">
+		
+		<li class=\"past\">&nbsp;</li>
+		<li class=\"past\">&nbsp;</li>
+		<li class=\"past\">&nbsp;</li>
+		<li class=\"selected\">&nbsp;</li>
+		<div>
+		
+		</ul>
+	    "
+
+	}
+    }
+    
+    return $workflow_html
+}
 
 
 
 #####################
-### BEGIN HTML FORM API
+### BEGIN HTML FROM API
 #####################
+
 
 ad_proc -public cn_assurance::part_html_input {
     {-name}

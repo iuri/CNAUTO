@@ -68,6 +68,8 @@ CREATE OR REPLACE FUNCTION cn_assurance__new (
        integer,		   -- vehicle_id
        numeric,		   -- kilometers	  
        varchar,		   -- status
+       integer,		   -- owner_id
+       integer,		   -- distributor_id
        varchar,		   -- creation_ip
        integer,		   -- creation_user
        integer		   -- context_id	   
@@ -80,9 +82,11 @@ CREATE OR REPLACE FUNCTION cn_assurance__new (
        	p_vehicle_id		ALIAS FOR $5;
         p_kilometers		ALIAS FOR $6;
  	p_status		ALIAS FOR $7;
-	p_creation_ip		ALIAS FOR $8;
-	p_creation_user		ALIAS FOR $9;	
-	p_context_id		ALIAS FOR $10;
+	p_owner_id		ALIAS FOR $8;
+	p_distributor_id	ALIAS FOR $9;
+	p_creation_ip		ALIAS FOR $10;
+	p_creation_user		ALIAS FOR $11;	
+	p_context_id		ALIAS FOR $12;
 
 	v_id			integer;
 
@@ -106,7 +110,9 @@ CREATE OR REPLACE FUNCTION cn_assurance__new (
 	       service_order_date,
 	       vehicle_id,
 	       kilometers,
-	       status
+	       status,
+	       owner_id,
+	       distributor_id
 	) VALUES (
 	       v_id,
 	       p_assurance_number,
@@ -115,7 +121,9 @@ CREATE OR REPLACE FUNCTION cn_assurance__new (
 	       p_service_order_date,
 	       p_vehicle_id,
 	       p_kilometers,
-	       p_status
+	       p_status,
+	       p_owner_id,
+	       p_distributor_id
 	);
 
 
@@ -159,6 +167,7 @@ CREATE OR REPLACE FUNCTION cn_assurance__edit (
 
 CREATE OR REPLACE FUNCTION cn_assurance__update_costs (
        integer,		   -- assurance_id
+       varchar,		   -- status
        text,		   -- description
        numeric,		   -- parts_total_cost
        numeric,		   -- assurance_total_cost
@@ -168,16 +177,19 @@ CREATE OR REPLACE FUNCTION cn_assurance__update_costs (
 ) RETURNS integer AS '
   DECLARE
        	p_assurance_id		ALIAS FOR $1;
-       	p_description		ALIAS FOR $2;
-       	p_parts_total_cost	ALIAS FOR $3; 
-       	p_assurance_total_cost	ALIAS FOR $4;
-        p_third_total_cost	ALIAS FOR $5;
-	p_mo_total_cost		ALIAS FOR $6;
-	p_total_cost		ALIAS FOR $7;
+	p_status		ALIAS FOR $2;
+       	p_description		ALIAS FOR $3;
+       	p_parts_total_cost	ALIAS FOR $4; 
+       	p_assurance_total_cost	ALIAS FOR $5;
+        p_third_total_cost	ALIAS FOR $6;
+	p_mo_total_cost		ALIAS FOR $7;
+	p_total_cost		ALIAS FOR $8;
 
 
   BEGIN
-	UPDATE cn_assurances SET	
+	UPDATE cn_assurances SET
+	       status = p_status,
+	       description = p_description,	
 	       parts_total_cost = p_parts_total_cost,
 	       assurance_total_cost = p_assurance_total_cost,
 	       third_total_cost = p_third_total_cost,
@@ -304,3 +316,18 @@ CREATE OR REPLACE FUNCTION cn_apr__new (
 
 END;' LANGUAGE 'plpgsql';
 
+
+-- Create a file object to storage assurance files using content repository
+SELECT content_type__create_type (
+       'assurance_file_object',	 -- content_type
+       'content_revision',       -- supertype. We search revision content 
+                                 -- first, before item metadata
+       'Assurance File Object',  -- pretty_name
+       'Assurance File Objects', -- pretty_plural
+       NULL,        -- table_name
+       -- DAVEB: acs_object_types supports a null table name so we do that
+       -- instead of passing a false value so we can actually use the
+       -- content repository instead of duplicating all the code in file-storage
+       NULL,	         -- id_column
+       'assurance_file__get_title' -- name_method
+);

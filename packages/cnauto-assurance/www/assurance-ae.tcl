@@ -18,7 +18,7 @@ ad_page_contract {
 }
 	
 
-
+ns_log Notice "VEHI $vehicle_id"
 if { [exists_and_not_null assurance_id] } {
     set page_title [_ cnauto-assurance.Edit_assurance]
     #set ad_form_mode display
@@ -39,6 +39,8 @@ if {[info exists new.x]} {
 			  -vehicle_id $vehicle_id \
 			  -kilometers $km \
 			  -status "pending" \
+			  -owner_id $owner_id \
+			  -distributor_id $distributor_id \
 			  -creation_ip  [ad_conn peeraddr] \
 			  -creation_user [ad_conn user_id] \
 			  -context_id [ad_conn package_id] \
@@ -66,7 +68,7 @@ if {[info exists edit.x]} {
 	-distributor_id $distributor_id
        
     
-    ad_returnredirect [export_vars -base "assurance-one" {return_url assurance_id}]
+    ad_returnredirect [export_vars -base "assurance-ae-2" {return_url assurance_id}]
     
 }
 
@@ -82,7 +84,12 @@ if {$assurance_id != ""} {
 	FROM cn_assurances ca
 	WHERE assurance_id = :assurance_id
     }
-} else {
+} else { 
+
+    if {$vehicle_id != ""} {
+	set assurance_number [cn_assurance::generate_assurance_number -vehicle_id $vehicle_id] 
+    }
+
     set submit_name "new"
     set submit_value "#cnauto-assurance.New#"
 }
@@ -118,11 +125,6 @@ set code [db_string select_code {
 } -default null]
 
 
-
-if {$vehicle_id != ""} {
-    set assurance_number [cn_assurance::generate_assurance_number -vehicle_id $vehicle_id] 
-    
-}
 
 set assurance_date_html [cn_assurance::input_date_html -name "assurance_date"]
 

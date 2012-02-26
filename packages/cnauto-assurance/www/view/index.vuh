@@ -1,0 +1,62 @@
+################## KLUDGE BY STAS ###############
+# Try and look up the item in the content repository
+#################################################
+ad_page_contract {
+   
+    @author Unknown
+    @creation-date Unknown
+    @cvs-id $Id: index.vuh,v 1.3 2006/08/08 21:26:49 donb Exp $
+} {    
+    { revision_id "" }
+}
+
+# Get the paths
+set the_url [ad_conn path_info]
+set splitted_url [split $the_url "/"]
+
+ns_log Notice "$the_url | $splitted_url"
+
+set splitted_url [split $splitted_url "."]
+set item_id [db_string select_item_id {
+    SELECT item_id FROM cr_revisions WHERE revision_id = :revision_id
+}]
+
+
+set file_extension [lindex $splitted_url 1]
+permission::require_permission -party_id [ad_conn user_id] -object_id $item_id -privilege read
+
+if {[exists_and_not_null item_id]} { 
+   cr_write_content -item_id $item_id
+}	
+	
+
+
+#else 
+
+set path [cr_fs_path CR_FILES]
+set revision_id [db_string select_revision {select content_item__get_live_revision(:item_id)}]
+
+ns_log Notice "$path | $revision_id FRF"
+
+set filename [db_string write_file_content {select :path || content
+          					from cr_revisions
+	            				where revision_id = :revision_id}]
+
+set mime_type [db_string write_file_content {select mime_type
+          					from cr_revisions
+	            				where revision_id = :revision_id}]
+
+ns_log Notice "$mime_type"
+switch $mime_type {
+		image/gif {set file_extension "gif"}
+		image/jpeg {set file_extension "jpeg"}
+		image/png {set file_extension "png"}
+		default {set file_extension "txt"}
+}
+
+ns_set update [ns_conn outputheaders] Content-Disposition "attachment; filename=\"${item_id}.${file_extension}\"" 
+ns_returnfile 200 $mime_type $filename
+ad_script_abort
+
+
+

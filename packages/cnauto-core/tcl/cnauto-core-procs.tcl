@@ -18,6 +18,49 @@ namespace eval cn_core::util {}
 namespace eval cn_categories {}
 
 namespace eval cn_categories::category {}
+
+
+ad_proc -public cn_categories::category::new {
+    {-pretty_name ""}
+    {-parent_id ""}
+    {-package_id ""}
+    {-object_type ""}
+} {
+
+    Adds a new category
+} {
+
+    
+    
+    set category_id [db_nextval acs_object_id_seq]
+    set name [util_text_to_url -replacement "" -text $pretty_name]
+
+    if {$package_id == ""} {
+	set package_id [ad_conn package_id]
+    }
+
+    db_transaction {
+	db_dml insert_category {
+	    INSERT INTO cn_categories (
+				       category_id,
+				       package_id,
+				       parent_id,
+				       pretty_name,
+				       name,
+				       object_type
+				       ) VALUES (
+						 :category_id,
+						 :package_id,
+						 :parent_id,
+						 :pretty_name,
+						 :name,
+						 :object_type
+				       )
+	}
+    }
+    
+    return $category_id
+}
 ad_proc -public cn_categories::category::delete {
     category_id
 } {

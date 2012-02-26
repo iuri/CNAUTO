@@ -164,7 +164,8 @@ CREATE TABLE cn_parts (
     resource_id       integer
     		      CONSTRAINT cn_parts_resource_id_fk
 		      REFERENCES cn_resources(resource_id),
-    model_id	      CONSTRAINT cn_parts_model_id_fk
+    model_id	      integer
+    		      CONSTRAINT cn_parts_model_id_fk
     		      REFERENCES cn_categories (category_id),
     quantity 	      integer,
     price 	      varchar(100),
