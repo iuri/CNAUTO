@@ -1,0 +1,113 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/tcl
+END
+bug-procs.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/tcl/bug-procs.tcl
+END
+bug-search-procs.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/tcl/bug-search-procs.tcl
+END
+bug-tracker-scheduled-init.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/tcl/bug-tracker-scheduled-init.tcl
+END
+bug-tracker-scheduled-procs.xql
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/tcl/bug-tracker-scheduled-procs.xql
+END
+bug-tracker-scheduled-procs-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/tcl/bug-tracker-scheduled-procs-postgresql.xql
+END
+bug-tracker-procs.xql
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/tcl/bug-tracker-procs.xql
+END
+install-procs.xql
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/tcl/install-procs.xql
+END
+bug-tracker-procs-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/tcl/bug-tracker-procs-postgresql.xql
+END
+install-procs-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/tcl/install-procs-postgresql.xql
+END
+bug-tracker-notification-procs.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/tcl/bug-tracker-notification-procs.tcl
+END
+install-procs-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/tcl/install-procs-oracle.xql
+END
+bug-tracker-procs-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/tcl/bug-tracker-procs-oracle.xql
+END
+bug-procs.xql
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/tcl/bug-procs.xql
+END
+bug-procs-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/tcl/bug-procs-postgresql.xql
+END
+bug-procs-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/tcl/bug-procs-oracle.xql
+END
+bug-tracker-scheduled-procs.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/tcl/bug-tracker-scheduled-procs.tcl
+END
+bug-tracker-procs.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/tcl/bug-tracker-procs.tcl
+END
+install-procs.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/tcl/install-procs.tcl
+END

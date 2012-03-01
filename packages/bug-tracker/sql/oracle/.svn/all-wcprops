@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/oracle
+END
+bug-tracker-create-packages.sql
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/oracle/bug-tracker-create-packages.sql
+END
+upgrade-1.2d2-1.2d6.sql
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/oracle/upgrade-1.2d2-1.2d6.sql
+END
+upgrade-1.5d1-1.5d2.sql
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/oracle/upgrade-1.5d1-1.5d2.sql
+END
+upgrade-1.4-1.4.1.sql
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/oracle/upgrade-1.4-1.4.1.sql
+END
+bug-tracker-create.sql
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/oracle/bug-tracker-create.sql
+END
+bug-tracker-drop.sql
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/oracle/bug-tracker-drop.sql
+END
+upgrade-1.2d10-1.2d11.sql
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/oracle/upgrade-1.2d10-1.2d11.sql
+END
+bug-tracker-create-tables.sql
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/oracle/bug-tracker-create-tables.sql
+END
+bug-tracker-drop-data.sql
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/oracle/bug-tracker-drop-data.sql
+END

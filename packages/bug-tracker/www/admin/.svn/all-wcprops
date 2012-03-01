@@ -1,0 +1,419 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin
+END
+project-maintainer-edit.xql
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/project-maintainer-edit.xql
+END
+project-maintainer-edit.adp
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/project-maintainer-edit.adp
+END
+category-edit.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/category-edit.tcl
+END
+version-release.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/version-release.tcl
+END
+distro-component-delete.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/distro-component-delete.tcl
+END
+distro-delete.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/distro-delete.tcl
+END
+index.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/index.tcl
+END
+version-ae.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/version-ae.tcl
+END
+component-ae-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/component-ae-postgresql.xql
+END
+version-set-active-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/version-set-active-oracle.xql
+END
+category-defaults.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/category-defaults.tcl
+END
+component-delete.xql
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/component-delete.xql
+END
+distros.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/distros.tcl
+END
+version-ae-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/version-ae-oracle.xql
+END
+permissions.adp
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/permissions.adp
+END
+version-delete.xql
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/version-delete.xql
+END
+categories.adp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/categories.adp
+END
+versions.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/versions.tcl
+END
+initial-setup.adp
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/initial-setup.adp
+END
+version-set-active-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/version-set-active-postgresql.xql
+END
+project-edit.xql
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/project-edit.xql
+END
+project-edit.adp
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/project-edit.adp
+END
+project-maintainer-edit.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/project-maintainer-edit.tcl
+END
+formwizard.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/formwizard.tcl
+END
+version-release-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/version-release-oracle.xql
+END
+version-ae-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/version-ae-postgresql.xql
+END
+index-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/index-oracle.xql
+END
+versions-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/versions-oracle.xql
+END
+permissions-user-add.adp
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/permissions-user-add.adp
+END
+category-delete-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/category-delete-oracle.xql
+END
+component-delete.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/component-delete.tcl
+END
+component-ae.adp
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/component-ae.adp
+END
+component-ae.xql
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/component-ae.xql
+END
+distro-edit.adp
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/distro-edit.adp
+END
+categories-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/categories-oracle.xql
+END
+permissions.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/permissions.tcl
+END
+distro-component-add.adp
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/distro-component-add.adp
+END
+distros-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/distros-oracle.xql
+END
+category-delete.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/category-delete.tcl
+END
+project-edit-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/project-edit-oracle.xql
+END
+category-edit.adp
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/category-edit.adp
+END
+version-release.xql
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/version-release.xql
+END
+version-release.adp
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/version-release.adp
+END
+version-delete.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/version-delete.tcl
+END
+categories.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/categories.tcl
+END
+version-release-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/version-release-postgresql.xql
+END
+initial-setup.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/initial-setup.tcl
+END
+version-set-active.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/version-set-active.tcl
+END
+category-set-default.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/category-set-default.tcl
+END
+project-edit.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/project-edit.tcl
+END
+index.xql
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/index.xql
+END
+index.adp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/index.adp
+END
+version-ae.xql
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/version-ae.xql
+END
+version-ae.adp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/version-ae.adp
+END
+index-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/index-postgresql.xql
+END
+versions-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/versions-postgresql.xql
+END
+category-delete-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/category-delete-postgresql.xql
+END
+category-defaults.adp
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/category-defaults.adp
+END
+categories-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/categories-postgresql.xql
+END
+distros.adp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/distros.adp
+END
+component-ae-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/component-ae-oracle.xql
+END
+distros-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/distros-postgresql.xql
+END
+project-edit-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/project-edit-postgresql.xql
+END
+permissions-user-add.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/permissions-user-add.tcl
+END
+component-ae.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/component-ae.tcl
+END
+distro-edit.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/distro-edit.tcl
+END
+distro-component-add.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/distro-component-add.tcl
+END
+versions.adp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/versions.adp
+END
+versions.xql
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/admin/versions.xql
+END

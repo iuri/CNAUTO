@@ -1,0 +1,80 @@
+10
+
+dir
+1682
+http://svn.softwarepublico.gov.br/svn/openacs/spb/packages/bug-tracker
+http://svn.softwarepublico.gov.br/svn/openacs
+
+
+
+2007-08-15T18:16:30.113791Z
+153
+eduardo
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+65270c51-0825-0410-a41e-fc8022ce9244
+
+sql
+dir
+
+bug-tracker.info
+file
+
+
+
+
+2012-03-01T14:02:56.000000Z
+35f8da9163f9aed38d2315bdd19709a4
+2007-08-15T18:16:30.113791Z
+153
+eduardo
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+4190
+
+tcl
+dir
+
+www
+dir
+
+lib
+dir
+
+catalog
+dir
+
+CVS
+dir
+
