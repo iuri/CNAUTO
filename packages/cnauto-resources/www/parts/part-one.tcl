@@ -56,10 +56,10 @@ ad_form -extend -name part_one -on_request {
     db_1row select_part_info {
 	
 	SELECT cp.code, cp.pretty_name, cr.pretty_name AS resource, cc.pretty_name AS model, cp.quantity, cp.price, cp.width, cp.height, cp.depth, cp.weight, cp.volume, cp.dimensions 
-	FROM cn_categories cc, cn_parts cp 
+	FROM cn_parts cp 
 	LEFT OUTER JOIN cn_resources cr ON (cr.resource_id = cp.resource_id)
+	LEFT JOIN cn_categories cc ON (cc.category_id = cp.model_id)
 	WHERE cp.part_id = :part_id
-	AND cp.model_id = cc.category_id
     }
 
     set part_ae_url [export_vars -base "part-ae" {part_id return_url}]

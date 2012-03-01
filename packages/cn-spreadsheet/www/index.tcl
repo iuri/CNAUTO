@@ -60,7 +60,7 @@ template::list::create \
 	atd {
 	    label ""
 	    display_template {
-		@spreadsheet_list.qtd@ emails cadastrados 
+		@spreadsheet_list.qtd@ #cn-spreadsheet.regitered_items# 
 	    }
 	}
 	actions {

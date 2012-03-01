@@ -7,10 +7,10 @@ ad_library {
 }
 
 
-namespace eval cnauto_core::install {}
+namespace eval cn_core::install {}
 
 
-ad_proc -private cnauto_core::install::after_install {} {
+ad_proc -private cn_core::install::after_install {} {
 
    Instantiate and Mount CNAUTO subsite and app's
 } {
@@ -62,16 +62,7 @@ ad_proc -private cnauto_core::install::after_install {} {
 					  ]
 	}
 	
-	if {[apm_package_installed_p "cnauto-resources"]} {
-	    set newsletter_package_id [site_node::instantiate_and_mount -node_name "resources" \
-					   -package_key "cnauto-resources" \
-					   -package_name "Resources" \
-					   -context_id $subsite_package_id \
-					   -parent_node_id $subsite_node_id \
-					  ]
-	}
-	
-	if {[apm_package_installed_p "cnauto-assurances"]} {
+	if {[apm_package_installed_p "assurances"]} {
 	    set assurances_package_id [site_node::instantiate_and_mount -node_name "assurances" \
 					   -package_key "cnauto-assurances" \
 					   -package_name "Assurances" \
@@ -79,16 +70,7 @@ ad_proc -private cnauto_core::install::after_install {} {
 					   -parent_node_id $subsite_node_id \
 					  ]
 	}
-	
-	if {[apm_package_installed_p "cnauto-resources"]} {
-	    set assurances_package_id [site_node::instantiate_and_mount -node_name "resources" \
-					   -package_key "cnauto-resources" \
-					   -package_name "Resources" \
-					   -context_id $subsite_package_id \
-					   -parent_node_id $subsite_node_id \
-					  ]
-	}
-	
+		
 	if {[apm_package_installed_p "cnauto-orders"]} {
 	    set orders_package_id [site_node::instantiate_and_mount -node_name "orders" \
 				       -package_key "cnauto-orders" \
@@ -106,12 +88,66 @@ ad_proc -private cnauto_core::install::after_install {} {
 					   -parent_node_id $subsite_node_id \
 					  ]
 	}
-    }	
-	return
+
+
+
+	if {[apm_package_installed_p "resources"]} {
+	    set resources_package_id [site_node::instantiate_and_mount -node_name "resources" \
+					  -package_key "cnauto-resources" \
+					  -package_name "Resources" \
+					  -context_id $subsite_package_id \
+					  -parent_node_id $subsite_node_id \
+					 ]
+	
+	
+	    cn_categories::category::new \
+		-pretty_name "Vehicle" \
+		-object_type "cn_resource" \
+		-package_id $resources_package_id
+	    
+	    cn_categories::category::new \
+		-pretty_name "Part" \
+		-object_type "cn_resource" \
+		-package_id $resources_package_id
+	    
+	    
+	    set person_parent_id [cn_categories::category::new \
+				      -pretty_name "Person" \
+				      -object_type "cn_person" \
+				      -package_id $resources_package_id]
+	    
+	    cn_categories::category::new \
+		-pretty_name "Fornecedor" \
+		-object_type "cn_person" \
+		-parent_id $person_parent_id \
+		-package_id $resources_package_id
+	    
+	    cn_categories::category::new \
+		-pretty_name "Cliente" \
+		-object_type "cn_person" \
+		-parent_id $person_parent_id \
+		-package_id $resources_package_id
+	    
+	    cn_categories::category::new \
+		-pretty_name "Pessoa Fisica" \
+		-object_type "cn_person" \
+		-parent_id $person_parent_id \
+		-package_id $resources_package_id
+	    
+	    cn_categories::category::new \
+		-pretty_name "Concessionarias" \
+		-object_type "cn_person" \
+		-parent_id $person_parent_id \
+		-package_id $resources_package_id
+	}
+   
+    }
+    
+    return
 }
-
-
-ad_proc -private  cnauto_core::install::before_unmount {
+    
+    
+    ad_proc -private  cnauto_core::install::before_unmount {
     {-package_id}
 } {
 

@@ -2,12 +2,18 @@ ad_page_contract {
     Shows person's info
 } {
     {person_id:integer,optional}
-    {type_id:integer,notnull}
+    {type_id:integer,optional}
     {email ""}
     {return_url ""}
 }
 
 set page_title [_ cnauto-assurance.Person_info]
+
+if {[info exists person_id]} {
+    set type_id [db_string select_type_id {
+	SELECT type_id FROM cn_persons WHERE person_id = :person_id
+    }]
+}
 
 ns_log Notice "$return_url"
 

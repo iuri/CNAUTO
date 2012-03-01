@@ -18,6 +18,49 @@ namespace eval cn_core::util {}
 namespace eval cn_categories {}
 
 namespace eval cn_categories::category {}
+
+
+ad_proc -public cn_categories::category::new {
+    {-pretty_name ""}
+    {-parent_id ""}
+    {-package_id ""}
+    {-object_type ""}
+} {
+
+    Adds a new category
+} {
+
+    
+    
+    set category_id [db_nextval acs_object_id_seq]
+    set name [util_text_to_url -replacement "" -text $pretty_name]
+
+    if {$package_id == ""} {
+	set package_id [ad_conn package_id]
+    }
+
+    db_transaction {
+	db_dml insert_category {
+	    INSERT INTO cn_categories (
+				       category_id,
+				       package_id,
+				       parent_id,
+				       pretty_name,
+				       name,
+				       object_type
+				       ) VALUES (
+						 :category_id,
+						 :package_id,
+						 :parent_id,
+						 :pretty_name,
+						 :name,
+						 :object_type
+				       )
+	}
+    }
+    
+    return $category_id
+}
 ad_proc -public cn_categories::category::delete {
     category_id
 } {
@@ -92,7 +135,7 @@ ad_proc -public cn_core::format_output_line {
     #ns_log Notice "FORMAT LINE: $line"
 
     set suplemento [format "%15d" 0]
-    set tipomov [format "%1s" "A"]
+    set tipomov [format "%1s" "I"]
 
     set numero [format "%-15s" [lindex $line 0]]
     set vigencia [format "%-16s" [lindex $line 1]]
@@ -268,19 +311,3 @@ ad_proc -public cn_core::export_csv_to_txt {
 }
 
 
-
-
-
-ad_proc -public cn_core::util::treat_string {
-    {-str}
-} {
-    Removes special chars from the string
-} {
-
-
-
-
-    set str [string map {à á â ã ç é ê í óôõú-" "" " " ""} [string tolower $str]]
-
-    return $str 
-}

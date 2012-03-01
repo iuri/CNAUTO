@@ -15,6 +15,154 @@ namespace eval cn_spreadsheet::items {}
 
 
 
+ad_proc -public cn_spreadsheet::export_txt {
+    {-spreadsheet_id}
+} {
+    Export CSV file to TXT
+} {
+    
+    ns_log Notice "Running ad_proc export_txt"
+    
+    # Output file
+    set filename_jan "[acs_root_dir]/www/BRASIF1_31012011.txt"
+    set filename_feb "[acs_root_dir]/www/BRASIF1_28022011.txt"
+    set filename_mar "[acs_root_dir]/www/BRASIF1_31032011.txt"
+    set filename_apr "[acs_root_dir]/www/BRASIF1_30042011.txt"
+    set filename_may "[acs_root_dir]/www/BRASIF1_31052011.txt"
+    set filename_jun "[acs_root_dir]/www/BRASIF1_30062011.txt"
+    set filename_jul "[acs_root_dir]/www/BRASIF1_31072011.txt"
+    set filename_aug "[acs_root_dir]/www/BRASIF1_31082011.txt"
+    set filename_sep "[acs_root_dir]/www/BRASIF1_30092011.txt"
+    set filename_oct "[acs_root_dir]/www/BRASIF1_31102011.txt"
+
+    set output_jan [open "${filename_jan}" w]
+    set output_feb [open "${filename_feb}" w]
+    set output_mar [open "${filename_mar}" w]
+    set output_apr [open "${filename_apr}" w]
+    set output_may [open "${filename_may}" w]
+    set output_jun [open "${filename_jun}" w]
+    set output_jul [open "${filename_jul}" w]
+    set output_aug [open "${filename_aug}" w]
+    set output_sep [open "${filename_sep}" w]
+    set output_oct [open "${filename_oct}" w]
+    
+        
+    set count_towner 0
+    set count_topic 0
+    set total 0
+
+    set output_line [list]
+
+    db_foreach chassis {
+	SELECT DISTINCT se.element_id, se.element AS chassis FROM cn_spreadsheet_elements se
+	WHERE se.spreadsheet_id = :spreadsheet_id AND se.valid = 't'
+    } {
+	
+	set data [db_list_of_lists select_data {
+	    SELECT data FROM cn_spreadsheet_data sd WHERE sd.element = :chassis ORDER BY field_id
+	}]
+	
+	# 0 Chave do pedido
+	lappend output_line $element_id
+	
+	
+	# 1 Data de vigencia
+	set date [split [lindex $data 0] {/}]
+	set date1 "[lindex $date 2][lindex $date 1][lindex $date 0]"
+	
+	set date "[lindex $date 2]-[lindex $date 1]-[lindex $date 0]"
+
+	set month [db_string select_month {
+	    SELECT EXTRACT(MONTH FROM TIMESTAMP :date)
+	}]
+
+	set year [db_string select_month {
+	    SELECT EXTRACT(YEAR FROM TIMESTAMP :date)
+	}]
+
+	set date2 [clock format [clock scan "1 year" -base [clock scan $date]] -format %Y%m%d]
+	
+	set date "${date1}${date2}"
+	
+	lappend output_line $date
+
+	
+	# 2 Modelo
+	lappend output_line [lindex [lindex $data 3] 0]
+
+	# 3 Descrcao
+	lappend output_line "[lindex [lindex $data 4] 0] [lindex [lindex $data 5] 0] [lindex $data 6]"
+
+	# 4 Contrato
+	if {[regexp -all "^LSY" $chassis]} {
+	    set contrato 40000162449
+	    incr count_topic
+	   
+	} elseif {[regexp -all "^LKH" $chassis]} {
+	    set contrato 40000162448
+	    incr count_towner
+	}
+	
+	lappend output_line $contrato
+
+	lappend output_line $chassis
+
+	# Format output to BA standard
+	set output_line [cn_core::format_output_line -line $output_line]
+
+	# Send info to output file
+	ns_log Notice "MONTH $month | YEAR $year"
+	if {$year == 2011} { 
+	    switch $month {
+		1 {
+		    puts $output_jan $output_line
+		}
+		2 {
+		    puts $output_feb $output_line
+		}
+		3 {
+		    puts $output_mar $output_line
+		}
+		4 {
+		    puts $output_apr $output_line
+		}
+		5 {
+		    puts $output_may $output_line
+		}
+		6 {
+		    puts $output_jun $output_line
+		}
+		7 {
+		    puts $output_jul $output_line
+		}
+		8 {
+		    puts $output_aug $output_line
+		    
+		}
+		9 {
+		    puts $output_sep $output_line
+		    
+		}
+		10 {
+		    puts $output_oct $output_line
+		}
+		
+	    }
+	}
+
+
+	incr total
+
+	set output_line ""
+    } 
+
+    ns_log Notice "Total: $total | Topic: $count_topic | Towner: $count_towner"
+
+}
+
+
+
+
 
 ad_proc -public cn_spreadsheet::import_csv {
     {-spreadsheet_id:required}
@@ -26,6 +174,7 @@ ad_proc -public cn_spreadsheet::import_csv {
     @upadte_p 0 - removes everything
     @update_p 1 - add more data
 } {
+    ns_log Notice "Running ad_proc cn_spreadsheet::import_csv"
     
     if {$update_p} {
 	cn_spreadsheet::element::delete -spreadsheet_id $spreadsheet_id
@@ -42,12 +191,13 @@ ad_proc -public cn_spreadsheet::import_csv {
     set num_fields 0
     set num 0
     foreach line $lines {
+	#ns_log Notice "LINE $line " 
 	if {$num == 0} {
 	    # FIELDS
 	    set fields [split $line ";"]
 	    set i 0
 	    foreach field_name $fields {
-		set field_name [cn_spreadsheet::treat_chars -str $field_name] 
+		set field_name [util_text_to_url -replacement "" -text $field_name] 
 		if {[string equal $field_name $key_field]} {
 		    set key $i
 		}
@@ -72,6 +222,7 @@ ad_proc -public cn_spreadsheet::import_csv {
 	    set aux $row($key)
 	    if {[exists_and_not_null aux]} {
 		
+		#ns_log Notice "$row($key) - $spreadsheet_id"
 		cn_spreadsheet::element::new -name $row($key) -element $row($key) -spreadsheet_id $spreadsheet_id
 	    
 		for {set j 0} {$j<$num_fields} {incr j} {
@@ -85,18 +236,6 @@ ad_proc -public cn_spreadsheet::import_csv {
     }    
 }	
 
-
-ad_proc -public cn_spreadsheet::treat_chars {
-    {-str}
-} {
-    Changes char to lower case and treats special chars
-} {
-    
-
-
-    set str [encoding convertto utf-8 $str]
-    return [string tolower $str]
-}
 
 #####################################
 # CN SpreadSheet
@@ -246,7 +385,10 @@ ad_proc -public cn_spreadsheet::element::new {
 } {
     create new data
 } {
-    
+    ns_log Notice "Running ad_proc cn_spreadsheet::element::new"
+
+    ns_log Notice "$spreadsheet_id | $name | $element"
+
     #test if exists 
     set exists [db_string test {
 	SELECT 1 from cn_spreadsheet_elements WHERE element = :element AND spreadsheet_id = :spreadsheet_id
@@ -256,16 +398,18 @@ ad_proc -public cn_spreadsheet::element::new {
 	return
     } 
     
-    db_exec_plsql create_data {
-        SELECT cn_spreadsheet_element__new (
-					    :spreadsheet_id,		-- field_id
-					    :name, 			-- name
-					    :element  			-- element
-					    )
+    #set element_id [db_nextval cn_spreadsheet_element_id_seq]
+    db_transaction { 
+	db_exec_plsql create_data {
+	    SELECT cn_spreadsheet_element__new (
+						:spreadsheet_id,	-- spreadsheet_id
+						:name, 			-- name
+						:element  	        -- element
+						)
+	}
     }
+    
 }
-
-
 
 ad_proc -public cn_spreadsheet::element::delete {
     {-spreadsheet_id:required}

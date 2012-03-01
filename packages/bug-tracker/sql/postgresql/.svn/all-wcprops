@@ -1,0 +1,143 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql
+END
+upgrade-0.7d5-0.8.sql
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql/upgrade-0.7d5-0.8.sql
+END
+upgrade-1.2d9-1.2d10.sql
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql/upgrade-1.2d9-1.2d10.sql
+END
+upgrade-1.4-1.4.1.sql
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql/upgrade-1.4-1.4.1.sql
+END
+bug-tracker-search-triggers.sql
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql/bug-tracker-search-triggers.sql
+END
+upgrade-1.2d10-1.2d11.sql
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql/upgrade-1.2d10-1.2d11.sql
+END
+upgrade-1.3d2-1.3d3.sql
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql/upgrade-1.3d2-1.3d3.sql
+END
+upgrade-1.2d2-1.2d6.sql
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql/upgrade-1.2d2-1.2d6.sql
+END
+upgrade-0.5d1-0.7d1.sql
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql/upgrade-0.5d1-0.7d1.sql
+END
+upgrade-0.9d1-1.2d2.sql
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql/upgrade-0.9d1-1.2d2.sql
+END
+upgrade-1.5d1-1.5d2.sql
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql/upgrade-1.5d1-1.5d2.sql
+END
+upgrade-0.7d1-0.7d2.sql
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql/upgrade-0.7d1-0.7d2.sql
+END
+upgrade-1.2d5-1.2d6.sql
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql/upgrade-1.2d5-1.2d6.sql
+END
+upgrade-1.3a7-1.3a8.sql
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql/upgrade-1.3a7-1.3a8.sql
+END
+bug-tracker-create.sql
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql/bug-tracker-create.sql
+END
+bug-tracker-drop.sql
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql/bug-tracker-drop.sql
+END
+upgrade-0.7d2-0.7d3.sql
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql/upgrade-0.7d2-0.7d3.sql
+END
+auto-error-report.sql
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql/auto-error-report.sql
+END
+upgrade-1.2d6-1.2d7.sql
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql/upgrade-1.2d6-1.2d7.sql
+END
+upgrade-0.7d3-0.7d4.sql
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql/upgrade-0.7d3-0.7d4.sql
+END
+auto-error-report-drop.sql
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql/auto-error-report-drop.sql
+END
+upgrade-0.7d4-0.7d5.sql
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql/upgrade-0.7d4-0.7d5.sql
+END
+upgrade-1.2d8-1.2d9.sql
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql/upgrade-1.2d8-1.2d9.sql
+END
+bug-tracker-drop-data.sql
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/postgresql/bug-tracker-drop-data.sql
+END

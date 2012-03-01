@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/lib
+END
+one-bug.adp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/lib/one-bug.adp
+END
+nav-bar.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/lib/nav-bar.tcl
+END
+prev-next-links.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/lib/prev-next-links.tcl
+END
+version-bar.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/lib/version-bar.tcl
+END
+nav-bar.adp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/lib/nav-bar.adp
+END
+prev-next-links.adp
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/lib/prev-next-links.adp
+END
+pagination.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/lib/pagination.tcl
+END
+version-bar.adp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/lib/version-bar.adp
+END
+master.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/lib/master.tcl
+END
+pagination.adp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/lib/pagination.adp
+END
+master.adp
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/lib/master.adp
+END

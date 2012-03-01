@@ -2,6 +2,7 @@ ad_page_contract {
     Resource admin page
 } {
     {return_url ""}
+    {object_type ""}
     {category_id:integer,optional}
 } -properties {
     context:onevalue
@@ -19,7 +20,7 @@ if {[exists_and_not_null category_id]} {
 }    
 
 set parent_options [db_list_of_lists select_parent_info {
-    SELECT pretty_name, category_id FROM cn_categories WHERE object_type = 'cn_vehicle' ORDER BY pretty_name
+    SELECT pretty_name, category_id FROM cn_categories WHERE object_type = :object_type ORDER BY pretty_name
 }]
 
 
@@ -37,6 +38,8 @@ ad_form -name category_ae -form {
     {object_type:text(select)
 	{label "[_ cnauto-resouces.Type]"}
 	{options {{"Selecione" 0} {"Part" cn_part} {"Person" cn_person} {"Order" cn_order}  {"Resource" cn_resource} {"Vehicle" cn_vehicle}}}
+	{html {onChange "document.category_ae.__refreshing_p.value='1';document.category_ae.submit();"}}
+	
     }
     {parent_id:integer(select),optional
 	{label "[_ cnauto-resouces.Parent]"}
@@ -52,29 +55,11 @@ ad_form -name category_ae -form {
     }
 } -new_data {
     
-    set category_id [db_nextval acs_object_id_seq]
-    set name [util_text_to_url -replacement "" -text $pretty_name]
-    set package_id [ad_conn package_id]
+    cn_core::category::new \
+	-pretty_name $pretty_name \
+	-parent_id $parent_id \
+	-object_type $object_type
 
-    db_transaction {
-	    db_dml insert_category {
-		INSERT INTO cn_categories (
-		   category_id,
-		   package_id,
-		   parent_id,
-		   pretty_name,
-		   name,
-		   object_type
-		) VALUES (
-		     :category_id,
-		     :package_id,
-		     :parent_id,
-		     :pretty_name,
-		     :name,
-		     :object_type
-		)
-	    }
-    }
 } -edit_data {
 
     set name [util_text_to_url -replacement "" -text $pretty_name]

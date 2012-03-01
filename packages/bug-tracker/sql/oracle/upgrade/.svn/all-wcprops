@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/oracle/upgrade
+END
+upgrade-1.2d9-1.2d10.sql
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/oracle/upgrade/upgrade-1.2d9-1.2d10.sql
+END
+upgrade-1.3a7-1.3a8.sql
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/oracle/upgrade/upgrade-1.3a7-1.3a8.sql
+END
+upgrade-1.2d8-1.2d9.sql
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/oracle/upgrade/upgrade-1.2d8-1.2d9.sql
+END
+upgrade-1.3d1-1.3d2.sql
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/sql/oracle/upgrade/upgrade-1.3d1-1.3d2.sql
+END

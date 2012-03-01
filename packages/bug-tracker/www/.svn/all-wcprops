@@ -1,0 +1,221 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www
+END
+bug.adp
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/bug.adp
+END
+bug.xql
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/bug.xql
+END
+prefs.adp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/prefs.adp
+END
+index.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/index.tcl
+END
+patch-add-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/patch-add-oracle.xql
+END
+map-patch-to-bugs-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/map-patch-to-bugs-postgresql.xql
+END
+no-components.adp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/no-components.adp
+END
+patch-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/patch-oracle.xql
+END
+patch-add.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/patch-add.tcl
+END
+map-patch-to-bugs.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/map-patch-to-bugs.tcl
+END
+index.adp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/index.adp
+END
+unmap-patch-from-bug.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/unmap-patch-from-bug.tcl
+END
+patch-list-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/patch-list-postgresql.xql
+END
+no-bugs.adp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/no-bugs.adp
+END
+patch.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/patch.tcl
+END
+bug-add.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/bug-add.tcl
+END
+patch-add.xql
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/patch-add.xql
+END
+patch-add.adp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/patch-add.adp
+END
+patch-list.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/patch-list.tcl
+END
+patch-add-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/patch-add-postgresql.xql
+END
+notifications.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/notifications.tcl
+END
+map-patch-to-bugs.xql
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/map-patch-to-bugs.xql
+END
+map-patch-to-bugs.adp
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/map-patch-to-bugs.adp
+END
+patch-submission-instructions.html
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/patch-submission-instructions.html
+END
+bug.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/bug.tcl
+END
+map-patch-to-bugs-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/map-patch-to-bugs-oracle.xql
+END
+prefs.tcl
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/prefs.tcl
+END
+patch.xql
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/patch.xql
+END
+patch.adp
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/patch.adp
+END
+patch-postgresql.xql
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/patch-postgresql.xql
+END
+bug-add.adp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/bug-add.adp
+END
+patch-list.xql
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/patch-list.xql
+END
+patch-list.adp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/patch-list.adp
+END
+bug-submission-instructions.html
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/bug-submission-instructions.html
+END
+notifications.adp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/notifications.adp
+END
+patch-list-oracle.xql
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/openacs/!svn/ver/153/spb/packages/bug-tracker/www/patch-list-oracle.xql
+END

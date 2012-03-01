@@ -9,20 +9,22 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>f</inherit-templates-p>
     
-    <version name="0.2d" url="http://openacs.org/repository/download/apm/cnauto-assurance-0.2d.apm">
+    <version name="0.10d" url="http://openacs.org/repository/download/apm/cnauto-assurance-0.10d.apm">
         <owner url="mailto:iuri.sampaio@cnauto.com.br">Iuri Sampaio</owner>
         <summary>Package for automobile assurance management</summary>
         <description format="text/html">Package for automobile assurance management</description>
         <maturity>0</maturity>
 
-        <provides url="cnauto-assurance" version="0.2d"/>
+        <provides url="cnauto-assurance" version="0.10d"/>
         <requires url="cnauto-core" version="0.1d"/>
         <requires url="cnauto-resources" version="0.3d"/>
+        <requires url="acs-mail-lite" version="5.6.0"/>
 
         <callbacks>
         </callbacks>
         <parameters>
-        <!-- No version parameters -->
+            <parameter scope="instance" datatype="number"  min_n_values="1"  max_n_values="1"  name="AssuranceEmailAlert"  default="0" description="Parameter to enable/disable email sending after assurance creation"/>
+            <parameter scope="instance" datatype="string"  min_n_values="1"  max_n_values="1"  name="AssuranceEmailReceiver"  description="User's email who will receive the email"/>
         </parameters>
 
     </version>
