@@ -56,7 +56,7 @@ set initial_state_id [workflow::fsm::get_initial_state -workflow_id $workflow_id
 multirow append links "[bug_tracker::conn Bugs]" [export_vars -base "${url_prefix}." { { f_fix_for_version {[bug_tracker::conn current_version_id]} } }]
 
 if { $create_p } {
-    multirow append links "[_ bug-tracker.New] [bug_tracker::conn Bug]" "${url_prefix}bug-add"
+    multirow append links "[_ bug-tracker.New] [bug_tracker::conn Bug]" "${url_prefix}bug-ae"
 }
 
 if { [ad_conn untrusted_user_id] != 0 } {

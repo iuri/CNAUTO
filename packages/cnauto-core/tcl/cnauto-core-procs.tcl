@@ -12,6 +12,148 @@ namespace eval cnauto_core {}
 
 namespace eval cn_core {}
 
+
+
+
+ad_proc -public cn_core::import_xml {
+    {-input_file}
+} {
+    Import NFe XML file
+} {
+
+    ns_log Notice "Running ad_proc cn_core::import_xml"
+    set xml [read [open "${input_file}" r]]
+
+ #   ns_log Notice "$xml"
+
+    set doc [dom parse $xml]
+
+   ns_log Notice "DOC $doc"
+
+    if {[catch {set root [$doc documentElement]} err]} {
+	error "Error parsing XML: $err"
+    }
+    
+    ns_log Notice "NAME [$root nodeName]"
+    if {[$root hasChildNodes]} {
+	set childNodes [$root childNodes]
+	ns_log Notice "CHILDREN $childNodes | [$childNodes nodeName]"
+	ns_log Notice "[$root getElementsByTagName prod]"
+	set prod [$root getElementsByTagName prod]
+
+	set chassisNode [$root getElementsByTagName chassi]
+	set chassisElem	[$chassisNode nodeName]
+	set chassisValue [[$chassisNode firstChild] nodeValue]
+
+	set colorNode [$root getElementsByTagName xCor]
+	set colorElem [$colorNode nodeName]
+	set colorValue [[$colorNode firstChild] nodeValue]
+
+	set engineNode [$root getElementsByTagName nMotor]
+	set engineElem [$engineNode nodeName]
+	set engineValue [[$engineNode firstChild] nodeValue]
+
+	ns_log Notice "Chassis: $chassisNode | $chassisElem | $chassisValue"
+	ns_log Notice "Color: $colorNode | $colorElem | $colorValue"
+	ns_log Notice "Engine $engineNode | $engineElem | $engineValue"
+	
+    }
+    
+    
+    # Output file
+    set localtime [ns_localsqltimestamp]
+    set fileseq [db_nextval cn_core_file_number_seq]
+    set filename "${localtime}-${fileseq}"
+
+    ns_log Notice "FILE $filename"
+
+    set filepath "[acs_root_dir]/www/${filename}"
+    set output_file [open $filepath w]
+    
+    
+    
+    puts $output_file "${chassisValue};${colorValue};${engineValue}"
+    close $output_file
+    
+    set revision_id [cn_core::attach_file \
+			  -parent_id [ad_conn package_id] \
+			  -tmp_filename $filepath \
+			  -filename $filename \
+			 ]
+    
+
+    acs_mail_lite::send \
+	-send_immediately \
+	-from_addr "iuri.sampaio@gmail.com" \
+	-to_addr "iuri.sampaio@cnauto.com.br" \
+	-subject "CNAUTO - Fatura de automovel" \
+	-body "Please see file attachment" \
+	-package_id [ad_conn package_id] \
+	-file_ids $revision_id
+
+
+    ns_log Notice "$rt"
+}
+
+
+
+
+
+
+
+
+ad_proc -public cn_core::attach_file {
+    {-parent_id:required}
+    {-tmp_filename:required}
+    {-filename ""}
+} {
+
+    Attach files to a object requirement
+} {
+
+    set item_id [db_nextval acs_object_id_seq]
+
+    db_transaction {
+	content::item::new \
+	    -item_id $item_id \
+	    -name "${filename}-${item_id}" \
+	    -parent_id $parent_id \
+	    -package_id [ad_conn package_id] \
+	    -content_type "content_item" \
+	    -creation_user [ad_conn user_id] \
+	    -creation_ip [ad_conn peeraddr]
+	
+	set n_bytes [file size $tmp_filename]
+	set mime_type [ns_guesstype $tmp_filename]
+	set revision_id [cr_import_content \
+			     -item_id $item_id \
+			     -title $filename \
+			     -storage_type file \
+			     -creation_user [ad_conn user_id] \
+			     -creation_ip [ad_conn peeraddr] \
+			     -description $filename \
+			     -package_id [ad_conn package_id] \
+			     $parent_id \
+			     $tmp_filename \
+			     $n_bytes \
+			     $mime_type \
+			     "file-${filename}-${item_id}"
+			]
+	
+	item::publish -item_id $item_id -revision_id $revision_id
+    }
+
+
+    return $revision_id
+}
+
+
+
+
+
+
+
+
 namespace eval cn_core::util {}
 
 
@@ -20,20 +162,64 @@ namespace eval cn_categories {}
 namespace eval cn_categories::category {}
 
 
+ad_proc -public  cn_categories::import_csv_file {
+    {-input_file:required}
+    {-type ""}
+    {-parent_id ""}
+} {
+
+    Imports CSV files to add categories
+} {
+
+    ns_log Notice "Running ad_proc cn_categories::import_csv_file"
+
+    set input_file [open "${input_file}" r]
+    set lines [split [read $input_file] \n]
+    close $input_file
+    
+    foreach line $lines {
+	set line [split $line {;}] 
+
+	
+	ns_log Notice "LINE $line"
+
+	set code [lindex $line 0]
+	set name [lindex $line 1]
+
+	set class_id [cn_categories::get_category_id -code $code -type "cn_assurance"] 
+	  
+	if {$class_id eq "null"} {  
+	    ns_log Notice "Add class $name | "
+	    
+	    set class_id [cn_categories::category::new \
+			      -code $code \
+			      -pretty_name $name \
+			      -parent_id $parent_id \
+			      -object_type $type \
+			      -package_id [ad_conn package_id]]
+	}	
+    }
+    
+    return
+}
+
+
 ad_proc -public cn_categories::category::new {
     {-pretty_name ""}
+    {-name ""}
     {-parent_id ""}
     {-package_id ""}
     {-object_type ""}
 } {
 
     Adds a new category
-} {
-
-    
+} {    
     
     set category_id [db_nextval acs_object_id_seq]
-    set name [util_text_to_url -replacement "" -text $pretty_name]
+    
+    if {$name == ""} {
+	set name [util_text_to_url -replacement "" -text $pretty_name]
+    }
 
     if {$package_id == ""} {
 	set package_id [ad_conn package_id]
@@ -93,17 +279,35 @@ ad_proc -public cn_categories::category::delete {
 
 
 ad_proc -public cn_categories::get_category_id {
-    {-name}
+    {-code ""}
+    {-name ""} 
     {-type ""}
+    
+    
 } {
     Returns category_id
 } {
-    return [db_string select_category_id {
-	SELECT category_id FROM cn_categories WHERE name = :name OR object_type = :type
-    } -default null]
-} 
 
+    if {$code ne ""} {	
 
+        set code [util_text_to_url -replacement "" -text $code]
+    
+    	return [db_string select_category_id {
+	    SELECT category_id FROM cn_categories
+	    WHERE code = :code AND object_type = :type
+	} -default null]
+
+    } elseif {$name ne ""} {
+	      
+	set name [util_text_to_url -replacement "" -text $name]
+	
+	return [db_string select_category_id {
+	    SELECT category_id FROM cn_categories
+	    WHERE name = :name AND object_type = :type
+	} -default null]
+    }
+
+}
 
 ad_proc -public cn_core::item_exists {
     {-items}

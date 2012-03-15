@@ -13,5 +13,3 @@
 
 <formtemplate id="bug"></formtemplate>
 
-
-

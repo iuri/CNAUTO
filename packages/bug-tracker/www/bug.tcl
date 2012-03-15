@@ -6,6 +6,7 @@ ad_page_contract {
     @cvs-id $Id: bug.tcl,v 1.38 2005/03/01 00:01:26 jeffd Exp $
 } [bug_tracker::get_page_variables {
     bug_number:integer,notnull
+    {file_id:optional}
     {user_agent_p:boolean 0}
     {show_patch_status open}
 }]
@@ -25,6 +26,8 @@ set package_id [ad_conn package_id]
 set package_key [ad_conn package_key]
 
 set user_id [ad_conn user_id]
+
+set file_id [db_nextval acs_object_id_seq]
 
 permission::require_permission -object_id $package_id -privilege read
 
@@ -101,6 +104,8 @@ if { [empty_string_p $enabled_action_id] } {
         lappend actions [list "     [lang::util::localize $available_action(pretty_name)]     " $available_enabled_action_id]
     }
 }
+
+
 
 #####
 #
@@ -208,6 +213,17 @@ ad_form -extend -name bug -form {
 	{label "[_ bug-tracker.Description]"} 
 	{html {cols 60 rows 13}} 
     }
+    {attach_file:text(inform)
+	{label ""}
+	{value {
+	    <div id="mainbody" >
+	    <div id="upload" >
+	    <span>Upload File<span></div><span id="status" ></span>
+	    <ul id="files" ></ul>
+	    <input type="hidden" name= "file_id" id="file_id" value="$file_id">
+	    
+	}}
+    }   
     {return_url:text(hidden) 
 	{value $return_url}
     }
@@ -264,6 +280,23 @@ ad_form -extend -name bug -on_submit {
             -entry_id [element get_value bug entry_id]    
 
 
+    
+    db_foreach uploadfile_id {
+	SELECT item_id, name FROM cr_items WHERE parent_id = :package_id
+    } {
+	set filename [lindex [split $name "-"] 0] 
+	set filename_id [lindex [split $name "-"] 1]
+	ns_log Notice "$filename_id | $file_id"
+
+	if {$filename_id == $file_id} {
+	    db_dml update_parent_id {
+		UPDATE cr_items SET parent_id = :bug_id WHERE item_id = :item_id;
+	    }
+	}
+    }
+    
+
+
     ad_returnredirect $return_url
     ad_script_abort
 
@@ -271,6 +304,7 @@ ad_form -extend -name bug -on_submit {
     # Dummy
     # If we don't have this, ad_form complains
 }
+
 
 # Not-valid block (request or submit error)
 # Unfortunately, ad_form doesn't let us do what we want, namely have a block that executes
@@ -467,4 +501,68 @@ if { ![form is_valid bug] } {
                 [_ acs-kernel.common_last]
         }
     }
+}
+
+ 
+template::head::add_css -href "/resources/bug-tracker/styles.css"
+
+template::head::add_javascript -src "/resources/bug-tracker/js/jquery-1.3.2.js" -order 0
+template::head::add_javascript -src "/resources/bug-tracker/js/ajaxupload.3.5.js" -order 1
+
+# References http://valums.com/ajax-upload/
+template::head::add_javascript -script {
+    $(function(){
+	var btnUpload=$('#upload');
+	var status=$('#status');
+	var fileId = $('#file_id').val();
+	
+	new AjaxUpload(btnUpload, {
+	    action: 'file-add',
+	    data: { file_id: $('#file_id').val()},
+	    name: 'uploadfile',
+	    onSubmit: function(file, ext){
+		if (! (ext && /^(jpg|png|jpeg|gif)$/.test(ext))){ 
+                    // extension is not allowed 
+		    status.text('Only JPG, PNG or GIF files are allowed');
+		    return false;
+		}
+		status.text('Uploading...');
+	    },
+	    onComplete: function(file, response){
+		//On completion clear the status
+		status.text('');
+		//Add uploaded file to list
+		if(response==="success"){
+		    $('<li></li>').appendTo('#files').html('<img src="./uploads/'+file+'" alt="" /><br />'+file).addClass('success');
+		} else{
+		    $('<li></li>').appendTo('#files').text(file).addClass('error');
+		}
+	    }
+	});
+	
+    });
+} -order 2
+
+
+template::list::create \
+    -name files \
+    -multirow files \
+    -key file_id \
+    -elements {
+	description {
+	    label "[_ cnauto-core.Images]"
+	    
+	}
+    }
+
+set bug_id $bug(bug_id)
+set url [site_node::get_url_from_object_id -object_id [ad_conn package_id]]
+
+#[bug_tracker::get_bug_id -bug_number $bug_number -project_id $package_id]
+
+db_multirow -extend {view_image_url } files select_files {
+    SELECT cr.description, cr.revision_id FROM cr_revisions cr, cr_items ci WHERE ci.parent_id = :bug_id AND content_type = 'content_item'
+} {
+
+    set view_image_url [export_vars -base "${url}view/$description" {revision_id}]
 }

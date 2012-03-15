@@ -147,7 +147,7 @@ ad_proc -private cn_core::install::after_install {} {
 }
     
     
-    ad_proc -private  cnauto_core::install::before_unmount {
+ad_proc -private  cn_core::install::before_unmount {
     {-package_id}
 } {
 

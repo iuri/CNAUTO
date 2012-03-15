@@ -2,7 +2,7 @@ ad_page_contract {
     Categories main page
   
 } { 
-    {object_type ""}
+    {category_type ""}
     {orderby "pretty_name,asc"}
     page:optional
 } -properties {
@@ -14,7 +14,7 @@ ad_page_contract {
 set title "[_ cnauto-resources.Add_category]"
 set context [list $title]
 
-set object_type_options [list]
+set category_type_options [list]
 
 db_foreach category_type { 
     SELECT cc.object_type AS type, COUNT(cc.category_id) AS num, ot.pretty_name
