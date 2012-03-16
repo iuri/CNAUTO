@@ -1,23 +1,22 @@
 ad_page_contract {
-    Create file for Brasil Assistencia
+    Import file from abeiva spreadsheet
     
     @author Iuri Sampaio (iuri.sampaio@iurix.com)
-    @creation-date 2011-10-14
+    @creation-date 2012-03-16
 } {
     {return_url ""}
 }
 
-set title "#cnauto-core.Export_file# Brasil Assistencia"
+set title "#cnauto-core.Import_file# ABEIVA"
 set context $title
 
 
-ad_form -html { enctype multipart/form-data } -name export_file -form {
+ad_form -html { enctype multipart/form-data } -name import_file -form {
     {input_file:file {label "#cnauto-core.Input_file#"} {html "size 30"}}
-    {output_file:text {label "#cnauto-core.Output_file#"} {html "size 30"}}
 } -on_submit {
 
     set input_file [list [template::util::file::get_property tmp_filename $input_file]]
-    cn_core::export_csv_to_txt -input_file $input_file -output_file $output_file
+    cn_core::import_csv_file_abeiva -input_file $input_file
 
 } -after_submit {
     ad_returnredirect /cnauto-core
