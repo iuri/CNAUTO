@@ -1,0 +1,13 @@
+digraph workflow_1203 {
+  node [fontname="Courier", color=lightblue2, style=filled];
+  edge [fontname="Courier"];
+  state_1 [label="#bug-tracker.state_open# "];
+  state_2 [label="#bug-tracker.Resolved# "];
+  state_3 [label="#bug-tracker.Closed# "];
+  state_1 -> state_2 [label="#bug-tracker.Resolve#"];
+  state_2 -> state_2 [label="#bug-tracker.Resolve#"];
+  state_2 -> state_3 [label="#bug-tracker.Close#"];
+  state_2 -> state_1 [label="#bug-tracker.Reopen#"];
+  state_3 -> state_1 [label="#bug-tracker.Reopen#"];
+}
+

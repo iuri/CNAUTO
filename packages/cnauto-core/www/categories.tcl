@@ -4,6 +4,8 @@ ad_page_contract {
 } { 
     {category_type ""}
     {orderby "pretty_name,asc"}
+    {submit.x:optional}
+    {keyword:optional}
     page:optional
 } -properties {
     context:onevalue
@@ -35,6 +37,14 @@ set actions {
 }
 set bulk_actions {"#cnauto-core.Delete#" "category-bulk-delete" "#cnauto-core.Delete_selected_cat#"}
 
+
+set where_clause ""
+if {[info exists submit.x]} { 
+    set where_clause "AND cc.pretty_name = :keyword"
+    
+}
+
+
 template::list::create \
     -name categories \
     -multirow categories \
@@ -56,10 +66,14 @@ template::list::create \
 	pretty_type {
 	    label "[_ cnauto-core.Class]"
 	}	
+	parent {
+	    label "[_ cnauto-core.Parent]"
+	}
+	
     } -filters {
 	object_type {
-            label "[_ cnauto-core.Type]"
-            values $category_type_options
+	    label "[_ cnauto-core.Type]"
+	    values $category_type_options
             where_clause {
                 cc.object_type = :object_type
             }
@@ -73,10 +87,10 @@ template::list::create \
 	    orderby_desc {cc.pretty_name desc}
 	}
     }
-    
 
-
+ 
 db_multirow -extend {category_ae_url} categories select_categories {} {
     set category_ae_url [export_vars -base "category-ae" {category_id return_url}]
 
 }
+

@@ -117,13 +117,13 @@ END;' language 'plpgsql';
 
 
 CREATE TABLE cn_spreadsheet_fields (
-           field_id		integer PRIMARY KEY
-                                CONSTRAINT cn_spreadsheet_fields_field_id_pk
+           field_id		integer
+                                CONSTRAINT cn_spreadsheet_fields_field_id_pk PRIMARY KEY
                                 CONSTRAINT cn_spreadsheet_fields_field_id_fk
 				REFERENCES acs_objects (object_id),
-	   spreadsheet_id	integer NOT NULL
-                                constraint cn_spreadsheet_fields_spreadsheet_id_fk
-				references cn_spreadsheets on delete cascade,
+	   spreadsheet_id	integer
+                                CONSTRAINT cn_spreadsheet_fields_spreadsheet_id_fk
+				REFERENCES cn_spreadsheets on delete cascade,
 	   name			varchar(40) NOT NULL,
 	   label		varchar(40),
 	   sort_order		integer,
@@ -343,7 +343,7 @@ CREATE TABLE cn_spreadsheet_elements (
        element			     varchar NOT NULL,
        spreadsheet_id		     integer NOT NULL
                               	     constraint spreadsheet_elements_spreadsheet_id_fk
-				     references cn_spreadsheets ON DELETE CASCADE
+				     references cn_spreadsheets ON DELETE CASCADE,
        name		             varchar,
        valid		     	     boolean NOT NULL default true,
        CONSTRAINT cn_spreadsheet_elements_un UNIQUE (element, spreadsheet_id)

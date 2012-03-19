@@ -8,6 +8,21 @@ namespace eval cn_resources {}
 
 namespace eval cn_resources::resource {}
 
+
+ad_proc -public cn_resources::get_resource_id {
+    {-code:required}
+} {
+
+    Gets resource_id 
+} {
+    
+    return [db_string select_resource_id {
+	SELECT resource_id FROM cn_resources WHERE code = :code
+    } -default null]
+
+}
+
+
 ad_proc -public cn_resources::resource::delete {
     resource_id
 } {
@@ -838,7 +853,18 @@ ad_proc -public  cn_resources::persons::import_csv_file {
 }
 
 namespace eval cn_resources::person {}
+ad_proc -public cn_resources::person::get_id {
+    {-cpf_cnpj}
+} {
+    Returns person_id
+} {
 
+
+    return [db_string select_person_id {
+	SELECT person_id FROM cn_persons WHERE cpf_cnpj = :cpf_cnpj
+    } -default null]
+}
+    
 ad_proc -public cn_resources::person::new {
     {-cpf_cnpj}
     {-legal_name ""}

@@ -27,71 +27,134 @@ ad_proc -public cn_core::import_xml {
  #   ns_log Notice "$xml"
 
     set doc [dom parse $xml]
-
-   ns_log Notice "DOC $doc"
-
+    
+    ns_log Notice "DOC $doc"
+    
     if {[catch {set root [$doc documentElement]} err]} {
 	error "Error parsing XML: $err"
     }
     
+    set output_list [list]
+
     ns_log Notice "NAME [$root nodeName]"
+
     if {[$root hasChildNodes]} {
 	set childNodes [$root childNodes]
-	ns_log Notice "CHILDREN $childNodes | [$childNodes nodeName]"
-	ns_log Notice "[$root getElementsByTagName prod]"
-	set prod [$root getElementsByTagName prod]
+#	ns_log Notice "CHILDREN $childNodes | [$childNodes nodeName]"
+#	ns_log Notice "[$root getElementsByTagName prod]"
+	set prodNodes [$root getElementsByTagName prod]
 
-	set chassisNode [$root getElementsByTagName chassi]
-	set chassisElem	[$chassisNode nodeName]
-	set chassisValue [[$chassisNode firstChild] nodeValue]
 
-	set colorNode [$root getElementsByTagName xCor]
-	set colorElem [$colorNode nodeName]
-	set colorValue [[$colorNode firstChild] nodeValue]
+	set distNode [$root getElementsByTagName dest]
+       	set distCNPJElem [$distNode getElementsByTagName CNPJ]
+	set distCNPJ [[$distCNPJElem firstChild] nodeValue]
+		      
+	set ditributor_id [cn_resources::person::get_id -cpf_cnpj $distCNPJ]
 
-	set engineNode [$root getElementsByTagName nMotor]
-	set engineElem [$engineNode nodeName]
-	set engineValue [[$engineNode firstChild] nodeValue]
+	foreach node $prodNodes {
+	
+	    # Chassis
+	    set chassisNode [$node getElementsByTagName chassi]
+	    set chassisElem [$chassisNode nodeName]
+	    set chassisValue [[$chassisNode firstChild] nodeValue]
+	    
+	    # Color
+	    set colorNode [$node getElementsByTagName xCor]
+	    set colorElem [$colorNode nodeName]
+	    set colorValue [[$colorNode firstChild] nodeValue]
+	    
+	    # Engine
+	    set engineNode [$node getElementsByTagName nMotor]
+	    set engineElem [$engineNode nodeName]
+	    set engineValue [[$engineNode firstChild] nodeValue]
+	    
+	    # Resource
+	    set resourceNode [$node getElementsByTagName cProd]
+	    set resourceElem [$resourceNode nodeName]
+	    set resourceValue [[$resourceNode firstChild] nodeValue]
+	    
+	    set resource_id [cn_resources::get_resource_id -code $resourceValue]
+	    
+	    # Model
+	    #set model_id [cn_resources::get_model_id -resource_id $resource_id]
+	    
+	    
+	    # Year of Model
+	    set yofNode [$node getElementsByTagName anoFab]
+	    set yofValue [[$yofNode firstChild] nodeValue]
+	    
+	    #Year of fab
+	    set yomNode [$node getElementsByTagName anoMod]
+	    set yomValue [[$yomNode firstChild] nodeValue]
+	    
+	    # distributor - CNPJ
+    
+	    lappend $output_list "${chassisValue};${colorValue};${engineValue};\n"
+	
 
-	ns_log Notice "Chassis: $chassisNode | $chassisElem | $chassisValue"
-	ns_log Notice "Color: $colorNode | $colorElem | $colorValue"
-	ns_log Notice "Engine $engineNode | $engineElem | $engineValue"
+	    ns_log Notice "Chassis: $chassisNode | $chassisElem | $chassisValue"
+	    ns_log Notice "Color: $colorNode | $colorElem | $colorValue"
+	    ns_log Notice "Engine $engineNode | $engineElem | $engineValue"
+	    ns_log Notice "Distributor: $distCNPJ"
+	    
+
+	    # switch $item { "part" { insert part } "vehicle" {insert vehgicle}}
+
+	    # Insert Vehicle
+	    #cn_resources::vehicle::new \
+		-vin $chassisValue \
+		-resource_id $resource_id \
+		-model_id "" \
+		-engine $engineValue \
+		-year_of_model $yofValue \
+		-year_of_fabrication $yomValue \
+		-color $colorValue \
+		-ditributor_id $distributor_id
+		
+	    
+	}
+    }
+ 
+    set flag 0
+    if {$flag} {
+	
+
+	set filepath "[acs_root_dir]/www/${filename}"
+	set output_file [open $filepath w]
+	
+	
+	
+	# Output file
+	puts $output_file $output_list
+
+	close $output_file
+
+
+	
+	set date [lindex [ns_localsqltimestamp] 0]
+	set fileseq [db_nextval cn_core_file_number_seq]
+	set filename "${date}-${fileseq}"
+	
+	
+	set revision_id [cn_core::attach_file \
+			     -parent_id [ad_conn package_id] \
+			     -tmp_filename $filepath \
+			     -filename $filename \
+			    ]
+	
+	
+	acs_mail_lite::send \
+	    -send_immediately \
+	    -from_addr "iuri.sampaio@gmail.com" \
+	    -to_addr "iuri.sampaio@cnauto.com.br" \
+	    -subject "CNAUTO - Fatura de automovel" \
+	    -body "Please see file attachment" \
+	    -package_id [ad_conn package_id] \
+	    -file_ids $revision_id
 	
     }
     
     
-    # Output file
-    set localtime [ns_localsqltimestamp]
-    set fileseq [db_nextval cn_core_file_number_seq]
-    set filename "${localtime}-${fileseq}"
-
-    ns_log Notice "FILE $filename"
-
-    set filepath "[acs_root_dir]/www/${filename}"
-    set output_file [open $filepath w]
-    
-    
-    
-    puts $output_file "${chassisValue};${colorValue};${engineValue}"
-    close $output_file
-    
-    set revision_id [cn_core::attach_file \
-			  -parent_id [ad_conn package_id] \
-			  -tmp_filename $filepath \
-			  -filename $filename \
-			 ]
-    
-
-    acs_mail_lite::send \
-	-send_immediately \
-	-from_addr "iuri.sampaio@gmail.com" \
-	-to_addr "iuri.sampaio@cnauto.com.br" \
-	-subject "CNAUTO - Fatura de automovel" \
-	-body "Please see file attachment" \
-	-package_id [ad_conn package_id] \
-	-file_ids $revision_id
-
-
     ns_log Notice "$rt"
 }
 
