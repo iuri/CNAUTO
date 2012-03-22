@@ -23,6 +23,8 @@ DROP TABLE cn_spreadsheet_data;
 
 DROP FUNCTION cn_spreadsheet_elements__new (integer, varchar, varchar);
 
+DROP SEQUENCE cn_spreadsheet_element_id_seq;
+
 DROP TABLE cn_spreadsheet_elements;
 
 

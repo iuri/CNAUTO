@@ -334,18 +334,63 @@ ad_proc -public cn_core::import_csv_file_abeiva {
     set count_towner 0
     set count_topic 0
     
+    #Array
+    array set towner_units {
+	92010 0
+	102010 0
+	112010 0
+	122010 0
+	12011 0
+	22011 0
+	32011 0
+	42011 0
+	52011 0
+	62011 0
+	72011 0
+	82011 0
+	92011 0
+	102011 0
+	112011 0
+	122011 0
+	12012 0
+	22012 0
+    }
+    
+    #Array
+    array set topic_units {
+	92010 0
+	102010 0
+	112010 0
+	122010 0
+	12011 0
+	22011 0
+	32011 0
+	42011 0
+	52011 0
+	62011 0
+	72011 0
+	82011 0
+	92011 0
+	102011 0
+	112011 0
+	122011 0
+	12012 0
+	22012 0
+    } 
+    
     foreach line $lines {
 	set line [split $line ";"]
 	
 	if {$line ne ""} {
 	    ns_log Notice "LINE: $line"
 	    
+	    
 	    # Date
 	    set date [lindex $line 0] 
 	    set date [split $date /]
 	    set date "[lindex $date 2]-[lindex $date 1]-[lindex $date 0]"
 
-	    if {$date ne "--data"} {
+	    if {$date ne "--emp_data"} {
 		set month [db_string select_month { 
 		    SELECT EXTRACT (month from timestamp :date) 
 		}]
@@ -353,8 +398,7 @@ ad_proc -public cn_core::import_csv_file_abeiva {
 		    SELECT EXTRACT (year from timestamp :date) 
 		}]
 	    
-		ns_log Notice "$month $year"
-		
+		set date "${month}${year}"		
 		
 		# Chassis
 		set chassis [lindex $line 1] 
@@ -370,30 +414,26 @@ ad_proc -public cn_core::import_csv_file_abeiva {
 		    
 		    lappend items $chassis
 		    
-		    if {$month eq 12 && $year eq 2011} {
-			if {[regexp -all {LSY} $chassis]} {
-			    incr count_topic
-			}
-			if {[regexp -all {LKH} $chassis]} {
-			    incr count_towner
-			}
-			
-			incr i
+		    if {[regexp -all {LSY} $chassis]} {
+			incr topic_units($date)
 		    }
+		    if {[regexp -all {LKH} $chassis]} {
+			incr towner_units($date)
+		    }
+			
+		    incr i
 		}
-		set model [lindex $line 2] 
-		set description [lindex $line 3] 
-		set fabricant [lindex $line 4] 
-		set municipality [lindex $line 5] 
-		set state [lindex $line 6] 
-		
-		ns_log Notice "$date | $chassis | $model | $description | $fabricant | $municipality | $state"
-		
 	    }
+	    set model [lindex $line 2] 
+	    set description [lindex $line 3] 
+	    
+	    ns_log Notice "$date | $chassis | $model | $description"
+	    
 	}
     }
-    
-    ns_log Notice "Total $i | Towners: $count_towner | Topics: $count_topic"
+
+
+    ns_log Notice "Total $i | Towners: [parray towner_units] | Topics: [parray topic_units]"
     
     close $input_file
     
