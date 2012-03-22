@@ -2,8 +2,10 @@ ad_page_contract {
     Categories main page
   
 } { 
-    {object_type ""}
+    {category_type ""}
     {orderby "pretty_name,asc"}
+    {submit.x:optional}
+    {keyword:optional}
     page:optional
 } -properties {
     context:onevalue
@@ -14,7 +16,7 @@ ad_page_contract {
 set title "[_ cnauto-resources.Add_category]"
 set context [list $title]
 
-set object_type_options [list]
+set category_type_options [list]
 
 db_foreach category_type { 
     SELECT cc.object_type AS type, COUNT(cc.category_id) AS num, ot.pretty_name
@@ -34,6 +36,14 @@ set actions {
     "#cnauto-resources.Import_person_cat_lt#" "categories-import-csv-file"
 }
 set bulk_actions {"#cnauto-core.Delete#" "category-bulk-delete" "#cnauto-core.Delete_selected_cat#"}
+
+
+set where_clause ""
+if {[info exists submit.x]} { 
+    set where_clause "AND cc.pretty_name = :keyword"
+    
+}
+
 
 template::list::create \
     -name categories \
@@ -56,10 +66,14 @@ template::list::create \
 	pretty_type {
 	    label "[_ cnauto-core.Class]"
 	}	
+	parent {
+	    label "[_ cnauto-core.Parent]"
+	}
+	
     } -filters {
 	object_type {
-            label "[_ cnauto-core.Type]"
-            values $category_type_options
+	    label "[_ cnauto-core.Type]"
+	    values $category_type_options
             where_clause {
                 cc.object_type = :object_type
             }
@@ -73,10 +87,10 @@ template::list::create \
 	    orderby_desc {cc.pretty_name desc}
 	}
     }
-    
 
-
+ 
 db_multirow -extend {category_ae_url} categories select_categories {} {
     set category_ae_url [export_vars -base "category-ae" {category_id return_url}]
 
 }
+

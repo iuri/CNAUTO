@@ -55,7 +55,7 @@ ad_form -name category_ae -form {
     }
 } -new_data {
     
-    cn_core::category::new \
+    cn_categories::category::new \
 	-pretty_name $pretty_name \
 	-parent_id $parent_id \
 	-object_type $object_type

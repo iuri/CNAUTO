@@ -59,7 +59,7 @@ ad_form -name bug -cancel_url $return_url -form {
     }
 
     {assign_to:text(select),optional 
-        {label "Assign to"}  
+        {label "[_ bug-tracker.Assign_to]"}  
         {options {[bug_tracker::assignee_get_options -workflow_id $workflow_id -include_unknown]}} 
     }
 

@@ -9,13 +9,13 @@ ad_library {
 }
 
 # Default interval is about one minute (reduce lock contention with other jobs scheduled at full minutes)
-ad_schedule_proc -thread t 61 acs_mail_lite::sweeper
+#ad_schedule_proc -thread t 61 acs_mail_lite::sweeper
 
 set queue_dir [parameter::get_from_package_key -parameter "BounceMailDir" -package_key "acs-mail-lite"]
 
 if {$queue_dir ne ""} {
     # if BounceMailDir is set then handle incoming mail
-    ad_schedule_proc -thread t 120 acs_mail_lite::load_mails -queue_dir $queue_dir
+    ad_schedule_proc -thread t 20 acs_mail_lite::load_mails -queue_dir $queue_dir
 }
 
 # check every few minutes for bounces

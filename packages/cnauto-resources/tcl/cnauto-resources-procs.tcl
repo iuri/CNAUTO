@@ -8,6 +8,21 @@ namespace eval cn_resources {}
 
 namespace eval cn_resources::resource {}
 
+
+ad_proc -public cn_resources::get_resource_id {
+    {-code:required}
+} {
+
+    Gets resource_id 
+} {
+    
+    return [db_string select_resource_id {
+	SELECT resource_id FROM cn_resources WHERE code = :code
+    } -default null]
+
+}
+
+
 ad_proc -public cn_resources::resource::delete {
     resource_id
 } {
@@ -60,6 +75,7 @@ ad_proc -public cn_resources::resource::edit {
 
 ad_proc -public cn_resources::resource::new {
     {-code:required}
+    {-name ""}
     {-pretty_name ""}
     {-description ""}
     {-class_id:required}
@@ -72,9 +88,10 @@ ad_proc -public cn_resources::resource::new {
     Creates a new resoruce and returns its resource_id
 } {
 
-    
-    set name [util_text_to_url -replacement "" -text $pretty_name]
-    
+    if {$name == ""} {
+	set name [util_text_to_url -replacement "" -text $pretty_name]
+    }
+
     if {$creation_ip == ""} {
 	set creation_ip [ad_conn peeraddr]
     }
@@ -124,55 +141,41 @@ ad_proc -public  cn_resources::import_csv_file {
     
     foreach line $lines {
 	set line [split $line {;}] 
+	
 	ns_log Notice "LINE $line"
-	
-	set resource_id [db_nextval acs_object_id_seq]
+
 	set code [lindex $line 0]
-	set pretty_name [lindex $line 1]
-
-	set name [util_text_to_url -replacement "" -text [lindex $line 1]]
-
-	set description [lindex $line 1]
-	set class [lindex $line 2]
-	set unit [lindex $line 3]
-	set ncm_class [lindex $line 4]
-	
-	#ns_log notice "[llength $name] - $name"
 
 	set exists_p [db_string select_code {
 	    SELECT code FROM cn_resources WHERE code = :code
 	} -default null]
 
 	if {$exists_p == "null"} {
-
-	    
-	    db_transaction {
-		db_dml insert_resource {
-		    INSERT INTO cn_resources (
-                         resource_id,
-					      code,
-					      name,
-					      pretty_name,
-					      description,
-					      class,
-					      ncm_class,
-					      unit
-					      ) VALUES (
-							:resource_id,
-							:code,
-							:name,
-							:pretty_name,
-							:description,
-							:class,
-							:ncm_class,
-							:unit
-					      )
-		}
+	    set pretty_name [lindex $line 1]
+	    set class [lindex $line 2]
+	    set class_id [cn_categories::get_category_id -name $class -type "cn_resource"] 
+	    if {$class_id eq "null"} {  
+		ns_log Notice "Add class $class | "
+		
+		set class_id [cn_categories::category::new \
+				  -pretty_name $class \
+				  -parent_id 1367 \
+				  -object_type "cn_resource" \
+				  -package_id [ad_conn package_id]]
 	    }
 	    
-	}
+	    set unit [lindex $line 3]
+	    set ncm [lindex $line 4]
+
+	    ns_log Notice "ADD RESOURCE $code | $pretty_name | $class_id | $ncm | $unit"
+	    cn_resources::resource::new \
+		-code $code \
+		-pretty_name $pretty_name \
+		-class_id $class_id \
+		-ncm_class $ncm \
+		-unit $unit \
+	    }
     }
-    
     
     return
 }
@@ -850,7 +853,18 @@ ad_proc -public  cn_resources::persons::import_csv_file {
 }
 
 namespace eval cn_resources::person {}
+ad_proc -public cn_resources::person::get_id {
+    {-cpf_cnpj}
+} {
+    Returns person_id
+} {
 
+
+    return [db_string select_person_id {
+	SELECT person_id FROM cn_persons WHERE cpf_cnpj = :cpf_cnpj
+    } -default null]
+}
+    
 ad_proc -public cn_resources::person::new {
     {-cpf_cnpj}
     {-legal_name ""}

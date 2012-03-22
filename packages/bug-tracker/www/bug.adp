@@ -26,3 +26,4 @@
   </div>
 </if>
 
+<listtemplate name="files"></listtemplate>

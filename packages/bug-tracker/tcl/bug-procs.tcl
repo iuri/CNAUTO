@@ -748,11 +748,10 @@ ad_proc bug_tracker::bug::get_list {
             display_template {<a href="@bugs.submitter_url@">@bugs.submitter_first_names@ @bugs.submitter_last_name@</a>}
         }
         assigned_to {
-            label "Assigned To"
+            label "[_ bug-tracker.Assigned_To]"
             display_template {<a href="@bugs.assignee_url@">@bugs.assignee_first_names@
-                               @bugs.assignee_last_name@</a>
-                               <if @bugs.action_pretty_name@ not nil> to </if>
-                               @bugs.action_pretty_name@}
+		@bugs.assignee_last_name@</a>
+	    }
         }
     }
 

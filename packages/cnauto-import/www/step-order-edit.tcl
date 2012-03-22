@@ -47,7 +47,8 @@ ad_form -name step_order_edit -form {
     }	
     {estimated_date:date,optional
 	{label "[_ cnauto-import.Estimated_date]"}
-	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('estimated_date', 'y-m-d');" > \[<b>[_ calendar.y-m-d]</b>\]} } 
+	{format "YYYY MM DD"}
+	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('estimated_date', 'y-m-d');" > \[<b>[_ calendar.y-m-d]</b>\]} } }
     }
     {executed_date:date,optional
 	{label "[_ cnauto-import.Executed_date]"}
@@ -67,6 +68,7 @@ ad_form -name step_order_edit -form {
     set estimated_date "[template::util::date::get_property year $estimated_date] [template::util::date::get_property month $estimated_date] [template::util::date::get_property day $estimated_date]"
 
     set executed_date "[template::util::date::get_property year $executed_date] [template::util::date::get_property month $executed_date] [template::util::date::get_property day $executed_date]"
+
 
 
     db_exec_plsql edit_step_order {

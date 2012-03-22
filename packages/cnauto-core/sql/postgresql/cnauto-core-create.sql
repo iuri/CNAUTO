@@ -23,8 +23,9 @@ CREATE TABLE cn_categories (
        parent_id       integer
        		       CONSTRAINT cn_categories_parent_id_fk
 		       REFERENCES cn_categories (category_id),
-       name	       varchar(50),
-       pretty_name     varchar(50),
+       code	       varchar(50),
+       name	       varchar(255),
+       pretty_name     varchar(255),
        object_type     varchar(20)
        		       CONSTRAINT cn_categories_object_type_fk
 		       REFERENCES acs_object_types(object_type)
@@ -128,3 +129,6 @@ CREATE TABLE cn_colors (
 
 
 
+
+
+CREATE SEQUENCE cn_core_file_number_seq cache 1000;
