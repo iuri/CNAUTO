@@ -578,3 +578,91 @@ ad_proc -public cn_core::export_csv_to_txt {
 }
 
 
+
+
+
+
+ad_proc -public cn_core::import_csv_file_abeiva {
+    {-input_file}
+} {
+    Import Abeiva's spreadsheet
+
+} {
+
+    ns_log Notice "Running ad_proc export_csv_to_txt"
+    # Input File
+    set input_file [open "${input_file}" r]
+    set lines [split [read $input_file] \n]
+    
+    set items [list]
+    set i 0
+    set duplicated 0
+    
+    set count_towner 0
+    set count_topic 0
+    
+    foreach line $lines {
+	set line [split $line ";"]
+	
+	if {$line ne ""} {
+	    ns_log Notice "LINE: $line"
+	    
+	    # Date
+	    set date [lindex $line 0] 
+	    set date [split $date /]
+	    set date "[lindex $date 2]-[lindex $date 1]-[lindex $date 0]"
+
+	    if {$date ne "--data"} {
+		set month [db_string select_month { 
+		    SELECT EXTRACT (month from timestamp :date) 
+		}]
+		set year [db_string select_year { 
+		    SELECT EXTRACT (year from timestamp :date) 
+		}]
+	    
+		ns_log Notice "$month $year"
+		
+		
+		# Chassis
+		set chassis [lindex $line 1] 
+		
+		set exists_p [item_exists -items $items -chassi $chassis]
+		
+		#ns_log Notice "EXISTS $exists_p"
+		if {$exists_p == 1} {
+		    incr duplicated
+		}
+		
+		if {$exists_p == 0} {
+		    
+		    lappend items $chassis
+		    
+		    if {$month eq 12 && $year eq 2011} {
+			if {[regexp -all {LSY} $chassis]} {
+			    incr count_topic
+			}
+			if {[regexp -all {LKH} $chassis]} {
+			    incr count_towner
+			}
+			
+			incr i
+		    }
+		}
+		set model [lindex $line 2] 
+		set description [lindex $line 3] 
+		set fabricant [lindex $line 4] 
+		set municipality [lindex $line 5] 
+		set state [lindex $line 6] 
+		
+		ns_log Notice "$date | $chassis | $model | $description | $fabricant | $municipality | $state"
+		
+	    }
+	}
+    }
+    
+    ns_log Notice "Total $i | Towners: $count_towner | Topics: $count_topic"
+    
+    close $input_file
+    
+    return 
+}
