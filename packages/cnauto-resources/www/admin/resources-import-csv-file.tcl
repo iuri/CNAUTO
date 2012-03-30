@@ -21,7 +21,7 @@ ad_form -html { enctype multipart/form-data } -name import_file -form {
     ns_log Notice "$input_file | $mime_type"
 
     if {[string equal $mime_type "application/vnd.ms-excel"] || [string equal $mime_type "text/csv"]} {
-	cn_resources::import_csv_file -input_file $tmp_file
+	cn_resources::import_resources -input_file $tmp_file
     } else {
 	ad_return_complaint 0 "Wrong file extension: <b> [lindex $input_file 0] </b> <br \>  You can upload only CSV files!!"
 

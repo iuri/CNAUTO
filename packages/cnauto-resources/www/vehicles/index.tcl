@@ -47,7 +47,7 @@ template::list::create \
 	    }
 	}
 	model {
-	    label "[_ cnauto-resources.Model]"
+	    label "[_ cnauto-resources.Resource]"
 	    display_template {
 		@vehicles.model;noquote@</a>
 	    }
@@ -60,7 +60,7 @@ template::list::create \
 	}
     } -orderby {
 	model {
-	    label "[_ cnauto-resources.Model]"
+	    label "[_ cnauto-resources.Resource]"
 	    orderby "lower(cv.model)"
 	}
     } 
@@ -71,9 +71,3 @@ db_multirow -extend {vehicle_url} vehicles select_vehicles {} {
     set vehicle_url [export_vars -base vehicle-one {return_url vehicle_id}]
 }
 
-
-ad_form -name search -form {
-    {keyword:text(text)
-	{label "[_ cnauto-core.Search]"}
-    }    
-} 

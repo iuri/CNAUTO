@@ -2,31 +2,34 @@ ad_page_contract {
     Resource admin page
 } {
     {return_url ""}
-    {object_type ""}
+    {parent_id ""}
+    {category_type ""}
     {category_id:integer,optional}
 } -properties {
     context:onevalue
 }
 
 
-
+ns_log Notice "INFO $parent_id | $category_type | "
 if {[exists_and_not_null category_id]} {
     set title "[_ cnauto-resources.Edit_category]"
     set context [list $title]
-
 } else {
     set title "[_ cnauto-resources.Add_category]"
     set context [list $title]
 }    
 
-set parent_options [db_list_of_lists select_parent_info {
-    SELECT pretty_name, category_id FROM cn_categories WHERE object_type = :object_type ORDER BY pretty_name
-}]
 
+if {[info exists category_type]} {
+    set parent_options [db_list_of_lists select_parent_info {
+	SELECT pretty_name, category_id FROM cn_categories WHERE category_type = :category_type ORDER BY pretty_name
+    }]
+    
+    lappend parent_options "Selecione \"\""  
+}
+    
 
-lappend parent_options "Selecione \"\""  
-
-ad_form -name category_ae -form {
+ad_form -name category_ae -cancel_url "/test" -form {
     {category_id:key}
     {name:text(text)
 	{label "[_ cnauto-resouces.Code]"}
@@ -35,9 +38,9 @@ ad_form -name category_ae -form {
     {pretty_name:text(text)
 	{label "[_ cnauto-resouces.Name]"}
     }
-    {object_type:text(select)
+    {category_type:text(select)
 	{label "[_ cnauto-resouces.Type]"}
-	{options {{"Selecione" 0} {"Part" cn_part} {"Person" cn_person} {"Order" cn_order}  {"Resource" cn_resource} {"Vehicle" cn_vehicle}}}
+	{options {{"Selecione" ""} {"Part" cn_part} {"Person" cn_person} {"Order" cn_order}  {"Resource" cn_resource} {"Vehicle" cn_vehicle}}}
 	{html {onChange "document.category_ae.__refreshing_p.value='1';document.category_ae.submit();"}}
 	
     }
@@ -46,19 +49,22 @@ ad_form -name category_ae -form {
 	{options $parent_options}
     }
 } -on_request {
-    set parent_id ""
+
+
 } -on_submit {
 } -edit_request {
+
     db_1row category_info {
-	SELECT name, pretty_name, object_type 
+	SELECT name, pretty_name, category_type, parent_id 
 	FROM cn_categories WHERE category_id = :category_id
     }
+
 } -new_data {
     
     cn_categories::category::new \
 	-pretty_name $pretty_name \
 	-parent_id $parent_id \
-	-object_type $object_type
+	-category_type $category_type
 
 } -edit_data {
 
@@ -72,7 +78,7 @@ ad_form -name category_ae -form {
 	    parent_id = :parent_id,
 	    pretty_name = :pretty_name,
 	    name = :name,
-	    object_type = :object_type
+	    category_type = :category_type
 	    WHERE category_id = :category_id
 	    
 	}

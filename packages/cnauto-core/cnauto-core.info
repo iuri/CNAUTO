@@ -9,13 +9,13 @@
     <implements-subsite-p>f</implements-subsite-p>
     <inherit-templates-p>f</inherit-templates-p>
     
-    <version name="0.4d" url="http://openacs.org/repository/download/apm/cnauto-core-0.4d.apm">
+    <version name="0.5d" url="http://openacs.org/repository/download/apm/cnauto-core-0.5d.apm">
         <owner url="mailto:iuri.sampaio@cnauto.com.br">Iuri Sampaio</owner>
         <summary>Core package for CNAuto system</summary>
         <description format="text/html">Core package for CNAuto system</description>
         <maturity>0</maturity>
 
-        <provides url="cnauto-core" version="0.4d"/>
+        <provides url="cnauto-core" version="0.5d"/>
 
         <callbacks>
 	  <callback type="after-install" proc="cnauto_core::install::after_install" />

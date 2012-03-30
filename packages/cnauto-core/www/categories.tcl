@@ -19,15 +19,15 @@ set context [list $title]
 set category_type_options [list]
 
 db_foreach category_type { 
-    SELECT cc.object_type AS type, COUNT(cc.category_id) AS num, ot.pretty_name
+    SELECT cc.category_type AS type, COUNT(cc.category_id) AS num, ot.pretty_name
     FROM cn_categories cc, acs_object_types ot
-    WHERE cc.object_type = ot.object_type
-    GROUP BY cc.object_type, ot.pretty_name 
+    WHERE cc.category_type = ot.object_type
+    GROUP BY cc.category_type, ot.pretty_name 
 } {
     lappend category_type_options \
 	[list \
-	     $pretty_name \
-	     $type \
+	          $pretty_name \
+	          $type \
 	     [lc_numeric $num]]
 }
     
@@ -65,24 +65,24 @@ template::list::create \
 	}
 	pretty_type {
 	    label "[_ cnauto-core.Class]"
-	}	
+	}
 	parent {
 	    label "[_ cnauto-core.Parent]"
 	}
-	
+
     } -filters {
-	object_type {
+	category_type {
 	    label "[_ cnauto-core.Type]"
-	    values $category_type_options
+	        values $category_type_options
             where_clause {
-                cc.object_type = :object_type
+                cc.category_type = :category_type
             }
-	    default_value ""
+	        default_value ""
 	}
     } -orderby {
 	pretty_name {
 	    label "[_ cnauto-core.Name]"
-	    orderby category_id
+	        orderby category_id
 	    orderby_asc {cc.pretty_name asc}
 	    orderby_desc {cc.pretty_name desc}
 	}
@@ -93,4 +93,3 @@ db_multirow -extend {category_ae_url} categories select_categories {} {
     set category_ae_url [export_vars -base "category-ae" {category_id return_url}]
 
 }
-

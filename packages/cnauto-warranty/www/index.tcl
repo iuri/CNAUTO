@@ -1,6 +1,6 @@
 ad_page_contract {
     
-    Warranties main page
+    Warranties main page / List of claims
 
 } {
     {orderby "claim_date,desc"}
@@ -18,11 +18,11 @@ set context [list $title]
 
 set return_url [ad_return_url]
 
-set resources_pkg_id [db_string selectpackage_id { SELECT package_id FROM apm_packages WHERE package_key = 'cnauto-resources' }]
+set resources_pkg_id [db_string select_package_id { SELECT package_id FROM apm_packages WHERE package_key = 'cnauto-resources' }]
 set resources_url [site_node::get_url_from_object_id  -object_id $resources_pkg_id]
 
 set actions {
-    "#cnauto-warranty.Add_claim#" "assurance-ae?return_url=/cnauto-assurance" "#cnauto-assurance.Add_a_new_assurance#"
+    "#cnauto-warranty.Add_claim#" "claim-ae?return_url=/cnauto-warranty" "#cnauto-warranty.Add_a_new_claim#"
     "#cnauto-warranty.Import_CSV_file#" "import-csv-file?return_url=/cnauto-warranty" "#cnauto-warranty.Import_csv_file#"
 }
 
@@ -79,7 +79,7 @@ template::list::create \
 	total_cost {
 	    label "[_ cnauto-warranty.Total]"
 	}
-	assurance_date {
+	claim_date {
 	    label "[_ cnauto-warranty.Date]"
 	}
     } -orderby { 
@@ -101,7 +101,7 @@ template::list::create \
 	    orderby_asc {total_cost asc}
 	    orderby_desc {total_cost desc}
 	}
-	assurance_date {
+	claim_date {
 	    label "[_ cnauto-warranty.Date]"
 	    orderby claim_date
 	    orderby_asc {claim_date asc}

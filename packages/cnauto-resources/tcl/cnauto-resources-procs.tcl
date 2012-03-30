@@ -41,12 +41,17 @@ ad_proc -public cn_resources::resource::delete {
 
 ad_proc -public cn_resources::resource::edit {
     {-resource_id:required}
-    {-code:required}
+    {-code_unum ""}
     {-pretty_name ""}
     {-description ""}
     {-class_id:required}
     {-ncm_class ""}
     {-unit ""}
+    {-code ""}
+    {-fabricant ""}
+    {-lcvm ""}
+    {-model ""}
+    {-version ""}
 } {
     Edit resource info
 } {
@@ -57,24 +62,29 @@ ad_proc -public cn_resources::resource::edit {
     db_exec_plsql update_resource {
 	SELECT cn_resource__edit (
 				  :resource_id,
-				  :code,
+				  :code_unum,
 				  :name,
 				  :pretty_name,
 				  :description,
 				  :class_id,
 				  :ncm_class,
-				  :unit
+				  :unit,
+				  :code,
+				  :fabricant,
+				  :lcvm,
+				  :model,
+				  :version
 				  )
     }
 
     return
-
 }
 
 
 
+
 ad_proc -public cn_resources::resource::new {
-    {-code:required}
+    {-code ""}
     {-name ""}
     {-pretty_name ""}
     {-description ""}
@@ -126,7 +136,7 @@ ad_proc -public cn_resources::resource::new {
 
 
 
-ad_proc -public  cn_resources::import_csv_file {
+ad_proc -public  cn_resources::import_resources {
     {-input_file:required}
 } {
 
@@ -144,39 +154,49 @@ ad_proc -public  cn_resources::import_csv_file {
 	
 	ns_log Notice "LINE $line"
 
-	set code [lindex $line 0]
-
-	set exists_p [db_string select_code {
-	    SELECT code FROM cn_resources WHERE code = :code
-	} -default null]
-
-	if {$exists_p == "null"} {
-	    set pretty_name [lindex $line 1]
-	    set class [lindex $line 2]
-	    set class_id [cn_categories::get_category_id -name $class -type "cn_resource"] 
-	    if {$class_id eq "null"} {  
-		ns_log Notice "Add class $class | "
-		
-		set class_id [cn_categories::category::new \
-				  -pretty_name $class \
-				  -parent_id 1367 \
-				  -object_type "cn_resource" \
-				  -package_id [ad_conn package_id]]
-	    }
+	if {$line ne ""} {
+	    ns_log Notice "LINE 3 $line"
+	    set code_unum [lindex $line 0]
 	    
-	    set unit [lindex $line 3]
-	    set ncm [lindex $line 4]
-
-	    ns_log Notice "ADD RESOURCE $code | $pretty_name | $class_id | $ncm | $unit"
-	    cn_resources::resource::new \
-		-code $code \
-		-pretty_name $pretty_name \
-		-class_id $class_id \
-		-ncm_class $ncm \
-		-unit $unit \
+	    set exists_p [db_string select_code {
+		SELECT code FROM cn_resources WHERE code = :code
+	    } -default null]
+	    
+	    if {$exists_p == "null"} {
+		set pretty_name [lindex $line 1]
+		set color [lindex $pretty_name 1]
+		
+		set class [lindex $line 2]
+		set class_id [cn_categories::get_category_id -name $class -type "cn_resource"] 
+		if {$class_id eq "null"} {  
+		    ns_log Notice "Add class $class | "
+		    
+		    set class_id [cn_categories::category::new \
+				      -pretty_name $class \
+				      -parent_id "" \
+				      -object_type "cn_resource" \
+				      -package_id [ad_conn package_id]]
+		}
+		
+		set unit [lindex $line 3]
+		set ncm [lindex $line 4]
+		
+		ns_log Notice "ADD RESOURCE $code | $pretty_name | $class_id | $ncm | $unit"
+		cn_resources::resource::new \
+		    -code_unum $code \
+		    -pretty_name $pretty_name \
+		    -class_id $class_id \
+		    -ncm_class $ncm \
+		    -unit $unit \
+		    -code $code \
+		    -fabricant $fabricant \
+		    -lcvm $lcvm \
+		    -model $model \
+		    -version $version	    
 	    }
-    }
-    
+	}
+    }	
+
     return
 }
 
@@ -305,272 +325,6 @@ ad_proc -public cn_resources::part::new {
     }
     
     return $part_id
-}
-
-
-
-
-namespace eval cn_resources::vehicles {}
-
-ad_proc -public  cn_resources::vehicles::import_csv_file {
-    {-input_file}
-} {
-
-    Imports CSV files to add vehicles
-} {
-
-    ns_log Notice "Running ad_proc cn_resources::vehicles::import_csv_file"
-
-    set input_file [open "${input_file}" r]
-    set lines [split [read $input_file] \n]
-    close $input_file
-
-    foreach line $lines {
-	set line [split $line {;}] 
-	ns_log Notice "LINE $line"
-	
-
-	set vin [lindex $line 0]
-	set model [lindex $line 1]
-	set purchase_date [lindex $line 2]
-	if {[exists_and_not_null purchase_date]} {
-	    set purchase_date [split $purchase_date {/}]
-	    set purchase_date "[lindex $purchase_date 2]-[lindex $purchase_date 1]-[lindex $purchase_date 0]"
-	} else {
-	    set purchase_date ""
-	}
-	    
-
-
-	set duration [lindex $line 3]
-	set color ""
-	set distributor [lindex $line 5]
-	set owner [lindex $line 6]
-	
-	set postal_address [lindex $line 7]
-	set city [lindex $line 8]
-	set state [lindex $line 9]
-	set postal_code [lindex $line 10]
-	set phone [lindex $line 11]
-	set yof [lindex $line 12]
-	set yom [lindex $line 13]
-	set engine [lindex $line 14]
-
-	set arrival_date [lindex $line 15]
-	if {[exists_and_not_null arrival_date]} {
-	    set arrival_date [split $arrival_date {/}]
-	    set arrival_date "[lindex $arrival_date 2]-[lindex $arrival_date 1]-[lindex $arrival_date 0]"
-	} else {
-	    set arrival_date ""
-	}
- 
-
-	set billing_date [lindex $line 16]
-	if {[exists_and_not_null billing_date]} {
-	    set billing_date [split $billing_date {/}]
-	    set billing_date "[lindex $billing_date 2]-[lindex $billing_date 1]-[lindex $billing_date 0]"
-	} else {
-	    set billing_date ""
-	}
-
-	set notes [lindex $line 17]
-
-	
-	
-	set resource_id ""
-	set person_id ""
-	set creation_ip [ad_conn peeraddr]
-	set creation_user [ad_conn user_id]
-	set context_id [ad_conn package_id]
-
-	#ns_log notice "[llength $name] - $name"
-
-
-	ns_log Notice "
-	    vin $vin \n 
-	    model $model \n
-	    purchase_date $purchase_date \n
-	    duration $duration \n
-	    color $color \n
-	    distributor $distributor \n
-	    owner  $owner \n
-	    postal_address \n 
-	    city $color \n
-	    state $state \n
-	    postal_code $postal_code \n
-	    phone $phone \n
-	    yof $yof \
-	    yom $yom \n
-	    engine  $engine \n
-	    arrival_date $arrival_date \n
-	    billing_date $billing_date
-	    notes $notes \n
-        "
-
-
-
-	set exists_p [db_string select_code {
-	    SELECT vin FROM cn_vehicles WHERE vin = :vin
-	} -default null]
-
-	if {$exists_p == "null" && $vin != ""} {
-
-	    
-	    db_transaction {
-		db_exec_plsql insert_vehicle {
-		    SELECT cn_vehicle__new (
-					    :vin,
-					    :model,
-					    :engine,
-					    :yom,
-					    :yof,
-					    :color,
-					    :purchase_date,
-					    :arrival_date,
-					    :billing_date,
-					    :duration,
-					    :resource_id,
-					    :person_id,
-					    :notes,
-					    :creation_ip,
-					    :creation_user,
-					    :context_id
-					    )
-		}
-	    }
-	    
-	}
-    }
-    
-    
-    return
-}
-
-namespace eval cn_resources::vehicle {}
-
-ad_proc -public cn_resources::vehicle::delete { 
-    vehicle_id
-} {
-    Deletes a vehicle
-} {
-
-    db_exec_plsql delete_vehicle {
-	SELECT cn_vehicle__delete ( :vehicle_id )
-    }
-
-    return
-}
-
-ad_proc -public cn_resources::vehicle::edit { 
-    {-vehicle_id:required}
-    {-vin:required}
-    {-resource_id:required}
-    {-model_id ""}
-    {-engine ""}
-    {-year_of_model ""}
-    {-year_of_fabrication ""}
-    {-color ""}
-    {-arrival_date ""}
-    {-billing_date ""}
-    {-purchase_date ""}
-    {-duration ""}
-    {-distributor_id ""}
-    {-owner_id ""}
-    {-notes ""}
-} {
-    Edit vehicle info
-} {
-    
-
-    db_transaction {
-	db_exec_plsql update_vehicle {
-	    SELECT cn_vehicle__edit (
-				     :vehicle_id,
-				     :vin,
-				     :resource_id,
-				     :model_id,
-				     :engine,
-				     :year_of_model,
-				     :year_of_fabrication,
-				     :color,
-				     :arrival_date,
-				     :purchase_date,
-				     :billing_date,
-				     :duration,
-				     :distributor_id,
-				     :owner_id,
-				     :notes
-				     )
-	}
-    }
-
-    return
-
-}
-
-
-ad_proc -public cn_resources::vehicle::new { 
-    {-vin:required}
-    {-resource_id:required}
-    {-model_id ""}
-    {-engine ""}
-    {-year_of_model ""}
-    {-year_of_fabrication ""}
-    {-color ""}
-    {-arrival_date ""}
-    {-billing_date ""}
-    {-purchase_date ""}
-    {-duration ""}
-    {-distributor_id ""}
-    {-owner_id ""}
-    {-notes ""}
-    {-creation_ip ""}
-    {-creation_user ""}
-    {-context_id ""}
-} {
-    Adds a new vehicle 
-} {
-     
-    if {$creation_ip == ""} {
-	set creation_ip [ad_conn peeraddr]
-    }
-    
-    if {$creation_user == ""} {
-	set creation_user [ad_conn user_id]
-    }
-     
-    if {$context_id == ""} {
-	set context_id [ad_conn package_id]
-    }
-
-
-   #set vehicle_id [db_nextval acs_object_id_seq]
-	
-    db_transaction {
-	set vehicle_id [db_exec_plsql insert_vehicle {
-	    SELECT cn_vehicle__new (
-				    :vin,
-				    :resource_id,
-				    :model_id,
-				    :engine,
-				    :year_of_model,
-				    :year_of_fabrication,
-				    :color,
-				    :purchase_date,
-				    :arrival_date,	
-				    :billing_date,
-				    :duration,
-				    :distributor_id,
-				    :owner_id,
-				    :notes,
-				    :creation_ip,
-				    :creation_user,
-				    :context_id
-				    )
-	}]
-    }
-
-    return $vehicle_id
 }
 
 

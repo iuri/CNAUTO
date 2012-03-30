@@ -4,15 +4,12 @@
 <property name="context">@context;noquote@</property>
 
 <br>
-<h1>@title;noquote@</h1>
-
-
 <table cellpadding="3" cellspacing="3">
   <tr>
-    <td>&nbsp;</td>
+    <td><h1>@title;noquote@</h1></td>
     <td align="right" valing="top">
       <form action="index" method="post" name="search">
-        <input type="text" name="keyword" id="keyword" value="Chassis" size="30px"> &nbsp; <input type="submit" name="submit" id="submit" value="#cnauto-assurance.Search#">
+        <input type="text" name="keyword" id="keyword" value="Chassis" size="30px"> &nbsp; <input type="submit" name="submit" id="submit" value="#cnauto-warranty.Search#">
       </form>
 
     </td>

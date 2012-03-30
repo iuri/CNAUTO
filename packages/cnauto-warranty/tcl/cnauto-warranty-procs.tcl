@@ -5,7 +5,7 @@ ad_library {
 }
 
 
-namespace eval cn_warranty {}
+namespace eval cn_claim {}
 ad_proc -public cn_claim::new { 
     {-claim_number ""}
     {-claim_date ""}
@@ -342,7 +342,7 @@ ad_proc -public cn_claim::part_html_input {
     set part_id ""
     
     if {$part_id == ""} {
-	set html_options "<option value=\"0\">#cnauto-claim.Select#</option>"
+	set html_options "<option value=\"0\">#cnauto-warranty.Select#</option>"
     }
 
     set element_options [db_list_of_lists select_part_info {
@@ -416,7 +416,7 @@ ad_proc -public cn_claim::vehicle_select_widget_html {
     set html_select "<select name=\"${name}\" id=\"${name}\" onChange=\"return FillFieldsOnChange();\">"
     
     if {$key == ""} {
-	set html_options "<option value=\"0\">#cnauto-claim.Select#</option>"
+	set html_options "<option value=\"0\">#cnauto-warranty.Select#</option>"
     } else {
 
 	db_1row select_vehicle {
@@ -459,7 +459,7 @@ ad_proc -public cn_claim::model_select_widget_html {
     set category_id ""
 
     if {$key == ""} {
-	set html_options "<option value=\"0\">#cnauto-claim.Select#</option>"
+	set html_options "<option value=\"0\">#cnauto-warranty.Select#</option>"
     } else {
 	
 	db_1row select_pretty_name {
@@ -511,7 +511,7 @@ ad_proc -public cn_claim::distributor_select_widget_html {
     set person_id ""
 
     if {$key == ""} {
-	set html_options "<option value=\"0\">#cnauto-claim.Select#</option>"
+	set html_options "<option value=\"0\">#cnauto-warranty.Select#</option>"
     } else {
 	
 	set count [db_string select_person_id {
@@ -530,7 +530,7 @@ ad_proc -public cn_claim::distributor_select_widget_html {
 	    
 	    set html_options "<option value=\"$person_id\">$pretty_name</option>"
 	} else {
-	    set html_options "<option value=\"0\">#cnauto-claim.Select#</option>" 
+	    set html_options "<option value=\"0\">#cnauto-warranty.Select#</option>" 
 	}
 	ns_log Notice "$html_options"
     }
@@ -574,7 +574,7 @@ ad_proc -public cn_claim::owner_select_widget_html {
     set person_id ""
 
     if {$key == ""} {
-	set html_options "<option value=\"0\">#cnauto-claim.Select#</option>"
+	set html_options "<option value=\"0\">#cnauto-warranty.Select#</option>"
     } else {
 	
 	set count [db_string select_person_id {
@@ -593,7 +593,7 @@ ad_proc -public cn_claim::owner_select_widget_html {
 	    
 	    set html_options "<option value=\"${person_id}\">${pretty_name}</option>"
 	} else {
-	    set html_options "<option value=\"0\">#cnauto-claim.Select#</option>" 
+	    set html_options "<option value=\"0\">#cnauto-warranty.Select#</option>" 
 	}
     }
 
@@ -862,23 +862,4 @@ ad_proc -public  cn_claim::import_csv_file {
 	-creation_ip [ad_conn peeraddr] \
 	-creation_user [ad_conn user_id] \
 	-context_id [ad_conn package_id]    
-	
-
-}
-
-
-
-
-
-
-
-
-
-ad_proc -public cn_claim::get_color_options {} {
-    
-    Returns a list of lists to the ad_form select element 
-    
-} {
-    
-    return [db_list_of_lists select_colors { SELECT name, code FROM cn_colors }]
 }

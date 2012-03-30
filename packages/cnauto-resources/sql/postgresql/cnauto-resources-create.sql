@@ -17,13 +17,30 @@ CREATE TABLE cn_resources (
     name 	varchar(255),
     pretty_name varchar(255),
     description text,
-    class_id 	integer 
+    type_id 	integer 
     		CONSTRAINT cn_resources_class_id_fk
     		REFERENCES cn_categories (category_id),
     unit 	varchar(50),
-    ncm_class 	varchar(50)
+    ncm_class 	varchar(50),
 );
 
+
+------------------------------------
+-- Object Type: cn_resource
+------------------------------------
+
+SELECT acs_object_type__create_type (
+    'cn_resource',         -- object_type
+    'CN Resource',         -- pretty_name
+    'CN Resources',    	   -- pretty_plural
+    'acs_object',     	   -- supertype
+    'cn_resources',        -- table_name
+    'resource_id',     	   -- id_column
+    null,		   -- name_method
+    'f',
+    null,
+    null
+);
 
 
 
@@ -37,7 +54,6 @@ RETURNS integer AS '
 
 	RETURN 0;
   END;' LANGUAGE 'plpgsql';
-
 
 
 CREATE FUNCTION cn_resource__new(
@@ -104,9 +120,7 @@ CREATE FUNCTION cn_resource__new(
 
 
 
-
-
-CREATE OR REPLACE FUNCTION cn_resource__edit (
+CREATE FUNCTION cn_resource__edit (
        integer, -- resource_id
        varchar,	-- code
        varchar,	-- name
@@ -126,7 +140,6 @@ CREATE OR REPLACE FUNCTION cn_resource__edit (
 	p_ncm_class	ALIAS FOR $7;
 	p_unit		ALIAS FOR $8;
 
-
   BEGIN
   
   	UPDATE cn_resources SET 
@@ -142,6 +155,117 @@ CREATE OR REPLACE FUNCTION cn_resource__edit (
 	RETURN 0;
 
   END;' LANGUAGE 'plpgsql';
+
+
+
+
+
+
+
+
+
+CREATE TABLE cn_renavam (
+       renavam_id	integer PRIMARY KEY,
+       resource_id	integer
+       			CONSTRAINT cn_renavam_resource_id_fk
+			REFERENCES cn_resources (resource_id),
+       code		varchar(255)
+    			CONSTRAINT cn_renavam_code_un UNIQUE,  
+       fabricant 	varchar(255),
+       lcvm		varchar(255),
+       model		varchar(255),
+       version		varchar(255)
+);
+
+
+CREATE OR REPLACE FUNCTION cn_renavam__new (
+       integer, -- renavam_id
+       varchar, -- code
+       varchar, -- fabricant
+       varchar, -- lcvm
+       varchar, -- model
+       varchar -- version
+) RETURNS integer AS '
+  DECLARE
+	p_renavam_id	ALIAS FOR $1;
+	p_code		ALIAS FOR $2;
+	p_fabricant	ALIAS FOR $3;
+	p_lcvm		ALIAS FOR $4;
+	p_model		ALIAS FOR $5;
+	p_version	ALIAS FOR $6;
+
+  BEGIN
+  
+	INSERT INTO cn_renavam (
+	       	renavam_id,
+		code,
+		fabricant,
+		lcvm,
+		model,
+		version
+	) VALUES (
+	  	 p_renavam_id,
+		 p_code,
+		 p_fabricant,
+		 p_lcvm,
+		 p_model,
+		 p_version
+	);
+
+	RETURN 0;
+
+  END;' LANGUAGE 'plpgsql';
+
+
+
+CREATE OR REPLACE FUNCTION cn_renavam__edit (
+       integer, -- renavam_id
+       varchar, -- code
+       varchar, -- fabricant
+       varchar, -- lcvm
+       varchar, -- model
+       varchar -- version
+) RETURNS integer AS '
+  DECLARE
+	p_renavam_id	ALIAS FOR $1;
+	p_code		ALIAS FOR $2;
+	p_fabricant	ALIAS FOR $3;
+	p_lcvm		ALIAS FOR $4;
+	p_model		ALIAS FOR $5;
+	p_version	ALIAS FOR $6;
+
+  BEGIN
+  
+	UPDATE cn_renavam SET 
+		code = p_code,
+		fabricant = p_fabricant,
+		lcvm = p_lcvm,
+		model = p_model,
+		version = p_version
+	WHERE renavam_id = p_renavam_id;
+
+	RETURN 0;
+
+  END;' LANGUAGE 'plpgsql';
+
+
+
+CREATE OR REPLACE FUNCTION cn_renavam__delete (
+       integer -- renavam_id
+) RETURNS integer AS '
+  DECLARE 
+  	  p_renavam_id	ALIAS FOR $1;  
+  BEGIN
+	DELETE FROM cn_renavam WHERE renavam_id = p_renavam_id;
+
+	RETURN 0;
+
+  END;' LANGUAGE 'plpgsql';
+
+
+
+
+
 
 
 
@@ -605,9 +729,6 @@ CREATE TABLE cn_vehicles (
        resource_id		integer
        				CONSTRAINT cn_vehicles_resource_id_fk
 				REFERENCES cn_resources (resource_id),
-       model_id			integer
-       				CONSTRAINT cn_vehicles_model_id_fk
-				REFERENCES cn_categories (category_id),
        engine			varchar(100),
        year_of_model		integer,
        year_of_fabrication 	integer,
@@ -626,6 +747,8 @@ CREATE TABLE cn_vehicles (
 			   	REFERENCES cn_persons (person_id),
        notes		   	text
 );
+
+
 
 
 ------------------------------------

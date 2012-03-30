@@ -272,7 +272,7 @@ ad_proc -public cn_categories::category::new {
     {-name ""}
     {-parent_id ""}
     {-package_id ""}
-    {-object_type ""}
+    {-category_type ""}
 } {
 
     Adds a new category
@@ -296,14 +296,14 @@ ad_proc -public cn_categories::category::new {
 				       parent_id,
 				       pretty_name,
 				       name,
-				       object_type
+				       category_type
 				       ) VALUES (
 						 :category_id,
 						 :package_id,
 						 :parent_id,
 						 :pretty_name,
 						 :name,
-						 :object_type
+						 :category_type
 				       )
 	}
     }

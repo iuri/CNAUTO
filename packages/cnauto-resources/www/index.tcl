@@ -2,6 +2,7 @@ ad_page_contract {
     Resources main page
 } {
     {page ""}
+    {keyword:optional}
 }
 
 set title "[_ cnauto-resources.Resources]"
@@ -26,6 +27,15 @@ if {$admin_p} {
     set bulk_actions {"#cnauto-resources.Delete#" "resource-bulk-delete" "#cnauto-resources.Delete_selected_resources#"}
 }
 
+
+set where_clause ""
+if {[info exists keyword]} {
+    set where_clause "WHERE (
+      cr.code = :keyword 
+      OR cr.name = lower(:keyword) 
+      OR cr.pretty_name = :keyword)"
+}
+
 template::list::create \
     -name resources \
     -multirow resources \
@@ -33,6 +43,7 @@ template::list::create \
     -actions $actions \
     -row_pretty_plural "resources" \
     -bulk_actions $bulk_actions \
+    -bulk_action_method post \
     -page_flush_p t \
     -page_size 50 \
     -page_query_name resources_pagination \
@@ -55,6 +66,8 @@ template::list::create \
 		<a href="@resources.resource_url@">@resources.class;noquote@</a>
 	    }
 	}
+	
+
     } -orderby {
 	class {
 	    label "[_ cnauto-resources.Class]"
@@ -70,9 +83,3 @@ db_multirow -extend {resource_url} resources select_resources {
     set resource_url [export_vars -base resource-one {return_url resource_id}]
 }
 
-
-ad_form -name search -form {
-    {keyword:text(text)
-	{label "[_ cnauto-core.Search]"}
-    }    
-} 

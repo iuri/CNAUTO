@@ -8,9 +8,8 @@ ad_page_contract {
 
 set page_title [_ cnauto-assurance.Resource_info]
 
-ns_log Notice "$return_url"
 
-ad_form -name resource_one -action resource-ae -export {return_url resource_id} -has_submit 1 -has_edit 1 -mode display -form {
+ad_form -name resource_one -action resource-ae -export {{return_url "resource-one"} resource_id} -has_submit 1 -has_edit 1 -mode display -form {
     {inform1:text(inform)
         {label "<h2>[_ cnauto-resources.Company_info]</h2>"}
     }
@@ -26,6 +25,10 @@ ad_form -name resource_one -action resource-ae -export {return_url resource_id} 
     {unit:text(text)
 	{label "[_ cnauto-assurance.Unit]"}
     }	
+    {ncm:text(text),optional
+	{label "[_ cnauto-resources.NCM]"}
+	{html {size 30} }
+    }    
 } -on_request {
     
    

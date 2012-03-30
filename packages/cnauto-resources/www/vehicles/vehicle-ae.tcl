@@ -6,15 +6,15 @@ ad_page_contract {
 }
 
 if { [exists_and_not_null vehicle_id] } {
-    set page_title [_ cnauto-assurance.Edit_vehicle]    
+    set page_title [_ cnauto-resources.Edit_vehicle]    
     #set ad_form_mode display
 } else {    
-    set page_title [_ cnauto-assurance.Add_vehicle]    
+    set page_title [_ cnauto-resources.Add_vehicle]    
     #set ad_form_mode edit
 }
 
 
-set color_options [cn_assurance::get_color_options]
+set color_options [cn_resources::vehicles::get_color_options]
 set year_options {"2000 2000" "2001 2001" "2002 2002" "2003 2003" "2004 2004" "2005 2005" "2006 2006" "2007 2007" "2008 2008" "2009 2009" "2010 2010" "2011 2011"}
 
 #set year_options [db_list_of_lists select_years { SELECT EXTRACT(YEAR FROM INTERVAL ('now' + '10 years')); }]
@@ -45,7 +45,7 @@ lappend chassis_options {"Selecione" ""}
 set model_options [db_list_of_lists select_chassis {
     SELECT c1.pretty_name, c1.category_id 
     FROM cn_categories c1, cn_categories c2
-    WHERE c1.parent_id = c2.category_id AND c2.name ='models' AND c2.object_type = 'cn_vehicle'
+    WHERE c1.parent_id = c2.category_id AND c2.name ='models' AND c2.category_type = 'cn_vehicle'
 }]
 
 lappend model_options {"Selecione" 0}
@@ -54,7 +54,7 @@ lappend model_options {"Selecione" 0}
 
 
 set resource_options [db_list_of_lists select_resources {
-    SELECT cr.pretty_name, cr.resource_id FROM cn_resources cr, cn_categories cc WHERE cr.class_id = cc.category_id AND cc.name = 'vehicles'
+    SELECT cr.code, cr.resource_id FROM cn_resources cr, cn_categories cc WHERE cr.class_id = cc.category_id AND cc.name = 'veculos'
 }]
 
 lappend resource_options {"Selecione" ""}
@@ -64,69 +64,72 @@ set person_ae_url [export_vars -base "person-ae" {return_url}]
 ad_form -name vehicle_ae -form {
     {vehicle_id:key}
     {inform1:text(inform)
-        {label "<h2>[_ cnauto-assurance.Vehicle_info]</h2>"}
+        {label "<h2>[_ cnauto-resources.Vehicle_info]</h2>"}
         {value ""}
     }
     {vin:text(text)
-	{label "[_ cnauto-asssurance.Chassis]"}
+	{label "[_ cnauto-resources.Chassis]"}
     }    
     {model_id:integer(select),optional
-	{label "[_ cnauto-asssurance.Model]"}
+	{label "[_ cnauto-resources.Model]"}
 	{options $model_options}   
     }    
     {resource_id:integer(select)
-	{label "[_ cnauto-assurance.Resource]"}
+	{label "[_ cnauto-resources.Resource]"}
 	{options $resource_options} 
     }	
     {engine:text(text)
-	{label "[_ cnauto-assurance.Engine]"}
+	{label "[_ cnauto-resources.Engine]"}
     }
     {color:text(select),optional
-	{label "[_ cnauto-assurance.Color]"}
+	{label "[_ cnauto-resources.Color]"}
 	{options $color_options}
     }
     {year_of_model:integer(select),optional
-	{label "[_ cnauto-assurance.Year_of_model]"}
+	{label "[_ cnauto-resources.Year_of_model]"}
 	{options $year_options} 
     }
     {year_of_fabrication:integer(select),optional
-	{label "[_ cnauto-assurance.Year_of_fabricant]"}
+	{label "[_ cnauto-resources.Year_of_fabricant]"}
 	{options $year_options}   
     }
     {purchase_date:date,optional,optional
-	{label "[_ cnauto-assurance.Purchase_date]"}
+	{label "[_ cnauto-resources.Purchase_date]"}
 	{format "YYYY MM DD"}
-	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('purchase_date', 'y-m-d');" > \[<b>[_ calendar.y-m-d]</b>\]}}   
+	{help_text "[_ cnauto-resources.y-m-d]"}
+	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('purchase_date', 'y-m-d');" >}}   
     }   
     {arrival_date:date,optional
-	{label "[_ cnauto-assurance.Arrival_date]"}
+	{label "[_ cnauto-resources.Arrival_date]"}
 	{format "YYYY MM DD"}
-	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('arrival_date', 'y-m-d');" > \[<b>[_ calendar.y-m-d]</b>\]} }
+	{help_text "[_ cnauto-resources.y-m-d]"}
+	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('arrival_date', 'y-m-d');" >} }
     }
     {billing_date:date,optional
-	{label "[_ cnauto-assurance.Billing_date]"}
+	{label "[_ cnauto-resources.Billing_date]"}
 	{format "YYYY MM DD"}
-	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('billing_date', 'y-m-d');" > \[<b>[_ calendar.y-m-d]</b>\]} }
+	{help_text "[_ cnauto-resources.y-m-d]"}
+	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('billing_date', 'y-m-d');" >} }
     }
     {duration:text(text),optional
-	{label "[_ cnauto-assurance.Duration]"}
+	{label "[_ cnauto-resources.Duration]"}
     }
     {distributor_id:integer(select),optional
-	{label "[_ cnauto-assurance.Distributor]"}
+	{label "[_ cnauto-resources.Distributor]"}
 	{options $distributor_options}
-	{help_text "<a href=\"${person_ae_url}\">#cnauto-assurance.Add_distributor#</a>"}
+	{help_text "<a href=\"${person_ae_url}\">#cnauto-resources.Add_distributor#</a>"}
     }
     {inform3:text(inform)
-        {label "<h2>[_ cnauto-assurance.Client_info]</h2>"}
+        {label "<h2>[_ cnauto-resources.Client_info]</h2>"}
         {value ""} 
     }
     {owner_id:integer(select),optional
-	{label "[_ cnauto-assurance.Owner]"}
+	{label "[_ cnauto-resources.Owner]"}
 	{options $owner_options}
-	{help_text "<a href=\"${person_ae_url}\">#cnauto-assurance.Add_owner#</a>"}
+	{help_text "<a href=\"${person_ae_url}\">#cnauto-resources.Add_owner#</a>"}
     }
     {notes:text(textarea),optional
-	{label "[_ cnauto-assurance.Notes]"}
+	{label "[_ cnauto-resources.Notes]"}
     }
     {return_url:text(hidden)
 	{value $return_url}
