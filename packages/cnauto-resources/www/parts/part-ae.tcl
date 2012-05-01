@@ -17,7 +17,7 @@ if {[exists_and_not_null part_id]} {
 
 set model_options [db_list_of_lists select_model {
 	SELECT pretty_name, category_id
-	FROM cn_categories WHERE object_type = 'cn_part' ORDER BY pretty_name
+	FROM cn_categories WHERE category_type = 'cn_part' ORDER BY pretty_name
 }]
     
 lappend model_options {"Selecione" ""}
@@ -43,10 +43,6 @@ ad_form -name part_ae -form {
     {resource_id:integer(select)
 	{label "[_ cnauto-resources.Resource]"}
 	{options $resource_options}
-    }
-    {model_id:integer(select),optional
-	{label "[_ cnauto-resources.Model]"}
-	{options $model_options}
     }
     {quantity:integer,optional
 	{label "[_ cnauto-resources.Quantity]"}
@@ -84,12 +80,11 @@ ad_form -name part_ae -form {
 
     db_1row select_part_info {
 	
-	
-	SELECT cp.code, cp.pretty_name, cr.pretty_name AS resource, cc.pretty_name AS model, cp.quantity, cp.price, cp.width, cp.height, cp.depth, cp.weight, cp.volume, cp.dimensions 
+       	SELECT cp.code, cp.pretty_name, cr.pretty_name AS resource, cp.quantity, cp.price, cp.width, cp.height, cp.depth, cp.weight, cp.volume, cp.dimensions 
 	FROM cn_parts cp 
 	LEFT OUTER JOIN cn_resources cr ON (cr.resource_id = cp.resource_id)
-	LEFT JOIN cn_categories cc ON (cc.category_id = cp.model_id)
 	WHERE cp.part_id = :part_id
+
     }
 } -edit_data {
     
@@ -101,7 +96,6 @@ ad_form -name part_ae -form {
 		     -name $name \
 		     -pretty_name $pretty_name \
 		     -resource_id $resource_id \
-		     -model_id $model_id \
 		     -quantity $quantity \
 		     -price $price \
 		     -width $width \
@@ -131,7 +125,6 @@ ad_form -name part_ae -form {
 			 -name $name \
 			 -pretty_name $pretty_name \
 			 -resource_id $resource_id \
-			 -model_id  $model_id \
 			 -quantity $quantity \
 			 -price $price \
 			 -width $width \

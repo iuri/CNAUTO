@@ -60,18 +60,18 @@ template::list::create \
 		<a href="@resources.resource_url@">@resources.pretty_name;noquote@</a>
 	    }
 	}
-	class {
-	    label "[_ cnauto-resources.Class]"
+	type {
+	    label "[_ cnauto-resources.Type]"
 	    display_template {
-		<a href="@resources.resource_url@">@resources.class;noquote@</a>
+		<a href="@resources.resource_url@">@resources.type;noquote@</a>
 	    }
 	}
 	
 
     } -orderby {
-	class {
-	    label "[_ cnauto-resources.Class]"
-	    orderby "lower(cr.class)"
+	type {
+	    label "[_ cnauto-resources.Type]"
+	    orderby "lower(cr.type)"
 	}
     } 
 

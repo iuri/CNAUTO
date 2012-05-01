@@ -44,14 +44,10 @@ ad_proc -public cn_resources::resource::edit {
     {-code_unum ""}
     {-pretty_name ""}
     {-description ""}
-    {-class_id:required}
+    {-type_id:required}
     {-ncm_class ""}
     {-unit ""}
-    {-code ""}
-    {-fabricant ""}
-    {-lcvm ""}
-    {-model ""}
-    {-version ""}
+    {-renavam_id ""}
 } {
     Edit resource info
 } {
@@ -66,14 +62,10 @@ ad_proc -public cn_resources::resource::edit {
 				  :name,
 				  :pretty_name,
 				  :description,
-				  :class_id,
+				  :type_id,
 				  :ncm_class,
 				  :unit,
-				  :code,
-				  :fabricant,
-				  :lcvm,
-				  :model,
-				  :version
+				  :renavam_id
 				  )
     }
 
@@ -88,9 +80,10 @@ ad_proc -public cn_resources::resource::new {
     {-name ""}
     {-pretty_name ""}
     {-description ""}
-    {-class_id:required}
+    {-type_id:required}
     {-ncm_class ""}
     {-unit ""}
+    {-renavam_id ""}
     {-creation_ip ""}
     {-creation_user ""}
     {-context_id ""}
@@ -121,9 +114,10 @@ ad_proc -public cn_resources::resource::new {
 				     :name,
 				     :pretty_name,
 				     :description,
-				     :class_id,
+				     :type_id,
 				     :ncm_class,
 				     :unit,
+				     :renavam_id,
 				     :creation_ip,
 				     :creation_user,
 				     :context_id
@@ -167,16 +161,6 @@ ad_proc -public  cn_resources::import_resources {
 		set color [lindex $pretty_name 1]
 		
 		set class [lindex $line 2]
-		set class_id [cn_categories::get_category_id -name $class -type "cn_resource"] 
-		if {$class_id eq "null"} {  
-		    ns_log Notice "Add class $class | "
-		    
-		    set class_id [cn_categories::category::new \
-				      -pretty_name $class \
-				      -parent_id "" \
-				      -object_type "cn_resource" \
-				      -package_id [ad_conn package_id]]
-		}
 		
 		set unit [lindex $line 3]
 		set ncm [lindex $line 4]
@@ -188,11 +172,7 @@ ad_proc -public  cn_resources::import_resources {
 		    -class_id $class_id \
 		    -ncm_class $ncm \
 		    -unit $unit \
-		    -code $code \
-		    -fabricant $fabricant \
-		    -lcvm $lcvm \
-		    -model $model \
-		    -version $version	    
+		    -renavam_id ""
 	    }
 	}
     }	

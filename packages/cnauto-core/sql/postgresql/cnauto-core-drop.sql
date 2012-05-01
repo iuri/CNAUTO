@@ -45,3 +45,7 @@ DROP FUNCTION cn_category__delete (
 -- Table cn_colors
 ------------------------------------
 DROP TABLE cn_colors;
+
+
+
+DROP SEQUENCE cn_core_file_number_seq;

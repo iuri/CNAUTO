@@ -26,8 +26,8 @@ CREATE TABLE cn_categories (
        code	       varchar(50),
        name	       varchar(255),
        pretty_name     varchar(255),
-       object_type     varchar(20)
-       		       CONSTRAINT cn_categories_object_type_fk
+       category_type     varchar(20)
+       		       CONSTRAINT cn_categories_category_type_fk
 		       REFERENCES acs_object_types(object_type)
 );
 
@@ -45,7 +45,7 @@ CREATE OR REPLACE FUNCTION cn_category__new (
 	  p_parent_id		ALIAS FOR $3;
 	  p_name		ALIAS FOR $4;
 	  p_pretty_name		ALIAS FOR $5;
-	  p_object_type		ALIAS FOR $6;
+	  p_category_type	ALIAS FOR $6;
   BEGIN
 
 	INSERT INTO cn_categories (
@@ -54,14 +54,14 @@ CREATE OR REPLACE FUNCTION cn_category__new (
 	       parent_id,
 	       name,
 	       pretty_name,
-	       object_type
+	       category_type
 	) VALUES (
 	       p_category_id,
 	       p_package_id,
 	       p_parent_id,
 	       p_name,
 	       p_pretty_name,
-	       p_object_type
+	       p_category_type
         );
 
 	RETURN 0;
@@ -75,7 +75,7 @@ CREATE OR REPLACE FUNCTION cn_category__edit (
        integer,	  -- parent_id
        varchar,	  -- name
        varchar,	  -- pretty_name
-       varchar	  -- object_type
+       varchar	  -- category_type
 ) RETURNS integer AS '
   DECLARE 
   	  p_category_id		ALIAS FOR $1;
@@ -83,7 +83,7 @@ CREATE OR REPLACE FUNCTION cn_category__edit (
 	  p_parent_id		ALIAS FOR $3;
 	  p_name		ALIAS FOR $4;
 	  p_pretty_name		ALIAS FOR $5;
-	  p_object_type		ALIAS FOR $6;
+	  p_categorty_type	ALIAS FOR $6;
   BEGIN
 
 	UPDATE cn_categories SET 
@@ -91,7 +91,7 @@ CREATE OR REPLACE FUNCTION cn_category__edit (
 	       parent_id = p_parent_id,
 	       name = p_name,
 	       pretty_name = p_prety_name,
-	       object_type = p_object_type
+	       category_type = p_category_type
 	WHERE category_id = p_category_id;
 
 	RETURN 0;

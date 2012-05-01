@@ -3,7 +3,7 @@ ad_page_contract {
     Add/Edit resource
 } {
     {resource_id:integer,optional}
-    {class_id ""}
+    {type_id ""}
     {state_code ""}
     {return_url ""}
 }
@@ -36,7 +36,7 @@ ad_form -name resource_ae -cancel_url $return_url -form {
 	{label "[_ cnauto-resources.Name]"}
 	{html {size 50} }
     }
-    {class_id:integer(select),optional
+    {type_id:integer(select),optional
 	{label "[_ cnauto-resources.Class]"}
 	{options $class_options}
 	{html {onChange "document.resource_ae.__refreshing_p.value='1';document.resource_ae.submit();"}}
@@ -51,21 +51,27 @@ ad_form -name resource_ae -cancel_url $return_url -form {
     }    
 }
 
-if {[info exists class_id]} {
+if {[info exists type_id]} {
     set renavam_options [db_list_of_lists select_renavam {
-	SELECT fabricant || ' ' || lcvm || ' ' || model || ' ' || version AS title, code FROM cn_renavam
+	SELECT 
+	  CASE WHEN fabricant IS NOT NULL THEN fabricant ELSE '' END || ' ' || 
+	  CASE WHEN lcvm IS NOT NULL THEN lcvm ELSE '' END || ' ' || 
+	  CASE WHEN model IS NOT NULL THEN model ELSE '' END || ' ' || 
+	  CASE WHEN version IS NOT NULL THEN version ELSE '' END AS title, 
+	  code 
+	FROM cn_vehicle_renavam
     }]
     
     ad_form -extend -name resource_ae -form {
 	{renavam_id:integer(select),optional
-	    {label "[_ cnauto-resources.NCM]"}
+	    {label "[_ cnauto-resources.Renavam]"}
 	    {options $renavam_options}
 	}	
     }
 }
 
 ad_form -extend -name resource_ae -new_request {
-    set class_id 0
+    set type_id 0
     
 } -on_submit {
     
@@ -76,8 +82,9 @@ ad_form -extend -name resource_ae -new_request {
 			 -code $code \
 			 -pretty_name $pretty_name \
 			 -description "" \
-			 -class_id $class_id \
+			 -type_id $type_id \
 			 -unit $unit \
+			 -renavam_id $renavam_id \
 			 -creation_ip [ad_conn peeraddr] \
 			 -creation_user [ad_conn user_id] \
 			 -context_id [ad_conn package_id]
@@ -87,10 +94,10 @@ ad_form -extend -name resource_ae -new_request {
 } -edit_request {
 
     db_1row select_resource_info {	
-	SELECT cr.code, cr.pretty_name, cc.pretty_name AS class, cr.unit, cr.ncm_class
+	SELECT cr.code, cr.pretty_name, cc.pretty_name AS type, cr.unit, cr.ncm_class
 	FROM cn_resources cr
 	LEFT OUTER JOIN cn_categories cc
-	ON (cc.category_id = cr.class_id)
+	ON (cc.category_id = cr.type_id)
 	WHERE cr.resource_id = :resource_id
     }
 
@@ -101,9 +108,13 @@ ad_form -extend -name resource_ae -new_request {
 	-code_unum $code \
 	-pretty_name $pretty_name \
 	-description "" \
-	-class_id $class_id \
-	-unit $unit 
-	    
+	-type_id $type_id \
+	-unit $unit \
+	-renavam_id $renavam_id
+    
+    
+    
+
 } -after_submit {
 
     ad_returnredirect $return_url

@@ -24,14 +24,14 @@ SELECT acs_object_type__drop_type (
 );
 
 
-
 ------------------------------------
 -- cn_vehicles PL/SQL Functions
 ------------------------------------
 DROP FUNCTION cn_vehicle__new (
       varchar,		   -- chassis vin - vehicle identification number
+      integer,		   -- resource_id
+      integer,		   -- model_id
       varchar, 		   -- engine
-      varchar,		   -- model
       integer, 	   	   -- year of model
       integer,	   	   -- year of fabrication
       varchar,		   -- color
@@ -39,17 +39,65 @@ DROP FUNCTION cn_vehicle__new (
       timestamptz,	   -- arrival_date
       timestamptz,	   -- billing_date
       varchar,		   -- duration
-      integer,		   -- resource_id
-      integer,		   -- person_id
+      integer,		   -- distributor_id
+      integer,		   -- owner_id
       text,		   -- notes
       varchar,             -- creation_ip
       integer,             -- creation_user
       integer		   -- context_id
+); 
+
+DROP FUNCTION cn_vehicle__edit (
+       integer,	  	   -- vehicle_id
+       varchar,		   -- chassis vin - vehicle identification number
+       integer,		   -- resource_id
+       integer,		   -- model_id
+       varchar, 	   -- engine
+       integer, 	   -- year of model
+       integer,	   	   -- year of fabrication
+       varchar,		   -- color
+       timestamptz,	   -- purchase_date
+       timestamptz,	   -- arrival_date
+       timestamptz,	   -- billing_date
+       varchar,		   -- duration
+       integer,		   -- distributor_id
+       integer,		   -- owner_id
+       text		   -- notes
 );
 
 
 
 DROP FUNCTION cn_vehicle__delete (integer);
+
+
+
+
+
+
+DROP FUNCTION cn_vehicle_renavam__new (
+       integer, -- renavam_id
+       varchar, -- code
+       varchar, -- fabricant
+       varchar, -- lcvm
+       varchar, -- model
+       varchar -- version
+);
+
+DROP FUNCTION cn_vehicle_renavam__edit (
+       integer, -- renavam_id
+       varchar, -- code
+       varchar, -- fabricant
+       varchar, -- lcvm
+       varchar, -- model
+       varchar -- version
+);
+
+DROP FUNCTION cn_vehicle_renavam__delete (
+       integer -- renavam_id
+);
+
+
+DROP TABLE cn_vehicle_renavam;
 
 
 ------------------------------------
@@ -73,11 +121,15 @@ SELECT acs_object_type__drop_type (
 
 DROP  FUNCTION cn_part__delete (integer);
 
-DROP FUNCTION cn_part__new (
+
+
+DROP FUNCTION cn_part__new(
        varchar, -- code
        varchar, -- name
-       varchar, -- resource_id
-       varchar, -- quantity
+       varchar, -- pretty_name
+       integer, -- resource_id
+       integer, -- model_id
+       integer, -- quantity
        varchar, -- price
        varchar, -- width
        varchar, -- height
@@ -88,6 +140,24 @@ DROP FUNCTION cn_part__new (
        integer, -- context_id
        integer, -- creation_user 
        varchar	-- creation_ip
+);
+
+
+DROP FUNCTION cn_part__edit(
+       integer,	  -- part_id	  
+       varchar,   -- code
+       varchar,   -- name
+       varchar,   -- pretty_name
+       integer,   -- resource_id
+       integer,   -- model_id
+       integer,   -- quantity
+       varchar,   -- price
+       varchar,   -- width
+       varchar,   -- height
+       varchar,	  -- depth
+       varchar,	  -- weight
+       varchar,	  -- volume
+       varchar	  -- dimensions
 );
 
 
@@ -146,12 +216,16 @@ DROP FUNCTION cn_person__edit (
        varchar,		   -- state_code
        integer,		   -- city_code
        varchar		   -- country_code
-) RETURNS integer AS '
+);
 
 
 DROP FUNCTION cn_person__delete (
        integer	  	   -- person_id
 );
+
+
+
+
 
 
 
@@ -162,18 +236,39 @@ DROP FUNCTION cn_person__delete (
 DROP TABLE cn_resources;
 
 
-DROP FUNCTION cn_resource__delete (integer); 
+SELECT acs_object_type__drop_type (
+    'cn_resource',	   -- object_type
+    't'
+);
 
-DROP FUNCTION cn_resource__new( 
-       integer,	-- resource_id 
+
+
+DROP FUNCTION cn_resource__new(
        varchar,	-- code
        varchar,	-- name
        varchar,	-- pretty_name
        text,	-- description
-       varchar,	-- class
+       integer,	-- class_id
+       varchar,	-- ncm_class
+       varchar,	-- unit
+       varchar, -- creation_ip
+       integer, -- creation_user
+       integer	-- context_id
+);
+
+DROP FUNCTION cn_resource__edit (
+       integer, -- resource_id
+       varchar,	-- code
+       varchar,	-- name
+       varchar,	-- pretty_name
+       text,	-- description
+       integer,	-- class_id
        varchar,	-- ncm_class
        varchar	-- unit
 );
+
+
+DROP FUNCTION cn_resource__delete (integer); 
 
 
 

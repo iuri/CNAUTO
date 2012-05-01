@@ -17,7 +17,7 @@
 
         <provides url="cnauto-import" version="0.10d"/>
         <requires url="cnauto-core" version="0.1d"/>
-        <requires url="cnauto-orders" version="0.1d"/>
+        <requires url="cnauto-resources" version="0.1d"/>
 
         <callbacks>
         </callbacks>

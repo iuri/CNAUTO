@@ -3,67 +3,88 @@ ad_page_contract {
     Order's Info page
 } {
     {order_id:integer,notnull}
-    {workflow_id:integer,optional}
     {return_url ""}
 }
 
-set title "[_ cnauto-orders.Order_info]"
+set title "[_ cnauto-import.Order_info]"
 set context [list $title]
 
 
 set return_url [ad_conn url]
-set map_order_url [export_vars -base "admin/map-orders" {return_url workflow_id order_id}]
-
-if {![info exists workflow_id]} {
-    set workflow_id [db_string select_workflow_id {
-	SELECT workflow_id FROM cn_workflows WHERE order_id = :order_id
-    } -default null]
-}
-
-
-db_multirow -extend {step_order_url} steps select_steps {
-    SELECT cws.step_id, cws.pretty_name 
-    FROM cn_workflow_steps cws, cn_workflow_step_order_map wsom 
-    WHERE cws.step_id = wsom.step_id
-    AND wsom.order_id = :order_id
-    ORDER BY cws.sort_order
-} {
-
-    set map_id [db_string select_map_id {
-	SELECT wsom.map_id 
-	FROM cn_workflow_step_order_map wsom 
-	WHERE wsom.workflow_id = :workflow_id
-	AND wsom.step_id = :step_id
-	AND wsom.order_id = :order_id
-    } -default null]
-
-    set step_order_url [export_vars -base "step-order-edit" {return_url map_id}]
-} 
 
 db_1row select_order_info {
-    SELECT co.code, 
-    cp.pretty_name AS provider, 
-    cii.name AS incoterm, 
-    co.incoterm_value, 
-    o.creation_date
-    FROM
-    cn_orders co, 
-    cn_persons cp, 
-    cn_import_incoterms cii, 
-    acs_objects o
-    WHERE 
-    co.provider_id = cp.person_id
-    AND co.incoterm_id = cii.incoterm_id
-    AND co.order_id = o.object_id
-    AND order_id = :order_id
+	SELECT cio.parent_id, cio.cnimp_number, cio.provider_id, cp.pretty_name AS provider, cio,cnimp_date, cio.approval_date, cio.li_need_p,payment_date, cio.manufactured_date, cio.departure_date, cio.awb_bl_number, cio.arrival_date, cio.numerary_date, cio.di_date, cio.di_status, cio.nf_date, cio.delivery_date, cio.incoterm_id, cio.transport_type, cio.order_cost, cio.exchange_rate_type, cio.lc_number, cio.start_date, cio.notes 
+	FROM cn_import_orders cio
+	LEFT OUTER JOIN cn_persons cp ON (cp.person_id = cio.provider_id)
+	WHERE order_id = :order_id
 
 }
 
-db_multirow -extend {} columns select_columns {
-    SELECT wsom.department_id, wsom.assignee_id, wsom.estimated_date, wsom.executed_date, cws.sort_order
-    FROM cn_workflow_step_order_map wsom, cn_workflow_steps cws
-    WHERE wsom.workflow_id = :workflow_id
-    AND wsom.step_id = cws.step_id
-    AND wsom.order_id = :order_id
-    ORDER BY cws.sort_order
+
+
+
+if {$cnimp_date ne ""} {
+    set date [lindex $cnimp_date 0]
+    set date [split $date "-"]
+    set cnimp_date "[lindex $date 2]/[lindex $date 1]/[lindex $date 0]"
 }
+
+if {$approval_date ne ""} {
+    set date [lindex $approval_date 0]
+    set date [split $date "-"]
+    set approval_date "[lindex $date 2]/[lindex $date 1]/[lindex $date 0]"
+}
+
+if {$payment_date ne ""} {
+    set date [lindex $payment_date 0]
+    set date [split $date "-"]
+    set payment_date "[lindex $date 2]/[lindex $date 1]/[lindex $date 0]"
+}
+
+if {$manufactured_date ne ""} {
+    set date [lindex $manufactured_date 0]
+    set date [split $date "-"]
+    set manufactured_date "[lindex $date 2]/[lindex $date 1]/[lindex $date 0]"
+}
+
+if {$departure_date ne ""} {
+    set date [lindex $departure_date 0]
+    set date [split $date "-"]
+    set departure_date "[lindex $date 2]/[lindex $date 1]/[lindex $date 0]"
+}
+
+if {$arrival_date ne ""} {
+    set date [lindex $arrival_date 0]
+    set date [split $date "-"]
+    set arrival_date "[lindex $date 2]/[lindex $date 1]/[lindex $date 0]"
+}
+
+if {$numerary_date ne ""} {
+    set date [lindex $numerary_date 0]
+    set date [split $date "-"]
+    set numerary_date "[lindex $date 2]/[lindex $date 1]/[lindex $date 0]"
+}
+
+if {$di_date ne ""} {
+    set date [lindex $di_date 0]
+    set date [split $date "-"]
+    set di_date "[lindex $date 2]/[lindex $date 1]/[lindex $date 0]"
+}
+
+if {$nf_date ne ""} {
+    set date [lindex $nf_date 0]
+    set date [split $date "-"]
+    set nf_date "[lindex $date 2]/[lindex $date 1]/[lindex $date 0]"
+}
+
+if {$delivery_date ne ""} {
+    set date [lindex $delivery_date 0]
+    set date [split $date "-"]
+    set delivery_date "[lindex $date 2]/[lindex $date 1]/[lindex $date 0]"
+}
+
+if {$start_date ne ""} {
+    set date [lindex $start_date 0]
+    set date [split $date "-"]
+    set start_date "[lindex $date 2]/[lindex $date 1]/[lindex $date 0]"
+}    

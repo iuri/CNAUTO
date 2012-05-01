@@ -42,14 +42,14 @@ set city_options [db_list_of_lists select_city_info "
     SELECT name, ibge_code FROM br_ibge_municipality $where_clause2 ORDER BY name
 "]
 
-lappend city_options {"Selecione" ""}
+lappend city_options {"Selecione" "0"}
 
 set type_options [db_list_of_lists select_types {
 	SELECT pretty_name, category_id
-	FROM cn_categories WHERE object_type = 'cn_person' ORDER BY pretty_name
+	FROM cn_categories WHERE category_type = 'cn_person' ORDER BY pretty_name
 }]
     
-lappend type_options {"Selecione" ""}
+lappend type_options {"Selecione" 0}
 
 ad_form -name person_ae -form {
     {person_id:key}
@@ -98,7 +98,7 @@ if {$type != "pessoafisica" && ![string equal $type "null"]} {
 	{pretty_name:text(text)
 	    {label "[_ cnauto-resources.Name]"}
 	}
-	{code:text(text)
+	{code:text(text),optional
 	    {label "[_ cnauto-resources.Code]"}
 	}
 	{inform2:text(inform)
@@ -149,9 +149,10 @@ ad_form -extend -name person_ae -form {
 } -on_submit {
 } -new_request {
     
+    set type_id 0
     set state_code ""
     set city_code 0
-    set type_id 0
+    
     
 } -edit_request {
     
@@ -201,28 +202,28 @@ ad_form -extend -name person_ae -form {
 	-context_id [ad_conn package_id]         	
 
     
-    
-    catch {
-	email_image::edit_email_image \
-	    -user_id $contact_id \
-	    -new_email $email
-    } errmsg
-    
-    acs_user::get -user_id $contact_id -array user
-    
-    set user_info(authority_id) $user(authority_id)
-    set user_info(email) $email
-    set user_info(first_names) $first_names
-    set user_info(last_name) $last_name
-    set user_info(username) [util_text_to_url  -replacement "" -text "${first_names} ${last_name}"]
-    
-    
-    auth::update_local_account \
-	-authority_id $user_info(authority_id) \
-	-username $user_info(username) \
-	-array user_info
-
-    
+    if {$email ne ""} { 
+	catch {
+	    email_image::edit_email_image \
+		-user_id $contact_id \
+		-new_email $email
+	} errmsg
+	
+	acs_user::get -user_id $contact_id -array user
+	
+	set user_info(authority_id) $user(authority_id)
+	set user_info(email) $email
+	set user_info(first_names) $first_names
+	set user_info(last_name) $last_name
+	set user_info(username) [util_text_to_url  -replacement "" -text "${first_names} ${last_name}"]
+	
+	
+	auth::update_local_account \
+	    -authority_id $user_info(authority_id) \
+	    -username $user_info(username) \
+	    -array user_info
+	
+    }
     
 } -new_data {
 

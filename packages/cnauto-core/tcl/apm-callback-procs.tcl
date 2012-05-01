@@ -98,49 +98,9 @@ ad_proc -private cn_core::install::after_install {} {
 					  -context_id $subsite_package_id \
 					  -parent_node_id $subsite_node_id \
 					 ]
-	
-	
-	    cn_categories::category::new \
-		-pretty_name "Vehicle" \
-		-object_type "cn_resource" \
-		-package_id $resources_package_id
 	    
-	    cn_categories::category::new \
-		-pretty_name "Part" \
-		-object_type "cn_resource" \
-		-package_id $resources_package_id
-	    
-	    
-	    set person_parent_id [cn_categories::category::new \
-				      -pretty_name "Person" \
-				      -object_type "cn_person" \
-				      -package_id $resources_package_id]
-	    
-	    cn_categories::category::new \
-		-pretty_name "Fornecedor" \
-		-object_type "cn_person" \
-		-parent_id $person_parent_id \
-		-package_id $resources_package_id
-	    
-	    cn_categories::category::new \
-		-pretty_name "Cliente" \
-		-object_type "cn_person" \
-		-parent_id $person_parent_id \
-		-package_id $resources_package_id
-	    
-	    cn_categories::category::new \
-		-pretty_name "Pessoa Fisica" \
-		-object_type "cn_person" \
-		-parent_id $person_parent_id \
-		-package_id $resources_package_id
-	    
-	    cn_categories::category::new \
-		-pretty_name "Concessionarias" \
-		-object_type "cn_person" \
-		-parent_id $person_parent_id \
-		-package_id $resources_package_id
 	}
-   
+	
     }
     
     return

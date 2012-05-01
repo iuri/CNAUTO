@@ -3,7 +3,7 @@ ad_page_contract {
     Import main page
 
 } {
-    {orderby "code,asc"}
+    {orderby "order_id,asc"}
     page:optional
     {keyword ""}
 } -properties {
@@ -16,20 +16,30 @@ set context [list $title]
 
 set return_url [ad_conn url]
 
-set actions {
-    "#cnauto-import.Add_order#" "order-ae?return_url=/cnauto-order" "#cnauto-import.Add_a_new_order#"
-    "#cnauto-import.Admin#" "admin/index?return_url=/cnauto-order" "#cnauto-import.Admin#"
-}
 
+set admin_p [permission::permission_p -object_id [ad_conn package_id] -privilege admin]
+
+
+set actions [list]
 set bulk_actions [list]
-
-
-set order_delete_p 1
-#[permission::permission_p -object_id [ad_conn package_id] -privilege order_delete]
-
-if { $order_delete_p } {
+    
+if { $admin_p } {
+    
+    set actions {
+	"#cnauto-import.Add_order#" "order-ae?step=1&return_url=/cnauto-order" "#cnauto-import.Add_a_new_order#"
+	"#cnauto-import.Admin#" "admin/index?return_url=/cnauto-order" "#cnauto-import.Admin#"
+    }
+        
     set bulk_actions {"#cnauto-import.Delete#" "order-bulk-delete" "#cnauto-import.Delete_selected_orders#"}
 } 
+
+
+
+set where_clause ""
+if {$keyword ne ""} {
+    set where_clause "WHERE cio.cnimp_number = :keyword"
+}
+
 
 template::list::create \
     -name orders \
@@ -40,72 +50,63 @@ template::list::create \
     -bulk_actions $bulk_actions \
     -bulk_action_export_vars { return_url } \
     -elements {
-	code {
-	    label "[_ cnauto-import.Code]"
+	di_status {
+	    label "[_ cnauto-import.Status]"
 	    display_template {
-		<a href="@orders.order_url@">@orders.code;noquote@
+		<div style="width:15px; height:15px; background-color: @orders.di_status;noquote@;">&nbsp;</div>
 	    }
 	}
-	provider {
+	cnimp_number {
+	    label "[_ cnauto-import.CNIMP]"
+	    display_template {
+		<if @orders.parent_id@ ne "">&nbsp;&nbsp;&nbsp;&nbsp;</if>
+		<a href="@orders.cnimp_url@">@orders.cnimp_number;noquote@
+	    }
+	}
+	provider_pretty {
 	    label "[_ cnauto-import.Provider]"
 	    display_template {
-		<a href="@orders.provider_url@">@orders.provider;noquote@</a>
+		<a href="@orders.provider_url@">@orders.provider_pretty;noquote@
 	    }
 	}
-	incoterm {
-	    label "[_ cnauto-import.Incoterm]"
-	    display_template {
-		@orders.incoterm;noquote@</a>
-	    }	    
-	}
-	incoterm_value {
-	    label "[_ cnauto-import.Incoterm_value]"
-	    display_template {
-		@orders.incoterm_value;noquote@</a>
-	    }	    
-	}
-	creation_date {
-	    label ""
-	    display_template {
-		@orders.creation_date;noquote@
-	    }
-	}
+	cnimp_date {
+	 label "[_ cnauto-import.CNIMP_date]"
+	    
+	}   
     } -orderby {
-	code {
-	    label "[_ cnauto-import.Code]"
-	    orderby "lower(co.code)"
+	order_id {
+	    label ""
+	    orderby "cio.order_id"
+	}
+	cnimp_number {
+	    label "[_ cnauto-import.CNIMP]"
+	    orderby "cio.cnimp_number"
+	}
+	provider_pretty {
+	    label "[_ cnauto-import.Provider]"
+	    orderby "cp.pretty_name"
+	}
+	cnimp_date {
+	    label "[_ cnauto-import.CNIMP_date]"
+	    orderby "cio.cnimp_date"
 	}
     } 
 
 
-set package_id [ad_conn package_id]
-
-set workflow_id [db_string select_workflow_id {
-    SELECT workflow_id FROM cn_workflows WHERE package_id = :package_id
-} -default null]
 
 
-db_multirow -extend {provider_url order_url} orders select_orders {} {
+db_multirow -extend {cnimp_url provider_url} orders select_orders {} {
     
-    set order_url [export_vars -base "order-one" {order_id workflow_id return_url}]
+    set cnimp_url [export_vars -base "order-one" {order_id return_url}]
+    set provider_url [export_vars -base "/cnauto/cnauto-resources/persons/person-one" {person_id return_url}]
 
-    set node_id [db_string select_node_id {
-	SELECT node_id 
-	FROM site_nodes sn, apm_packages ap 
-	WHERE ap.package_id = sn.object_id 
-	AND package_key = 'cnauto-resources'
-    }]
-    
-    set resources_url [site_node::get_url -node_id $node_id]
-    
-    ns_log Notice "TEST $order_id | "
-    set provider_url [export_vars -base "${resources_url}persons/person-one" {person_id return_url}]
 
+
+    if {$cnimp_date ne ""} {
+	set date [lindex $cnimp_date 0]
+	set date [split $date "-"]
+	set cnimp_date "[lindex $date 2]/[lindex $date 1]/[lindex $date 0]"
+    }
+    
 }
 
-
-ad_form -name search -form {
-    {keyword:text(text)
-	{label "[_ cnauto-assurance.Search]"}
-    }    
-} 

@@ -552,6 +552,7 @@ ad_proc -public cn_core::export_csv_to_txt {
 	    ns_log Notice "Added $i"
 
 	}
+
 	#ns_log Notice "OUTPUT LINE [lindex $output_line 2]"
 	if {[regexp -all "opic" [lindex $output_line 2]]} {
 	    #ns_log Notice "Topic" 
@@ -582,22 +583,129 @@ ad_proc -public cn_core::export_csv_to_txt {
 
 
 
-ad_proc -public cn_core::import_csv_file_abeiva {
+
+#######################
+# ABEIVA 
+###############
+namespace eval cn_core::abeiva {}
+
+ad_proc -public cn_core::abeiva::format_output_line {
+    {-line}
+} {
+    Format output line to BA standards
+} {
+    #ns_log Notice "FORMAT LINE: $line"
+
+    set suplemento [format "%15d" 0]
+    set tipomov [format "%1s" "I"]
+    set vigencia [format "%-16s" [lindex $line 0]]
+    set chassi [format "%-17s" [lindex $line 1]]
+    set renavam [format "%-30s" [lindex $line 2]]    	
+    set desc [format "%-80s" [lindex $line 3]]
+    set contrato [format "%-18s" [lindex $line 4]]
+    set numero [format "%-15s" [lindex $line 5]]
+        
+    return "${contrato}${suplemento}${chassi}${numero}${tipomov}${desc}${vigencia}${renavam}\r"
+
+}
+
+
+
+
+
+
+
+
+
+
+
+ad_proc -public cn_core::abeiva::mount_output_line {
+    {-line} 
+} {
+    Prepare input line to output
+} {
+    
+    set i 0
+#    ns_log Notice "LINE $line"
+   
+    foreach element $line {
+	switch $i {
+	    0 { 
+		# vigencia
+		set date [split $element {/}]
+                set date1 "[lindex $date 2][lindex $date 1][lindex $date 0]"
+		
+                set date "[lindex $date 2]-[lindex $date 1]-[lindex $date 0]"
+                set date2 [clock format [clock scan "1 year" -base [clock scan $date]] -format %Y%m%d]
+
+		lappend output_line "${date1}${date2}"
+	   	
+	    }
+
+	    1 {
+		# Chassi
+		set chassi $element
+		lappend output_line $chassi		
+            }
+	    
+	    2 {
+		# Renavam
+		set renavam $element
+		lappend output_line $renavam 
+	    }
+	    3 {
+		# Desc
+		set desc $element
+		lappend output_line $desc
+            }	    
+	    4 {
+		# Contrato
+		if {[regexp -all "LSY" $chassi]} {
+		    #ns_log Notice "Topic" 
+		    set contrato 40000162449
+		    #ns_log Notice "$contrato"
+		    lappend output_line $contrato
+		} else {
+		    #ns_log Notice "Towner" 
+		    set contrato 40000162448
+		    #ns_log Notice "$contrato"
+		    lappend output_line $contrato
+		}
+	    }
+	    5 {
+		# Numero
+		set numero [ns_rand 1000000]
+		lappend output_line $numero
+	    }
+	}
+	incr i
+    }
+   
+ #   ns_log Notice "Output: $output_line"
+    return $output_line
+}
+
+
+
+
+
+
+ad_proc -public cn_core::abeiva::import_csv_file {
     {-input_file}
+    {-output_file}
 } {
     Import Abeiva's spreadsheet
 
 } {
 
     ns_log Notice "Running ad_proc export_csv_to_txt"
+
     # Input File
     set input_file [open "${input_file}" r]
     set lines [split [read $input_file] \n]
     
     set items [list]
-    set i 0
-    set duplicated 0
-    
+    set i 0    
     set count_towner 0
     set count_topic 0
     
@@ -621,6 +729,7 @@ ad_proc -public cn_core::import_csv_file_abeiva {
 	122011 0
 	12012 0
 	22012 0
+	32012 0
     }
     
     #Array
@@ -643,63 +752,68 @@ ad_proc -public cn_core::import_csv_file_abeiva {
 	122011 0
 	12012 0
 	22012 0
+	32012 0
     } 
     
+    # Output file
+    set filename "[acs_root_dir]/www/${output_file}"
+    set output_file [open "[acs_root_dir]/www/${filename}" w]
+
     foreach line $lines {
 	set line [split $line ";"]
 	
-	if {$line ne ""} {
-	    ns_log Notice "LINE: $line"
+	if {$line ne ""} {	    
+	    set output_line [cn_core::abeiva::mount_output_line -line $line]
 	    
+	    set exists_p [cn_core::item_exists -items $items -chassi [lindex $output_line 1]]
 	    
-	    # Date
-	    set date [lindex $line 0] 
-	    set date [split $date /]
-	    set date "[lindex $date 2]-[lindex $date 1]-[lindex $date 0]"
-
-	    if {$date ne "--emp_data"} {
-		set month [db_string select_month { 
-		    SELECT EXTRACT (month from timestamp :date) 
-		}]
-		set year [db_string select_year { 
-		    SELECT EXTRACT (year from timestamp :date) 
-		}]
-	    
-		set date "${month}${year}"		
-		
-		# Chassis
-		set chassis [lindex $line 1] 
-		
-		set exists_p [item_exists -items $items -chassi $chassis]
-		
-		#ns_log Notice "EXISTS $exists_p"
-		if {$exists_p == 1} {
-		    incr duplicated
-		}
-		
-		if {$exists_p == 0} {
-		    
-		    lappend items $chassis
-		    
-		    if {[regexp -all {LSY} $chassis]} {
-			incr topic_units($date)
-		    }
-		    if {[regexp -all {LKH} $chassis]} {
-			incr towner_units($date)
-		    }
-			
-		    incr i
-		}
+	    if {$exists_p == 1} {
+		incr duplicated
 	    }
-	    set model [lindex $line 2] 
-	    set description [lindex $line 3] 
+
+	    if {$exists_p == 0} {		
+		
+		lappend items [lindex $output_line 1]
+
+		# Date
+		set date [lindex $line 0] 
+		set date [split $date /]
+		set date "[lindex $date 2]-[lindex $date 1]-[lindex $date 0]"
+		
+		if {$date ne "--emp_data"} {
+		    set month [db_string select_month { 
+			SELECT EXTRACT (month from timestamp :date) 
+		    }]
+		    set year [db_string select_year { 
+			SELECT EXTRACT (year from timestamp :date) 
+		    }]
+		    
+		    set pos "${month}${year}"		
+		    
+		}   
+		if {[regexp -all {LSY} [lindex $line 1]]} {
+		    incr topic_units($pos)
+		}
+		if {[regexp -all {LKH} [lindex $line 1]]} {
+			incr towner_units($pos)
+		}
+		
+		
+		# format output to BA standards 
+		set output_line [cn_core::abeiva::format_output_line -line $output_line]
+		
+		#inserts line within output file
+		puts $output_file $output_line    
+		incr i
+		
+	    }
 	    
-	    ns_log Notice "$date | $chassis | $model | $description"
+
 	    
 	}
     }
-
-
+    
+    
     ns_log Notice "Total $i | Towners: [parray towner_units] | Topics: [parray topic_units]"
     
     close $input_file

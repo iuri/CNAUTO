@@ -21,7 +21,7 @@ CREATE TABLE cn_resources (
     		CONSTRAINT cn_resources_class_id_fk
     		REFERENCES cn_categories (category_id),
     unit 	varchar(50),
-    ncm_class 	varchar(50),
+    ncm_class 	varchar(50)
 );
 
 
@@ -155,116 +155,6 @@ CREATE FUNCTION cn_resource__edit (
 	RETURN 0;
 
   END;' LANGUAGE 'plpgsql';
-
-
-
-
-
-
-
-
-
-CREATE TABLE cn_renavam (
-       renavam_id	integer PRIMARY KEY,
-       resource_id	integer
-       			CONSTRAINT cn_renavam_resource_id_fk
-			REFERENCES cn_resources (resource_id),
-       code		varchar(255)
-    			CONSTRAINT cn_renavam_code_un UNIQUE,  
-       fabricant 	varchar(255),
-       lcvm		varchar(255),
-       model		varchar(255),
-       version		varchar(255)
-);
-
-
-CREATE OR REPLACE FUNCTION cn_renavam__new (
-       integer, -- renavam_id
-       varchar, -- code
-       varchar, -- fabricant
-       varchar, -- lcvm
-       varchar, -- model
-       varchar -- version
-) RETURNS integer AS '
-  DECLARE
-	p_renavam_id	ALIAS FOR $1;
-	p_code		ALIAS FOR $2;
-	p_fabricant	ALIAS FOR $3;
-	p_lcvm		ALIAS FOR $4;
-	p_model		ALIAS FOR $5;
-	p_version	ALIAS FOR $6;
-
-  BEGIN
-  
-	INSERT INTO cn_renavam (
-	       	renavam_id,
-		code,
-		fabricant,
-		lcvm,
-		model,
-		version
-	) VALUES (
-	  	 p_renavam_id,
-		 p_code,
-		 p_fabricant,
-		 p_lcvm,
-		 p_model,
-		 p_version
-	);
-
-	RETURN 0;
-
-  END;' LANGUAGE 'plpgsql';
-
-
-
-CREATE OR REPLACE FUNCTION cn_renavam__edit (
-       integer, -- renavam_id
-       varchar, -- code
-       varchar, -- fabricant
-       varchar, -- lcvm
-       varchar, -- model
-       varchar -- version
-) RETURNS integer AS '
-  DECLARE
-	p_renavam_id	ALIAS FOR $1;
-	p_code		ALIAS FOR $2;
-	p_fabricant	ALIAS FOR $3;
-	p_lcvm		ALIAS FOR $4;
-	p_model		ALIAS FOR $5;
-	p_version	ALIAS FOR $6;
-
-  BEGIN
-  
-	UPDATE cn_renavam SET 
-		code = p_code,
-		fabricant = p_fabricant,
-		lcvm = p_lcvm,
-		model = p_model,
-		version = p_version
-	WHERE renavam_id = p_renavam_id;
-
-	RETURN 0;
-
-  END;' LANGUAGE 'plpgsql';
-
-
-
-CREATE OR REPLACE FUNCTION cn_renavam__delete (
-       integer -- renavam_id
-) RETURNS integer AS '
-  DECLARE 
-  	  p_renavam_id	ALIAS FOR $1;  
-  BEGIN
-	DELETE FROM cn_renavam WHERE renavam_id = p_renavam_id;
-
-	RETURN 0;
-
-  END;' LANGUAGE 'plpgsql';
-
-
-
-
 
 
 
@@ -497,8 +387,7 @@ CREATE OR REPLACE FUNCTION cn_part__edit(
 CREATE TABLE cn_persons (
        person_id	integer not null
        			CONSTRAINT cn_persons_person_id_pk PRIMARY KEY,
-       cpf_cnpj		varchar(25)
-       			CONSTRAINT cn_persons_cpf_cnpj_un UNIQUE,
+       cpf_cnpj		varchar(25),
        legal_name	varchar(100),
        pretty_name	varchar(100),
        code		varchar(100),
@@ -933,3 +822,114 @@ RETURNS integer AS '
 
 	RETURN 0;
   END;' language 'plpgsql';
+
+
+
+
+CREATE TABLE cn_vehicle_renavam (
+       renavam_id	integer PRIMARY KEY,
+       resource_id	integer
+       			CONSTRAINT cn_renavam_resource_id_fk
+			REFERENCES cn_resources (resource_id),
+       code		varchar(255)
+    			CONSTRAINT cn_renavam_code_un UNIQUE,  
+       fabricant 	varchar(255),
+       lcvm		varchar(255),
+       model		varchar(255),
+       version		varchar(255)
+);
+
+
+CREATE OR REPLACE FUNCTION cn_vehicle_renavam__new (
+       integer, -- renavam_id
+       varchar, -- code
+       varchar, -- fabricant
+       varchar, -- lcvm
+       varchar, -- model
+       varchar -- version
+) RETURNS integer AS '
+  DECLARE
+	p_renavam_id	ALIAS FOR $1;
+	p_code		ALIAS FOR $2;
+	p_fabricant	ALIAS FOR $3;
+	p_lcvm		ALIAS FOR $4;
+	p_model		ALIAS FOR $5;
+	p_version	ALIAS FOR $6;
+
+  BEGIN
+  
+	INSERT INTO cn_renavam (
+	       	renavam_id,
+		code,
+		fabricant,
+		lcvm,
+		model,
+		version
+	) VALUES (
+	  	 p_renavam_id,
+		 p_code,
+		 p_fabricant,
+		 p_lcvm,
+		 p_model,
+		 p_version
+	);
+
+	RETURN 0;
+
+  END;' LANGUAGE 'plpgsql';
+
+
+
+CREATE OR REPLACE FUNCTION cn_vehicle_renavam__edit (
+       integer, -- renavam_id
+       varchar, -- code
+       varchar, -- fabricant
+       varchar, -- lcvm
+       varchar, -- model
+       varchar -- version
+) RETURNS integer AS '
+  DECLARE
+	p_renavam_id	ALIAS FOR $1;
+	p_code		ALIAS FOR $2;
+	p_fabricant	ALIAS FOR $3;
+	p_lcvm		ALIAS FOR $4;
+	p_model		ALIAS FOR $5;
+	p_version	ALIAS FOR $6;
+
+  BEGIN
+  
+	UPDATE cn_renavam SET 
+		code = p_code,
+		fabricant = p_fabricant,
+		lcvm = p_lcvm,
+		model = p_model,
+		version = p_version
+	WHERE renavam_id = p_renavam_id;
+
+	RETURN 0;
+
+  END;' LANGUAGE 'plpgsql';
+
+
+
+CREATE OR REPLACE FUNCTION cn_vehicle_renavam__delete (
+       integer -- renavam_id
+) RETURNS integer AS '
+  DECLARE 
+  	  p_renavam_id	ALIAS FOR $1;  
+  BEGIN
+	DELETE FROM cn_renavam WHERE renavam_id = p_renavam_id;
+
+	RETURN 0;
+
+  END;' LANGUAGE 'plpgsql';
+
+
+
+
+
+
+
+
+
+

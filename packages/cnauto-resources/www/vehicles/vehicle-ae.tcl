@@ -147,7 +147,7 @@ ad_form -name vehicle_ae -form {
     set purchase_date [template::util::date::from_ansi $purchase_date [lc_get formbuilder_time_format]]
     set arrival_date [template::util::date::from_ansi $arrival_date [lc_get formbuilder_time_format]]
     set billing_date [template::util::date::from_ansi $billing_date [lc_get formbuilder_time_format]]
-
+   
 
 
 } -edit_data {

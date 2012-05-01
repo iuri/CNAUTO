@@ -18,8 +18,8 @@
         <provides url="cnauto-core" version="0.5d"/>
 
         <callbacks>
-	  <callback type="after-install" proc="cnauto_core::install::after_install" />
-	  <callback type="before-unmount" proc="cnauto_core::install::before_unmount" />
+	  <callback type="after-install" proc="cn_core::install::after_install" />
+	  <callback type="before-unmount" proc="cn_core::install::before_unmount" />
         </callbacks>
         <parameters>
         <!-- No version parameters -->
