@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="cnauto-resources" locale="en_US" charset="ISO-8859-1">
+
+  <msg key="Add_resource">Add resource</msg>
+  <msg key="Admin">Admin</msg>
+  <msg key="Parts">Parts</msg>
+  <msg key="Persons">Persons</msg>
+  <msg key="Vehicles">Vehicles</msg>
+</message_catalog>
