@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="cnauto-warranty" locale="en_US" charset="ISO-8859-1">
+
+  <msg key="Add_a_new_claim">Add a new claim</msg>
+  <msg key="Add_claim">Add claim</msg>
+  <msg key="Cancel">Cancel</msg>
+  <msg key="Chassis">Chassis</msg>
+  <msg key="Claim_date">Claim date</msg>
+  <msg key="Claim_number">Claim number</msg>
+  <msg key="Claims">Claims</msg>
+  <msg key="Code">Code</msg>
+  <msg key="Date">Date</msg>
+  <msg key="Distributor">Distributor</msg>
+  <msg key="Import_CSV_file">Import Claims</msg>
+  <msg key="Import_csv_file">Import Claims from CSV file</msg>
+  <msg key="KM">KM</msg>
+  <msg key="Model">Model</msg>
+  <msg key="New">New</msg>
+  <msg key="Number">Number</msg>
+  <msg key="Owner">Owner</msg>
+  <msg key="Purchase_date">Purchase date</msg>
+  <msg key="Search">Search</msg>
+  <msg key="Select">Select</msg>
+  <msg key="Service_order">Service order</msg>
+  <msg key="Total">Total</msg>
+  <msg key="Year">Year
+</msg>
+</message_catalog>
