@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="cnauto-import" locale="en_US" charset="ISO-8859-1">
+
+  <msg key="Add_a_new_order">Add a new order</msg>
+  <msg key="Add_order">Add order</msg>
+  <msg key="Admin">Admin</msg>
+  <msg key="Airport">Airport</msg>
+  <msg key="Airport_Seaport">Airport / Seaport</msg>
+  <msg key="Approval_date">Approval date</msg>
+  <msg key="Arrival_date">Arrival date</msg>
+  <msg key="AWB_BL_number">AWB-BL</msg>
+  <msg key="CNIMP">CNIMP</msg>
+  <msg key="CNIMP_date">CNIMP date</msg>
+  <msg key="Delete">Delete</msg>
+  <msg key="Delete_selected_orders">Delete selected orders</msg>
+  <msg key="Delivery_date">Delivery date</msg>
+  <msg key="Departure">Departure</msg>
+  <msg key="Departure_date">Departure date</msg>
+  <msg key="DI">DI</msg>
+  <msg key="DI_date">DI date</msg>
+  <msg key="DI_status">DI status</msg>
+  <msg key="Edit">Edit</msg>
+  <msg key="Edit_order">Edit order</msg>
+  <msg key="Exchange_rate_type">Exchange rate type</msg>
+  <msg key="Gray">Gray</msg>
+  <msg key="Green">Green</msg>
+  <msg key="Import">Import</msg>
+  <msg key="Incoterm">Incoterm</msg>
+  <msg key="LC">LC</msg>
+  <msg key="LC_number">LC number</msg>
+  <msg key="LI_need_p">LI need</msg>
+  <msg key="Manufactured_date">Manufactured date</msg>
+  <msg key="Modal">Modal</msg>
+  <msg key="NF_date">NF date</msg>
+  <msg key="Notes">Notes</msg>
+  <msg key="Numerary_date">Numerary date</msg>
+  <msg key="Order">Order</msg>
+  <msg key="Order_cost">Order cost</msg>
+  <msg key="Order_info">Order Info</msg>
+  <msg key="Parent">Parent</msg>
+  <msg key="Payment_date">Payment date</msg>
+  <msg key="Port_Airport">Port/Airport</msg>
+  <msg key="Provider">Provider</msg>
+  <msg key="Red">Red</msg>
+  <msg key="Seaport">Seaport</msg>
+  <msg key="Search">Search</msg>
+  <msg key="Select">Select</msg>
+  <msg key="Start_date">Start date</msg>
+  <msg key="Status">Status</msg>
+  <msg key="TT">TT</msg>
+  <msg key="y-m-d">YYYY-MM-DD</msg>
+  <msg key="Yellow">Yellow</msg>
+  <msg key="Yes">Yes</msg>
+</message_catalog>
