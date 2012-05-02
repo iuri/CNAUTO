@@ -11,14 +11,14 @@ ad_page_contract {
     title:onevalue
 }
 
+auth::require_login
+
 set title "[_ cnauto-import.Import]"
 set context [list $title]
 
 set return_url [ad_conn url]
 
-
 set admin_p [permission::permission_p -object_id [ad_conn package_id] -privilege admin]
-
 
 set actions [list]
 set bulk_actions [list]

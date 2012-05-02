@@ -5,28 +5,21 @@ ad_page_contract {
     {keyword:optional}
 }
 
+auth::require_login
+
 set title "[_ cnauto-resources.Resources]"
 set context [list $title]
 
+set return_url [ad_return_url]
 set admin_p [permission::permission_p -party_id [ad_conn user_id] -object_id [ad_conn package_id] -privilege "admin"]
 
-if {$admin_p} {
-    set admin_url "[apm_package_url_from_id [ad_conn package_id]]admin"	      
-}
-set return_url [ad_return_url]
-
-
 set actions ""
-
-set admin_p [permission::permission_p -object_id [ad_conn package_id] -party_id [ad_conn user_id] -privilege "admin"]
-
-
 set bulk_actions ""
 
 if {$admin_p} {
     set bulk_actions {"#cnauto-resources.Delete#" "resource-bulk-delete" "#cnauto-resources.Delete_selected_resources#"}
+    set admin_url "[apm_package_url_from_id [ad_conn package_id]]admin"	      
 }
-
 
 set where_clause ""
 if {[info exists keyword]} {
