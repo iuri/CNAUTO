@@ -17,7 +17,7 @@
 
         <provides url="cnauto-warranty" version="0.10d"/>
         <requires url="cnauto-core" version="0.1d"/>
-        <requires url="cnauto-resources" version="0.3d"/>
+        <requires url="cnauto-resources" version="0.1d"/>
         <requires url="acs-mail-lite" version="5.6.0"/>
 
         <callbacks>

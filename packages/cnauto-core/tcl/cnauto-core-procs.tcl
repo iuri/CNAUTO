@@ -357,7 +357,7 @@ ad_proc -public cn_categories::get_category_id {
     
     	return [db_string select_category_id {
 	    SELECT category_id FROM cn_categories
-	    WHERE code = :code AND object_type = :type
+	    WHERE code = :code AND category_type = :type
 	} -default null]
 
     } elseif {$name ne ""} {
@@ -366,11 +366,29 @@ ad_proc -public cn_categories::get_category_id {
 	
 	return [db_string select_category_id {
 	    SELECT category_id FROM cn_categories
-	    WHERE name = :name AND object_type = :type
+	    WHERE name = :name AND category_type = :type
 	} -default null]
     }
 
 }
+
+ad_proc -public cn_categories::get_category_name {
+    {-category_id:required}
+} {
+    Returns category's name
+} {
+
+
+
+    return [db_string select_category_type {
+	SELECT name FROM cn_categories WHERE category_id = :category_id
+    } -default null]
+
+}
+
+
+
+
 
 ad_proc -public cn_core::item_exists {
     {-items}

@@ -15,46 +15,18 @@ if { [exists_and_not_null vehicle_id] } {
 
 
 set color_options [cn_resources::vehicles::get_color_options]
-set year_options {"2000 2000" "2001 2001" "2002 2002" "2003 2003" "2004 2004" "2005 2005" "2006 2006" "2007 2007" "2008 2008" "2009 2009" "2010 2010" "2011 2011"}
+set year_options {"Selecione 0" "2000 2000" "2001 2001" "2002 2002" "2003 2003" "2004 2004" "2005 2005" "2006 2006" "2007 2007" "2008 2008" "2009 2009" "2010 2010" "2011 2011"}
 
 #set year_options [db_list_of_lists select_years { SELECT EXTRACT(YEAR FROM INTERVAL ('now' + '10 years')); }]
 
-set owner_options [db_list_of_lists select_owners {
-    SELECT cp.pretty_name, cp.person_id 
-    FROM cn_persons cp, cn_categories cc
-    WHERE cp.type_id = cc.category_id AND cc.name = 'pessoafisica'
-}]
+set owner_options [cn_resources::vehicles::get_owner_options]
 
-lappend owner_options {"Selecione" ""}
-
-set distributor_options [db_list_of_lists select_clients {
-    SELECT cp.pretty_name, cp.person_id 
-    FROM cn_persons cp, cn_categories cc
-    WHERE cp.type_id = cc.category_id AND cc.name = 'concessionarias'
-}]
-
-lappend distributor_options {"Selecione" ""}
-
-set chassis_options [db_list_of_lists select_chassis {
-    SELECT vin, vehicle_id FROM cn_vehicles LIMIT 20
-}]
+set distributor_options [cn_resources::vehicles::get_distributor_options]
 
 
-lappend chassis_options {"Selecione" ""}
-
-set model_options [db_list_of_lists select_chassis {
-    SELECT c1.pretty_name, c1.category_id 
-    FROM cn_categories c1, cn_categories c2
-    WHERE c1.parent_id = c2.category_id AND c2.name ='models' AND c2.category_type = 'cn_vehicle'
-}]
-
-lappend model_options {"Selecione" 0}
-
-
-
-
+set vehicle_type_id [cn_categories::get_category_id -name "veiculos" -type "cn_resource"] 
 set resource_options [db_list_of_lists select_resources {
-    SELECT cr.code, cr.resource_id FROM cn_resources cr, cn_categories cc WHERE cr.class_id = cc.category_id AND cc.name = 'veculos'
+    SELECT cr.pretty_name, cr.resource_id FROM cn_resources cr WHERE cr.type_id = :vehicle_type_id
 }]
 
 lappend resource_options {"Selecione" ""}
@@ -69,10 +41,6 @@ ad_form -name vehicle_ae -form {
     }
     {vin:text(text)
 	{label "[_ cnauto-resources.Chassis]"}
-    }    
-    {model_id:integer(select),optional
-	{label "[_ cnauto-resources.Model]"}
-	{options $model_options}   
     }    
     {resource_id:integer(select)
 	{label "[_ cnauto-resources.Resource]"}
@@ -111,8 +79,8 @@ ad_form -name vehicle_ae -form {
 	{help_text "[_ cnauto-resources.y-m-d]"}
 	{after_html {<input type="button" style="height:23px; width:23px; background: url('/resources/acs-templating/calendar.gif');" onclick ="return showCalendarWithDateWidget('billing_date', 'y-m-d');" >} }
     }
-    {duration:text(text),optional
-	{label "[_ cnauto-resources.Duration]"}
+    {warranty_time:text(text),optional
+	{label "[_ cnauto-resources.Warranty_time]"}
     }
     {distributor_id:integer(select),optional
 	{label "[_ cnauto-resources.Distributor]"}
@@ -138,7 +106,7 @@ ad_form -name vehicle_ae -form {
 } -edit_request {
     
     db_1row select_vehicle_info {
-	SELECT cv.vin, cv.resource_id, cv.model_id, cv.engine, cv.year_of_model, cv.year_of_fabrication, cv.duration, cv.owner_id, cv.distributor_id, cv.purchase_date, cv.arrival_date, cv.billing_date, cv.notes
+	SELECT cv.vin, cv.resource_id, cv.engine, cv.year_of_model, cv.year_of_fabrication, cv.warranty_time, cv.owner_id, cv.distributor_id, cv.purchase_date, cv.arrival_date, cv.billing_date, cv.notes
 	FROM cn_vehicles cv
 	WHERE cv.vehicle_id = :vehicle_id
     }
@@ -161,7 +129,6 @@ ad_form -name vehicle_ae -form {
     cn_resources::vehicle::edit \
 	-vehicle_id $vehicle_id \
 	-vin $vin \
-	-model_id $model_id \
 	-engine $engine \
 	-year_of_model $year_of_model \
 	-year_of_fabrication $year_of_fabrication \
@@ -169,7 +136,7 @@ ad_form -name vehicle_ae -form {
 	-purchase_date $purchase_date \
 	-arrival_date $arrival_date \
 	-billing_date $billing_date \
-	-duration $duration \
+	-warranty_time $warranty_time \
 	-distributor_id $distributor_id \
 	-owner_id $owner_id \
 	-resource_id $resource_id \
@@ -190,15 +157,19 @@ ad_form -name vehicle_ae -form {
 			  
 	set vin [string trim $vin]
 
-	set arrival_date "[template::util::date::get_property year $arrival_date] [template::util::date::get_property month $arrival_date] [template::util::date::get_property day $arrival_date]"
-	set billing_date "[template::util::date::get_property year $billing_date] [template::util::date::get_property month $billing_date] [template::util::date::get_property day $billing_date]"
-	set purchase_date "[template::util::date::get_property year $purchase_date] [template::util::date::get_property month $purchase_date] [template::util::date::get_property day $purchase_date]"
-	
+	if {$arrival_date ne ""} {
+	    set arrival_date "[template::util::date::get_property year $arrival_date] [template::util::date::get_property month $arrival_date] [template::util::date::get_property day $arrival_date]"
+	}
+	if {$billing_date ne ""} {
+	    set billing_date "[template::util::date::get_property year $billing_date] [template::util::date::get_property month $billing_date] [template::util::date::get_property day $billing_date]"
+	}
+	if {$purchase_date ne ""} {
+	    set purchase_date "[template::util::date::get_property year $purchase_date] [template::util::date::get_property month $purchase_date] [template::util::date::get_property day $purchase_date]"
+	}
 	
 	
 	cn_resources::vehicle::new \
 	    -vin $vin \
-	    -model_id $model_id \
 	    -engine $engine \
 	    -year_of_model $year_of_model \
 	    -year_of_fabrication $year_of_fabrication \
@@ -206,7 +177,7 @@ ad_form -name vehicle_ae -form {
 	    -purchase_date $purchase_date \
 	    -arrival_date $arrival_date \
 	    -billing_date $billing_date \
-	    -duration $duration \
+	    -warranty_time $warranty_time \
 	    -distributor_id $distributor_id \
 	    -owner_id $owner_id \
 	    -resource_id $resource_id \

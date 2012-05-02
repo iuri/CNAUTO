@@ -19,8 +19,8 @@ ad_form -name resource_one -action resource-ae -export {{return_url "resource-on
     {pretty_name:text(text)
 	{label "[_ cnauto-resources.Name]"}
     }
-    {class:text(text)
-	{label "[_ cnauto-assurance.Class]"}
+    {type:text(text)
+	{label "[_ cnauto-assurance.Type]"}
     }	
     {unit:text(text)
 	{label "[_ cnauto-assurance.Unit]"}
@@ -34,9 +34,9 @@ ad_form -name resource_one -action resource-ae -export {{return_url "resource-on
    
     db_1row select_resource_info {
 	
-	SELECT cr.code, cr.pretty_name, cc.pretty_name AS class, cr.unit, cr.ncm_class
+	SELECT cr.code, cr.pretty_name, cc.pretty_name AS type, cr.unit, cr.ncm_class
 	FROM cn_resources cr, cn_categories cc 
-	WHERE cr.class_id = cc.category_id 
+	WHERE cr.type_id = cc.category_id 
 	AND cr.resource_id = :resource_id
     }
 

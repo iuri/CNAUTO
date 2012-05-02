@@ -2,8 +2,30 @@
 <message_catalog package_key="cnauto-resources" locale="en_US" charset="ISO-8859-1">
 
   <msg key="Add_resource">Add resource</msg>
+  <msg key="Add_vehicle">Add vehicle</msg>
   <msg key="Admin">Admin</msg>
+  <msg key="Arrival_date">Arrival date</msg>
+  <msg key="Billing_date">Billing date</msg>
+  <msg key="Chassis">Chassis</msg>
+  <msg key="Client_info">Client Info</msg>
+  <msg key="Color">Color</msg>
+  <msg key="Delete">Delete</msg>
+  <msg key="Delete_selected_vehicles">Delete selected vehicles</msg>
+  <msg key="Distributor">Distributor</msg>
+  <msg key="Duration">Duration</msg>
+  <msg key="Engine">Engine</msg>
+  <msg key="Import_vehicles">Import vehicles</msg>
+  <msg key="Notes">Notes</msg>
+  <msg key="Owner">Owner</msg>
   <msg key="Parts">Parts</msg>
   <msg key="Persons">Persons</msg>
+  <msg key="Purchase_date">Purchase date</msg>
+  <msg key="Resource">Resource</msg>
+  <msg key="Vehicle_info">Vehicle Info</msg>
   <msg key="Vehicles">Vehicles</msg>
+  <msg key="Warranty_time">Warranty time</msg>
+  <msg key="y-m-d">YYYY-MM-DD</msg>
+  <msg key="Year_of_fabricant">Year of fabrication</msg>
+  <msg key="Year_of_model">Year of model</msg>
+  <msg key="YYYY-MM-DD">YYYY-MM-DD</msg>
 </message_catalog>

@@ -280,10 +280,17 @@ ad_proc -public cn_import::get_incoterm_options {} {
     Returns a list of incoterms to a ad_form select widget
 
 } {
-
-    return [db_list_of_lists select_incomterms {
+    set incoterms [list] 
+    
+    lappend incoterms [list [_ cnauto-import.Select] ""]
+    
+    db_foreach select_incomterms {
 	SELECT name, incoterm_id FROM cn_import_incoterms
-    }]
+    } {
+	lappend incoterms [list $name $incoterm_id]
+    }
+    
+    return $incoterms
 }
 
 ad_proc -public cn_import::incoterm::new {
@@ -456,24 +463,41 @@ ad_proc -public cn_import::workflow::step::edit {
 
 
 
+ad_proc -public cn_import::get_parent_options {} {
+    Returns a list of CNIMPs for a select widget to be parent
+} {
 
 
-
+    set orders [list] 
+    
+    lappend orders [list [_ cnauto-import.Select] ""]
+    
+    db_foreach select_order { 
+	SELECT cnimp_number, order_id AS parent_id FROM cn_import_orders 
+    } {
+	
+	lappend orders [list $cnimp_number $parent_id]
+    }
+    
+    return $orders
+}
 
 ad_proc -public cn_import::get_provider_options {} {
     Returns a list of providers for a seletc widget
 } {
    
+    set providers [list]
+    
+    lappend providers [list [_ cnauto-import.Select] ""]
 
-    set providers [db_list_of_lists select_providers {
+    db_foreach select_provider {
 	SELECT cp.pretty_name, cp.person_id 
 	FROM cn_persons cp, cn_categories cc 
 	WHERE cp.type_id = cc.category_id AND cc.category_type = 'cn_person';
-    }]
+    } {
+	lappend providers [list $pretty_name $person_id]
+    }
 
-    lappend providers "{[_ cnauto-import.Select]} 0"
-
-    ns_log Notice "$providers"
-
+    
     return $providers
 }

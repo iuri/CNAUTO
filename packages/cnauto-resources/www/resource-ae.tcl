@@ -16,57 +16,71 @@ if {[exists_and_not_null resource_id]} {
     set context [list $title]
 }
 
-set class_options [db_list_of_lists select_classes {
+set type_options [db_list_of_lists select_classes {
     SELECT cc.pretty_name, cc.category_id
     FROM cn_categories cc 
     WHERE category_type = 'cn_resource' 
     AND parent_id IS NULL
 }]
 
-lappend class_options {"Selecione" 0}
+lappend type_options {"Selecione" 0}
 
 
 ad_form -name resource_ae -cancel_url $return_url -form {
     {resource_id:key}
-    {code:text(text)
-	{label "[_ cnauto-resources.Code]"}
-	{html {size 30} }
-    }
-    {pretty_name:text(text),optional
-	{label "[_ cnauto-resources.Name]"}
-	{html {size 50} }
-    }
     {type_id:integer(select),optional
-	{label "[_ cnauto-resources.Class]"}
-	{options $class_options}
+	{label "[_ cnauto-resources.Type]"}
+	{options $type_options}
 	{html {onChange "document.resource_ae.__refreshing_p.value='1';document.resource_ae.submit();"}}
     }
-    {unit:text(select),optional
-	{label "[_ cnauto-resources.Unit]"}
-	{options { {"Selecione" ""} {"Un" "Un"} }}
-    }
-    {ncm:text(text),optional
-	{label "[_ cnauto-resources.NCM]"}
-	{html {size 30} }
-    }    
 }
 
-if {[info exists type_id]} {
+ 
+
+if {[string equal [cn_categories::get_category_name -category_id $type_id] "veiculos"]} {
     set renavam_options [db_list_of_lists select_renavam {
 	SELECT 
-	  CASE WHEN fabricant IS NOT NULL THEN fabricant ELSE '' END || ' ' || 
-	  CASE WHEN lcvm IS NOT NULL THEN lcvm ELSE '' END || ' ' || 
-	  CASE WHEN model IS NOT NULL THEN model ELSE '' END || ' ' || 
-	  CASE WHEN version IS NOT NULL THEN version ELSE '' END AS title, 
-	  code 
+	CASE WHEN fabricant IS NOT NULL THEN fabricant ELSE '' END || ' ' || 
+	CASE WHEN lcvm IS NOT NULL THEN lcvm ELSE '' END || ' ' || 
+	CASE WHEN model IS NOT NULL THEN model ELSE '' END || ' ' || 
+	CASE WHEN version IS NOT NULL THEN version ELSE '' END AS title, 
+	code 
 	FROM cn_vehicle_renavam
     }]
     
     ad_form -extend -name resource_ae -form {
-	{renavam_id:integer(select),optional
+	{code:text(select),optional
 	    {label "[_ cnauto-resources.Renavam]"}
 	    {options $renavam_options}
 	}	
+	{pretty_name:text(hidden)}
+	{unit:text(select),optional
+	    {label "[_ cnauto-resources.Unit]"}
+	    {options { {"Selecione" ""} {"Un" "Un"} }}
+	}
+	{ncm:text(text),optional
+	    {label "[_ cnauto-resources.NCM]"}
+	    {html {size 30} }
+	}    
+    }
+} else {
+    ad_form -extend -name resource_ae -form {
+	{code:text(text)
+	    {label "[_ cnauto-resources.Code]"}
+	    {html {size 30} }
+	}
+	{pretty_name:text(text),optional
+	    {label "[_ cnauto-resources.Name]"}
+	    {html {size 50} }
+	}
+	{unit:text(select),optional
+	    {label "[_ cnauto-resources.Unit]"}
+	    {options { {"Selecione" ""} {"Un" "Un"} }}
+	}
+	{ncm:text(text),optional
+	    {label "[_ cnauto-resources.NCM]"}
+	    {html {size 30} }
+	}    
     }
 }
 
@@ -77,24 +91,35 @@ ad_form -extend -name resource_ae -new_request {
     
     
 } -new_data {
+
+    if {[string equal [cn_categories::get_category_name -category_id $type_id] "veiculos"]} {
+    
+	set pretty_name [db_string select_mmv {
+	    SELECT 
+	    CASE WHEN fabricant IS NOT NULL THEN fabricant ELSE '' END || ' ' || 
+	    CASE WHEN lcvm IS NOT NULL THEN lcvm ELSE '' END || ' ' || 
+	    CASE WHEN model IS NOT NULL THEN model ELSE '' END || ' ' || 
+	    CASE WHEN version IS NOT NULL THEN version ELSE '' END AS title
+	    FROM cn_vehicle_renavam
+	    WHERE code = :code
+	}]
+    }
     
     set resource_id [cn_resources::resource::new \
 			 -code $code \
 			 -pretty_name $pretty_name \
-			 -description "" \
 			 -type_id $type_id \
 			 -unit $unit \
-			 -renavam_id $renavam_id \
 			 -creation_ip [ad_conn peeraddr] \
 			 -creation_user [ad_conn user_id] \
 			 -context_id [ad_conn package_id]
 		    ]
-
-
+    
+    
 } -edit_request {
 
     db_1row select_resource_info {	
-	SELECT cr.code, cr.pretty_name, cc.pretty_name AS type, cr.unit, cr.ncm_class
+	SELECT cr.code, cr.pretty_name, cr.type_id, cr.unit, cr.ncm_class
 	FROM cn_resources cr
 	LEFT OUTER JOIN cn_categories cc
 	ON (cc.category_id = cr.type_id)
@@ -105,13 +130,10 @@ ad_form -extend -name resource_ae -new_request {
 
     cn_resources::resource::edit \
 	-resource_id $resource_id \
-	-code_unum $code \
+	-code $code \
 	-pretty_name $pretty_name \
-	-description "" \
 	-type_id $type_id \
-	-unit $unit \
-	-renavam_id $renavam_id
-    
+	-unit $unit 
     
     
 

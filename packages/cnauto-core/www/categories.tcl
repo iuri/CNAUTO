@@ -73,11 +73,11 @@ template::list::create \
     } -filters {
 	category_type {
 	    label "[_ cnauto-core.Type]"
-	        values $category_type_options
+	    values $category_type_options
             where_clause {
                 cc.category_type = :category_type
             }
-	        default_value ""
+	    default_value ""
 	}
     } -orderby {
 	pretty_name {

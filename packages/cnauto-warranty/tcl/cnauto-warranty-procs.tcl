@@ -474,7 +474,7 @@ ad_proc -public cn_claim::model_select_widget_html {
     set element_options [db_list_of_lists select_model_info {
 	SELECT c1.category_id, c1.pretty_name FROM cn_categories c1, cn_categories c2 
 	WHERE c1.parent_id = c2.category_id
-	AND c2.name = 'models' AND c1.object_type = 'cn_vehicle'
+	AND c2.name = 'models' AND c1.category_type = 'cn_vehicle'
 	AND c1.category_id != :category_id
 	ORDER BY c1.pretty_name
     }]

@@ -30,7 +30,7 @@ foreach element $renavam_ids {
 set renavam_ids [join $renavam_ids ","]
 
 db_multirow renavam select_renavam "
-        SELECT renavam_id, fabricant,lcvm,  model, version, code  FROM cn_renavam cr 
+        SELECT renavam_id, fabricant,lcvm,  model, version, code  FROM cn_vehicle_renavam cvr 
         WHERE renavam_id IN ($renavam_ids)
     "
 

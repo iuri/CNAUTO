@@ -51,12 +51,8 @@ if { [exists_and_not_null order_id] } {
 
 set provider_options [cn_import::get_provider_options]
 set incoterm_options [cn_import::get_incoterm_options]
-
+set parent_options [cn_import::get_parent_options]
 set transport_options ""
-
-set parent_options1 [list Selecione ""]
-set parent_options [db_list_of_lists select_parent { SELECT cnimp_number, order_id FROM cn_import_orders }]
-set parent_options "$parent_options1 $parent_options"
 
 
 ad_form -name order_ae -cancel_url $return_url -form {

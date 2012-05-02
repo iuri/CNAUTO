@@ -41,13 +41,12 @@ ad_proc -public cn_resources::resource::delete {
 
 ad_proc -public cn_resources::resource::edit {
     {-resource_id:required}
-    {-code_unum ""}
+    {-code ""}
     {-pretty_name ""}
     {-description ""}
     {-type_id:required}
     {-ncm_class ""}
     {-unit ""}
-    {-renavam_id ""}
 } {
     Edit resource info
 } {
@@ -58,14 +57,13 @@ ad_proc -public cn_resources::resource::edit {
     db_exec_plsql update_resource {
 	SELECT cn_resource__edit (
 				  :resource_id,
-				  :code_unum,
+				  :code,
 				  :name,
 				  :pretty_name,
 				  :description,
 				  :type_id,
 				  :ncm_class,
-				  :unit,
-				  :renavam_id
+				  :unit
 				  )
     }
 
@@ -83,7 +81,6 @@ ad_proc -public cn_resources::resource::new {
     {-type_id:required}
     {-ncm_class ""}
     {-unit ""}
-    {-renavam_id ""}
     {-creation_ip ""}
     {-creation_user ""}
     {-context_id ""}
@@ -117,7 +114,6 @@ ad_proc -public cn_resources::resource::new {
 				     :type_id,
 				     :ncm_class,
 				     :unit,
-				     :renavam_id,
 				     :creation_ip,
 				     :creation_user,
 				     :context_id

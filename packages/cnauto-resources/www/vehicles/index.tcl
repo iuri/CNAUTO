@@ -46,12 +46,6 @@ template::list::create \
 		<a href="@vehicles.vehicle_url@">@vehicles.vin;noquote@
 	    }
 	}
-	model {
-	    label "[_ cnauto-resources.Resource]"
-	    display_template {
-		@vehicles.model;noquote@</a>
-	    }
-	}
 	purchase_date {
 	    label "[_ cnauto-resources.Engine]"
 	    display_template {
