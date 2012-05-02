@@ -24,7 +24,7 @@ ad_proc -public cn_import::order::delete {
 	SELECT order_id AS child_id FROM cn_import_orders WHERE parent_id = :order_id
     } {
 	db_exec_plsql delete_order {
-	    SELECT cn_import_order__delete (:chldd_id)
+	    SELECT cn_import_order__delete (:child_id)
 	}
     }
     
