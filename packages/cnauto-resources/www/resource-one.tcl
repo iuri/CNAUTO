@@ -6,7 +6,7 @@ ad_page_contract {
     {return_url ""}
 }
 
-set page_title [_ cnauto-assurance.Resource_info]
+set page_title [_ cnauto-resources.Resource_info]
 
 
 ad_form -name resource_one -action resource-ae -export {{return_url "resource-one"} resource_id} -has_submit 1 -has_edit 1 -mode display -form {
@@ -20,10 +20,10 @@ ad_form -name resource_one -action resource-ae -export {{return_url "resource-on
 	{label "[_ cnauto-resources.Name]"}
     }
     {type:text(text)
-	{label "[_ cnauto-assurance.Type]"}
+	{label "[_ cnauto-resources.Type]"}
     }	
     {unit:text(text)
-	{label "[_ cnauto-assurance.Unit]"}
+	{label "[_ cnauto-resources.Unit]"}
     }	
     {ncm:text(text),optional
 	{label "[_ cnauto-resources.NCM]"}
@@ -42,15 +42,6 @@ ad_form -name resource_one -action resource-ae -export {{return_url "resource-on
 
     set resource_ae_url [export_vars -base "resource-ae" {resource_id return_url}]
 
-} -on_submit {
-
-    set myform [ns_getform]
-    if {[string equal "" $myform]} {
-	ns_log Notice "No Form was submited"
-    } else {
-	ns_log Notice "FORM"
-	ns_set print $myform
-    }
 }
 
 
