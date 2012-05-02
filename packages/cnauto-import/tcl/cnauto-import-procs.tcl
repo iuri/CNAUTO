@@ -12,7 +12,28 @@ namespace eval cn_import {}
 ###  Orders
 ##########################
 namespace eval cn_import::order {}
+ad_proc -public cn_import::order::delete {
+    {-order_id}
+} {
 
+    Deletes an order
+} {
+
+    # Delete its children first
+    db_foreach select_child {
+	SELECT order_id AS child_id FROM cn_import_orders WHERE parent_id = :order_id
+    } {
+	db_exec_plsql delete_order {
+	    SELECT cn_import_order__delete (:chldd_id)
+	}
+    }
+    
+    db_exec_plsql delete_order {
+	SELECT cn_import_order__delete (:order_id)
+    }
+
+    return
+}
 ad_proc -public cn_import::order::new {
     {-cnimp_number:required}
     {-parent_id ""}

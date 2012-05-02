@@ -75,9 +75,10 @@ CREATE OR REPLACE FUNCTION cn_import_order__delete (
 
   BEGIN 
 
-	DELETE FROM cn_import_orders WHERE order_id = p_order_id;
 	
 	PERFORM acs_object__delete(p_order_id);
+
+	DELETE FROM cn_import_orders WHERE order_id = p_order_id;
 
 	RETURN 0;
   END;' language 'plpgsql';

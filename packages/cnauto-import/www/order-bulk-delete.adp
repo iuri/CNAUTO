@@ -2,10 +2,10 @@
 <property name="context">@context_bar;noquote@</property>
 <property name="title">#cnauto-import.Confirm_room_delete#</property>
 
-<form method="post" action="order-delete-2">	
+<form method="post" action="order-delete">	
 <p>#cnauto-import.Are_you_sure_you_want_to_delete#?</p> 
 <multiple name="orders">
-@orders.code@<br>
+@orders.cnimp_number;noquote@<br>
 </multiple>
 
 <div>

@@ -30,7 +30,7 @@ foreach element $order_ids {
 set order_ids [join $order_ids ","]
 
 db_multirow orders orders "
-        SELECT order_id, code FROM cn_orders WHERE order_id IN ($order_ids)
+        SELECT order_id, cnimp_number FROM cn_import_orders WHERE order_id IN ($order_ids)
     "
 
 set hidden_vars [export_form_vars order_id return_url]
