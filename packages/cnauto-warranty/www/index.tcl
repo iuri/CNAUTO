@@ -13,6 +13,8 @@ ad_page_contract {
     title:onevalue
 }
 
+auth::require_login
+
 set title "[_ cnauto-warranty.Claims]"
 set context [list $title]
 
