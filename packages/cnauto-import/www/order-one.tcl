@@ -88,3 +88,15 @@ if {$start_date ne ""} {
     set date [split $date "-"]
     set start_date "[lindex $date 2]/[lindex $date 1]/[lindex $date 0]"
 }    
+
+
+switch $exchange_rate_type {
+    1 { set exchange_rate_type "TT"}
+    2 { set exchange_rate_type "LC"}
+}
+
+
+switch $transport_type {
+    1 { set transport_type "[_ cnauto-import.Seaport]"}
+    2 { set transport_type "[_ cnauto-import.Airport]"}
+}

@@ -6,7 +6,7 @@ ad_page_contract {
     {order_id:integer,optional}
     {cnimp_number ""}
     {parent_id ""}
-    {provider_id:integer,optional 0}
+    {provider_id ""}
     {cnimp_date ""}
     {approval_date ""}
     {li_need_p ""}
@@ -73,7 +73,7 @@ switch $step {
 		{label "[_ cnauto-import.Parent]"}
 		{options $parent_options}
 	    }   
-	    {provider_id:integer(select),optional
+	    {provider_id:text(select),optional
 		{label "[_ cnauto-import.Provider]"}
 		{options $provider_options}
 	    }
@@ -118,7 +118,7 @@ switch $step {
 	ad_form -extend -name order_ae -form {
 	    {cnimp_number:text(hidden) {value $cnimp_number}}
 	    {parent_id:text(hidden) {value $parent_id}}
-	    {provider_id:integer(hidden) {value $provider_id}}
+	    {provider_id:text:(hidden) {value $provider_id}}
 	    {cnimp_date:date(hidden) {value $cnimp_date}}
 	    {approval_date:date(hidden) {value $approval_date}}
 	    {li_need_p:boolean(hidden) {value $li_need_p}}
@@ -173,7 +173,7 @@ switch $step {
 	ad_form -extend -name order_ae -form {      	   
 	    {cnimp_number:text(hidden) {value $cnimp_number}}
 	    {parent_id:text(hidden) {value $parent_id}}
-	    {provider_id:integer(hidden) {value $provider_id}}
+	    {provider_id:text(hidden) {value $provider_id}}
 	    {cnimp_date:date(hidden) {value $cnimp_date}}
 	    {approval_date:date(hidden) {value $approval_date}}
 	    {li_need_p:boolean(hidden) {value $li_need_p}}
@@ -227,7 +227,7 @@ switch $step {
 	ad_form -extend -name order_ae -form {      	   
 	    {cnimp_number:text(hidden) {value $cnimp_number}}
 	    {parent_id:text(hidden) {value $parent_id}}
-	    {provider_id:integer(hidden) {value $provider_id}}
+	    {provider_id:text(hidden) {value $provider_id}}
 	    {cnimp_date:date(hidden) {value $cnimp_date}}
 	    {approval_date:date(hidden) {value $approval_date}}
 	    {li_need_p:boolean(hidden) {value $li_need_p}}
@@ -289,7 +289,7 @@ switch $step {
 		{label "[_ cnauto-import.Parent]"}
 		{options $parent_options}
 	    }   
-	    {provider_id:integer(select),optional
+	    {provider_id:text(select),optional
 		{label "[_ cnauto-import.Provider]"}
 		{options $provider_options}
 	    }
@@ -420,10 +420,6 @@ ad_form -extend -name order_ae -on_submit {} -edit_request {
 	
     }
     
-
-    if {$provider_id eq ""} {
-	set provider_id 0
-    }
 
     if {$incoterm_id eq ""} {
 	set incoterm_id 0
