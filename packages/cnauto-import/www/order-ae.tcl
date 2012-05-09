@@ -118,7 +118,7 @@ switch $step {
 	ad_form -extend -name order_ae -form {
 	    {cnimp_number:text(hidden) {value $cnimp_number}}
 	    {parent_id:text(hidden) {value $parent_id}}
-	    {provider_id:text:(hidden) {value $provider_id}}
+	    {provider_id:text(hidden) {value $provider_id}}
 	    {cnimp_date:date(hidden) {value $cnimp_date}}
 	    {approval_date:date(hidden) {value $approval_date}}
 	    {li_need_p:boolean(hidden) {value $li_need_p}}
