@@ -49,6 +49,9 @@ template::list::create \
     -row_pretty_plural "orders" \
     -bulk_actions $bulk_actions \
     -bulk_action_export_vars { return_url } \
+    -page_flush_p t \
+    -page_size 20 \
+    -page_query_name orders_pagination \
     -elements {
 	di_status {
 	    label "[_ cnauto-import.Status]"
