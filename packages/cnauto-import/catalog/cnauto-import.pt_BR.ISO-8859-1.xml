@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="cnauto-import" locale="pt_BR" charset="ISO-8859-1">
+
+  <msg key="Add_a_new_order">Adicionar novo pedido</msg>
+  <msg key="Add_order">Adicionar Pedido</msg>
+  <msg key="Admin">Admin</msg>
+  <msg key="CNIMP">CNIMP</msg>
+  <msg key="CNIMP_date">Data CNIMP</msg>
+  <msg key="Delete">Excluir</msg>
+  <msg key="Delete_selected_orders">Excluir pedidos selecionados</msg>
+  <msg key="Import">Importação</msg>
+  <msg key="Provider">Fornecedor</msg>
+  <msg key="Search">Busca</msg>
+  <msg key="Status">Situação</msg>
+</message_catalog>

@@ -111,6 +111,7 @@ switch $step {
 	    {start_date:date(hidden) {value $start_date}}
 	    {notes:text(hidden) {value $notes}}    
 	    {step:integer(hidden) {value $step}}
+	    {return_url:text(hidden) {value $return_url}}
 	}
     }
 
@@ -166,6 +167,7 @@ switch $step {
 	    {start_date:date(hidden) {value $start_date}}
 	    {notes:text(hidden) {value $notes}}    
 	    {step:integer(hidden) {value $step}}
+	    {return_url:text(hidden) {value $return_url}}
 	    
 	}
     }
@@ -221,6 +223,7 @@ switch $step {
 	    {start_date:date(hidden) {value $start_date}}
 	    {notes:text(hidden) {value $notes}}    
 	    {step:integer(hidden) {value $step}}
+	    {return_url:text(hidden) {value $return_url}}
 	}
     }
     4 {
@@ -274,6 +277,7 @@ switch $step {
 		{label "[_ cnauto-import.Notes]"}
 		{html {cols 50 rows 10}}
 	    }        
+	    {return_url:text(hidden) {value $return_url}}
 	}	    
     }
     5 { 
@@ -404,6 +408,7 @@ switch $step {
 		{label "[_ cnauto-import.Notes]"}
 		{html {cols 50 rows 10}}
 	    }        
+	    {return_url:text(hidden) {value $return_url}}
 	}
     }
 }

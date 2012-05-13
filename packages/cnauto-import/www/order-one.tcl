@@ -10,14 +10,15 @@ set title "[_ cnauto-import.Order_info]"
 set context [list $title]
 
 
-set return_url [ad_conn url]
+set return_url [export_vars -base [ad_conn url] {order_id}]
 
 db_1row select_order_info {
-	SELECT cio.parent_id, cio.cnimp_number, cio.provider_id, cp.pretty_name AS provider, cio,cnimp_date, cio.approval_date, cio.li_need_p,payment_date, cio.manufactured_date, cio.departure_date, cio.awb_bl_number, cio.arrival_date, cio.numerary_date, cio.di_date, cio.di_status, cio.nf_date, cio.delivery_date, cio.incoterm_id, cio.transport_type, cio.order_cost, cio.exchange_rate_type, cio.lc_number, cio.start_date, cio.notes 
-	FROM cn_import_orders cio
-	LEFT OUTER JOIN cn_persons cp ON (cp.person_id = cio.provider_id)
-	WHERE order_id = :order_id
-
+    SELECT cio.parent_id, cio.cnimp_number, cio.provider_id, cp.pretty_name AS provider, cio.cnimp_date, cio.approval_date, cio.li_need_p,payment_date, cio.manufactured_date, cio.departure_date, cio.awb_bl_number, cio.arrival_date, cio.numerary_date, cio.di_date, cio.di_status, cio.nf_date, cio.delivery_date, cio.incoterm_id, cii.pretty_name AS incoterm_pretty, cio.transport_type, cio.order_cost, cio.exchange_rate_type, cio.lc_number, cio.start_date, cio.notes 
+    FROM cn_import_orders cio
+    LEFT OUTER JOIN cn_persons cp ON (cp.person_id = cio.provider_id)
+    LEFT OUTER JOIN cn_import_incoterms cii ON (cio.incoterm_id = cii.incoterm_id)
+    WHERE order_id = :order_id
+    
 }
 
 
@@ -100,3 +101,15 @@ switch $transport_type {
     1 { set transport_type "[_ cnauto-import.Seaport]"}
     2 { set transport_type "[_ cnauto-import.Airport]"}
 }
+
+# General Comments                                                                                   
+set comment_add_url "
+    [general_comments_package_url]comment-add?[export_vars {
+	{ object_id $order_id }
+	{ object_name $$cnimp_number }
+	{ return_url "[ad_conn url]?[ad_conn query]"}
+    }]"
+
+set comments_html [general_comments_get_comments -print_content_p 1 $order_id]
+
+
