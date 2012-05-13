@@ -3,18 +3,17 @@
 
   <msg key="Address">Endereco</msg>
   <msg key="Admin">Admin</msg>
-  <msg key="Contact">Contato</msg>
   <msg key="Company">Nossa Empresa</msg>
+  <msg key="Contact">Contato</msg>
   <msg key="Email">Termos de Uso</msg>
   <msg key="Follow_us_on_twitter">Siga-nos no Twitter</msg>
   <msg key="Home">Home</msg>
   <msg key="Name">Nome</msg>
-  <msg key="Products">Produtos</msg>
   <msg key="OK">OK</msg>
+  <msg key="Products">Produtos</msg>
   <msg key="Receive_our_newsletter">Receba nosso informativos</msg>
   <msg key="Services">Serviços</msg>
   <msg key="SiteMap">SiteMap</msg>
   <msg key="Terms_of_Use">Termos de Uso</msg>
   <msg key="Under_Construction">Em Construcao</msg>
-
 </message_catalog>

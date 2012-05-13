@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="cnauto-core" locale="pt_BR" charset="ISO-8859-1">
+
+  <msg key="Admin">Admin</msg>
+  <msg key="Contact_us">Contato</msg>
+  <msg key="Core">Geral</msg>
+  <msg key="Log_out">Sair</msg>
+  <msg key="Search">Busca</msg>
+  <msg key="SiteMap">Mapa do site</msg>
+  <msg key="Terms_of_Use">Termos de Uso</msg>
+</message_catalog>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="cnauto-warranty" locale="pt_BR" charset="ISO-8859-1">
+
+  <msg key="Add_a_new_claim">Adicionar nova SG</msg>
+  <msg key="Add_claim">Adicionar SG</msg>
+  <msg key="Chassis">Chassis</msg>
+  <msg key="Claims">Solicitações de Garantia</msg>
+  <msg key="Date">Data</msg>
+  <msg key="Distributor">Distribuidor</msg>
+  <msg key="Import_CSV_file">Importar SGs</msg>
+  <msg key="Import_csv_file">Importar SGs de arquivo CSV</msg>
+  <msg key="Number">Número</msg>
+  <msg key="Owner">Proprietário</msg>
+  <msg key="Search">Busca</msg>
+  <msg key="Total">Total</msg>
+  <msg key="Warranty">Garantia</msg>
+</message_catalog>
