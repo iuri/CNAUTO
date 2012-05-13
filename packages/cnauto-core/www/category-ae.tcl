@@ -3,49 +3,54 @@ ad_page_contract {
 } {
     {return_url ""}
     {parent_id ""}
-    {category_type ""}
+    {category_type:optional}
     {category_id:integer,optional}
 } -properties {
     context:onevalue
 }
 
 
-ns_log Notice "INFO $parent_id | $category_type | "
 if {[exists_and_not_null category_id]} {
-    set title "[_ cnauto-resources.Edit_category]"
+    set title "[_ cnauto-core.Edit_category]"
     set context [list $title]
 } else {
-    set title "[_ cnauto-resources.Add_category]"
+    set title "[_ cnauto-core.Add_category]"
     set context [list $title]
 }    
 
+  
 
-if {[info exists category_type]} {
-    set parent_options [db_list_of_lists select_parent_info {
-	SELECT pretty_name, category_id FROM cn_categories WHERE category_type = :category_type ORDER BY pretty_name
-    }]
+set parent_options [list]
+
+if {[exists_and_not_null category_type]} {
     
-    lappend parent_options "Selecione \"\""  
+    lappend parent_options [list [_ cnauto-core.Select] ""]
+
+    db_foreach select_parent_info {
+	SELECT pretty_name, category_id FROM cn_categories WHERE category_type = :category_type ORDER BY pretty_name
+    } {
+	lappend parent_options [list $pretty_name $category_id]
+    }
 }
     
 
-ad_form -name category_ae -cancel_url "/test" -form {
+ad_form -name category_ae -cancel_url $return_url -form {
     {category_id:key}
     {name:text(text)
-	{label "[_ cnauto-resouces.Code]"}
+	{label "[_ cnauto-core.Code]"}
 	{mode "display"}
     }
     {pretty_name:text(text)
-	{label "[_ cnauto-resouces.Name]"}
+	{label "[_ cnauto-core.Name]"}
     }
     {category_type:text(select)
-	{label "[_ cnauto-resouces.Type]"}
+	{label "[_ cnauto-core.Type]"}
 	{options {{"Selecione" ""} {"Part" cn_part} {"Person" cn_person} {"Order" cn_order}  {"Resource" cn_resource} {"Vehicle" cn_vehicle}}}
 	{html {onChange "document.category_ae.__refreshing_p.value='1';document.category_ae.submit();"}}
 	
     }
     {parent_id:integer(select),optional
-	{label "[_ cnauto-resouces.Parent]"}
+	{label "[_ cnauto-core.Parent]"}
 	{options $parent_options}
     }
 } -on_request {

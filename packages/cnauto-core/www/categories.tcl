@@ -2,7 +2,8 @@ ad_page_contract {
     Categories main page
   
 } { 
-    {category_type ""}
+    {category_id:integer,optional}
+    {type:optional}
     {orderby "pretty_name,asc"}
     {submit.x:optional}
     {keyword:optional}
@@ -16,20 +17,18 @@ ad_page_contract {
 set title "[_ cnauto-resources.Add_category]"
 set context [list $title]
 
+
 set category_type_options [list]
 
-db_foreach category_type { 
-    SELECT cc.category_type AS type, COUNT(cc.category_id) AS num, ot.pretty_name
-    FROM cn_categories cc, acs_object_types ot
-    WHERE cc.category_type = ot.object_type
-    GROUP BY cc.category_type, ot.pretty_name 
-} {
+db_foreach select_category_types {} {
+
     lappend category_type_options \
 	[list \
 	          $pretty_name \
-	          $type \
+	          $category_type \
 	     [lc_numeric $num]]
 }
+
     
 set actions {
     "#cnauto-core.Add_category#" "category-ae" "#cnauto-core.Add_category#"
@@ -53,8 +52,8 @@ template::list::create \
     -bulk_actions $bulk_actions \
     -bulk_action_export_vars { return_url } \
     -row_pretty_plural "categories" \
-    -page_size 10 \
     -page_flush_p t \
+    -page_size 20 \
     -page_query_name categories_pagination \
     -elements {
 	pretty_name {
@@ -66,30 +65,30 @@ template::list::create \
 	pretty_type {
 	    label "[_ cnauto-core.Class]"
 	}
-	parent {
+	pretty_parent {
 	    label "[_ cnauto-core.Parent]"
 	}
 
     } -filters {
-	category_type {
+	type {
 	    label "[_ cnauto-core.Type]"
 	    values $category_type_options
             where_clause {
-                cc.category_type = :category_type
+                cc.category_type = :type
             }
-	    default_value ""
 	}
     } -orderby {
 	pretty_name {
 	    label "[_ cnauto-core.Name]"
-	        orderby category_id
+	    orderby category_id
 	    orderby_asc {cc.pretty_name asc}
 	    orderby_desc {cc.pretty_name desc}
 	}
     }
 
  
-db_multirow -extend {category_ae_url} categories select_categories {} {
+db_multirow -extend {pretty_parent category_ae_url} categories select_categories {} {
     set category_ae_url [export_vars -base "category-ae" {category_id return_url}]
 
+    set pretty_parent [db_string select_pretty_name {} -default ""]
 }
