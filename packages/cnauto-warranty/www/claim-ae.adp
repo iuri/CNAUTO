@@ -13,7 +13,7 @@
     <td>#cnauto-warranty.Chassis#</td>
     <td>@vehicle_select_html;noquote@</td>
     <td>#cnauto-warranty.Model#</td>
-    <td>@model_select_html;noquote@</td>
+    <td>@resource_select_html;noquote@</td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
   <tr>

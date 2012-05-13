@@ -445,7 +445,7 @@ ad_proc -public cn_claim::vehicle_select_widget_html {
 }
 
 
-ad_proc -public cn_claim::model_select_widget_html {
+ad_proc -public cn_claim::resource_select_widget_html {
     {-name}
     {-key ""}
 } {
@@ -463,9 +463,8 @@ ad_proc -public cn_claim::model_select_widget_html {
     } else {
 	
 	db_1row select_pretty_name {
-	    SELECT cc.category_id, cc.pretty_name FROM cn_categories cc, cn_vehicles cv
-	    WHERE cc.category_id = cv.model_id
-	    AND cv.vehicle_id = :key
+	    SELECT cr.resource_id, cr.pretty_name FROM cn_resources cr, cn_vehicles cv
+	    WHERE cr.resource_id = cv.resource_id AND cv.vehicle_id = :key
 	}
 	
 	set html_options "<option value=\"${category_id}\">${pretty_name}</option>"
@@ -627,7 +626,7 @@ ad_proc -public cn_claim::owner_select_widget_html {
 
 ad_proc -public cn_claim::input_date_html {
     {-name}
-    {-date 0}
+    {-date ""}
 } {
 
     Generates a date input widget
@@ -636,7 +635,7 @@ ad_proc -public cn_claim::input_date_html {
     set html_format "<input type=\"hidden\" name=\"${name}.format\" value=\"YYYY MM DD\" >"
 
     ns_log Notice "$name | $date fdfd"
-    if {$date != 0} {
+    if {[exists_and_not_null date]} {
 	
 	set year [db_string select_year { SELECT EXTRACT(YEAR FROM TIMESTAMP :date)}] 
 	set month [db_string select_year { SELECT EXTRACT(MONTH FROM TIMESTAMP :date)}] 
@@ -734,7 +733,7 @@ ad_proc -public cn_claim::generate_claim_number {
 } {
 
     set count [db_string select_warranties { 
-	SELECT COUNT(claim_id) FROM cn_warranties WHERE vehicle_id = :vehicle_id
+	SELECT COUNT(claim_id) FROM cn_claims WHERE vehicle_id = :vehicle_id
     }]
     
     set year [db_string select_year { SELECT EXTRACT(year from timestamp 'now()')}] 
