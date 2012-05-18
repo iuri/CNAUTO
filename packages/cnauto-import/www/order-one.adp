@@ -37,7 +37,7 @@
          <tr>
  	   <td>&nbsp;</td>
 	   <td>&nbsp;</td>
-	   <td align="right"><a href="order-ae?order_id=@order_id@&step=1&return_url=@return_url@">#cnauto-import.Edit#</a></td>
+	   <td align="right"><a href="order-ae?order_id=@order_id@&step=1&return_url=@return_url@" class="button">#cnauto-import.Edit#</a></td>
 	 </tr>
 	 <tr>
 	   <td><hr></td>
@@ -77,7 +77,7 @@
          <tr>
 	   <td width="45%" align="left" valign="top">&nbsp;</td>
 	   <td width="10%" align="left" valign="top">&nbsp;</td>
-	   <td width="45%" align="right"><a href="order-ae?order_id=@order_id@&step=2&return_url=@return_url@">#cnauto-import.Edit#</a></td>
+	   <td width="45%" align="right"><a href="order-ae?order_id=@order_id@&step=2&return_url=@return_url@" class="button">#cnauto-import.Edit#</a></td>
 	 </tr>
 	 <tr>
 	   <td>&nbsp;</td>
@@ -116,7 +116,7 @@
 	<tr>
 	  <td width="45%" align="left" valign="top">&nbsp;</td>
  	  <td width="10%" align="left" valign="top">&nbsp;</td>
-    	  <td width="45%" align="right" valign="top"><a href="order-ae?order_id=@order_id@&step=3&return_url=@return_url@">#cnauto-import.Edit#</a></td>
+    	  <td width="45%" align="right" valign="top"><a href="order-ae?order_id=@order_id@&step=3&return_url=@return_url@" class="button">#cnauto-import.Edit#</a></td>
 	</tr>
 	 <tr>
 	   <td><hr></td>
@@ -131,7 +131,7 @@
 	<tr>
 	  <td width="45%" align="left" valign="top">&nbsp;</td>
  	  <td width="10%" align="left" valign="top">&nbsp;</td>
-    	  <td width="45%" align="right" valign="top"><a href="order-ae?order_id=@order_id@&step=4">#cnauto-import.Edit#</a></td>
+    	  <td width="45%" align="right" valign="top"><a href="order-ae?order_id=@order_id@&step=4" class="button">#cnauto-import.Edit#</a></td>
 	</tr>
 	 <tr>
 	   <td><hr></td>
@@ -159,7 +159,7 @@
           <td><b>#cnauto-import.Notes#</b><br> @notes@</td>
         </tr>
         <tr>
-	 <td><div style="float:right;"><a href="order-ae?order_id=@order_id@&step=4&return_url=@return_url@">#cnauto-import.Edit#</a></div></td>
+	 <td><div style="float:right;"><a href="order-ae?order_id=@order_id@&step=4&return_url=@return_url@" class="button">#cnauto-import.Edit#</a></div></td>
 	</tr>
 	<tr>
 	  <td>&nbsp;</td>

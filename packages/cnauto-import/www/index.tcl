@@ -64,9 +64,23 @@ template::list::create \
 	    }
 	}
 	cnimp_date {
-	 label "[_ cnauto-import.CNIMP_date]"
+	    label "[_ cnauto-import.CNIMP_date]"
 	    
-	}   
+	}
+	transport_type {
+	    label "[_ cnauto-import.Transport_type]"
+	    display_template {
+		<if @orders.transport_type@ eq 1>
+		 #cnauto-import.Seaport#    
+		</if>	
+		<if @orders.transport_type@ eq 2>
+		 #cnauto-import.Airport#
+		</if>
+	    }
+	}
+	order_cost {
+	    label "[_ cnauto-import.Order_cost]"
+	}
 	comments {
 	    label "[_ cnauto-import.Notes]"
 	}
@@ -123,7 +137,7 @@ db_multirow -extend {comments cnimp_url provider_url} orders select_orders {} {
 	r.revision_id = i.live_revision AND
 	o.object_id = g.comment_id AND
 	p.person_id = o.creation_user
-	ORDER BY creation_date
+	ORDER BY creation_date DESC
 	LIMIT 1
     } -default ""]
 }

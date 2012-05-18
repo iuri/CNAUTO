@@ -1,5 +1,5 @@
 .main {
-    width: 1024px;
+    width: 100%;
     margin: 0px 0px;
  
 }
@@ -152,6 +152,7 @@
 
 
 .main .content {
+    width:100%;
     clear: both;
 }
 
