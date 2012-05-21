@@ -17,7 +17,7 @@ ad_form -html { enctype multipart/form-data } -name export_file -form {
 } -on_submit {
 
     set input_file [list [template::util::file::get_property tmp_filename $input_file]]
-    cn_core::export_csv_to_txt -input_file $input_file -output_file $output_file
+    cn_core::abeiva::import_csv_file -input_file $input_file -output_file $output_file
 
 } -after_submit {
     ad_returnredirect /cnauto-core
