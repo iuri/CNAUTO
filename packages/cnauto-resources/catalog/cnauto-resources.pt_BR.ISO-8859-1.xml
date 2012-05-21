@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="cnauto-resources" locale="pt_BR" charset="ISO-8859-1">
+
+  <msg key="Add_resource">Adicionar Recurso</msg>
+  <msg key="Add_vehicle">Adicionar veículo</msg>
+  <msg key="Admin">Admin</msg>
+  <msg key="Categories">Categorias</msg>
+  <msg key="Chassis">Chassis</msg>
+  <msg key="Code">Código</msg>
+  <msg key="Company_info">Empresa</msg>
+  <msg key="Delete">Excluir</msg>
+  <msg key="Delete_selected_resources">Excluir recursos selecionados</msg>
+  <msg key="Delete_selected_vehicles">Excluir veículos selecionados</msg>
+  <msg key="Edit_resource">Editar recurso</msg>
+  <msg key="Engine">Motor</msg>
+  <msg key="Import_resources">Importar Recursos</msg>
+  <msg key="Import_vehicles">Importar veículos</msg>
+  <msg key="Name">Nome</msg>
+  <msg key="NCM">NCM</msg>
+  <msg key="Parts">Peças</msg>
+  <msg key="Persons">Pessoas</msg>
+  <msg key="Renavam">Renavam</msg>
+  <msg key="Resource_info">Recursos</msg>
+  <msg key="Resources">Recursos</msg>
+  <msg key="Type">Tipo</msg>
+  <msg key="Unit">Unidade</msg>
+  <msg key="Vehicles">Veículos</msg>
+</message_catalog>

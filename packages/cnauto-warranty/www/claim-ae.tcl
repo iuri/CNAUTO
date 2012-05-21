@@ -97,11 +97,11 @@ if {$claim_id != ""} {
 
 set vehicle_select_html [cn_claim::vehicle_select_widget_html -name "vehicle_id" -key $vehicle_id]
 
-set model_select_html [cn_claim::model_select_widget_html -name "model_id" -key $vehicle_id] 
+set resource_select_html [cn_claim::resource_select_widget_html -name "resource_id" -key $vehicle_id] 
 
 set purchase_date [db_string select_purchase_date {
     SELECT cv.purchase_date FROM cn_vehicles cv WHERE vehicle_id = :vehicle_id
-} -default 0]
+} -default ""]
 
 set purchase_date_html [cn_claim::input_date_html -name "purchase_date" -date $purchase_date]
 
@@ -114,7 +114,7 @@ set owner_select_html [cn_claim::owner_select_widget_html -name "owner_id" -key 
 
 set year [db_string select_year {
     SELECT year_of_fabrication || '/' || year_of_model AS year FROM cn_vehicles WHERE vehicle_id = :vehicle_id
-} -default null]
+} -default ""]
 
 
 set code [db_string select_code {
@@ -122,7 +122,7 @@ set code [db_string select_code {
     FROM cn_persons cp, cn_vehicles cv 
     WHERE cp.person_id = cv.distributor_id
     AND cv.vehicle_id = :vehicle_id
-} -default null]
+} -default ""]
 
 
 

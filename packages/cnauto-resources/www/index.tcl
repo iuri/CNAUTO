@@ -54,9 +54,9 @@ template::list::create \
 	    }
 	}
 	type {
-	    label "[_ cnauto-resources.Type]"
+	    label "[_ cnauto-resources.Category]"
 	    display_template {
-		<a href="@resources.resource_url@">@resources.type;noquote@</a>
+		<a href="@resources.category_url@">@resources.type;noquote@</a>
 	    }
 	}
 	
@@ -69,10 +69,11 @@ template::list::create \
     } 
 
 
-db_multirow -extend {resource_url} resources select_resources {
+db_multirow -extend {resource_url category_url} resources select_resources {
     
 } {
 
-    set resource_url [export_vars -base resource-one {return_url resource_id}]
+    set resource_url [export_vars -base "resource-one" {return_url resource_id}]
+    set category_url [export_vars -base "/cnauto/cnauto-core/category-ae" {return_url {category_id $type_id} category_type}]
 }
 

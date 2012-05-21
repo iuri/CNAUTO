@@ -1,6 +1,6 @@
 -- /packages/cnauto-import/sql/postgresql/upgrade/upgrade-0.9d-0.10d.sql
 
-SELECT acs_log__debug (' /packages/cnauto-assurance/sql/postgresql/upgrade/upgrade-0.9d-0.10d.sql','');
+SELECT acs_log__debug (' /packages/cnauto-import/sql/postgresql/upgrade/upgrade-0.9d-0.10d.sql','');
 
 CREATE OR REPLACE FUNCTION cn_workflow_order_map__new (
        integer,	  	   -- map_id

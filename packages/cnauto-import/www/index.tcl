@@ -45,20 +45,11 @@ template::list::create \
     -name orders \
     -multirow orders \
     -key order_id \
-    -actions $actions \
     -row_pretty_plural "orders" \
+    -actions $actions \
     -bulk_actions $bulk_actions \
     -bulk_action_export_vars { return_url } \
-    -page_flush_p t \
-    -page_size 20 \
-    -page_query_name orders_pagination \
     -elements {
-	di_status {
-	    label "[_ cnauto-import.Status]"
-	    display_template {
-		<div style="width:15px; height:15px; background-color: @orders.di_status;noquote@;">&nbsp;</div>
-	    }
-	}
 	cnimp_number {
 	    label "[_ cnauto-import.CNIMP]"
 	    display_template {
@@ -69,13 +60,36 @@ template::list::create \
 	provider_pretty {
 	    label "[_ cnauto-import.Provider]"
 	    display_template {
-		<a href="@orders.provider_url@">@orders.provider_pretty;noquote@
+		<a href="@orders.provider_url@">@orders.provider_pretty;noquote@</a>
 	    }
 	}
 	cnimp_date {
-	 label "[_ cnauto-import.CNIMP_date]"
+	    label "[_ cnauto-import.CNIMP_date]"
 	    
-	}   
+	}
+	transport_type {
+	    label "[_ cnauto-import.Transport_type]"
+	    display_template {
+		<if @orders.transport_type@ eq 1>
+		 #cnauto-import.Seaport#    
+		</if>	
+		<if @orders.transport_type@ eq 2>
+		 #cnauto-import.Airport#
+		</if>
+	    }
+	}
+	order_cost {
+	    label "[_ cnauto-import.Order_cost]"
+	}
+	comments {
+	    label "[_ cnauto-import.Notes]"
+	}
+	di_status {
+	    label "[_ cnauto-import.Status]"
+	    display_template {
+		<div style="width:15px; height:15px; background-color: @orders.di_status;noquote@;">&nbsp;</div>
+	    }
+	}
     } -orderby {
 	order_id {
 	    label ""
@@ -98,7 +112,7 @@ template::list::create \
 
 
 
-db_multirow -extend {cnimp_url provider_url} orders select_orders {} {
+db_multirow -extend {comments cnimp_url provider_url} orders select_orders {} {
     
     set cnimp_url [export_vars -base "order-one" {order_id return_url}]
     set provider_url [export_vars -base "/cnauto/cnauto-resources/persons/person-one" {person_id return_url}]
@@ -111,5 +125,21 @@ db_multirow -extend {cnimp_url provider_url} orders select_orders {} {
 	set cnimp_date "[lindex $date 2]/[lindex $date 1]/[lindex $date 0]"
     }
     
+    set comments [db_string select_comment {
+	SELECT r.title
+	FROM general_comments g,
+	cr_items i,
+	cr_revisions r,
+	acs_objects o,
+	persons p
+	WHERE g.object_id = :order_id AND
+	i.item_id = g.comment_id AND
+	r.revision_id = i.live_revision AND
+	o.object_id = g.comment_id AND
+	p.person_id = o.creation_user
+	ORDER BY creation_date DESC
+	LIMIT 1
+    } -default ""]
 }
 
+    

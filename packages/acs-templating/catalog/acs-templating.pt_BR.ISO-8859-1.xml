@@ -7,6 +7,8 @@
   <msg key="data">dados</msg>
   <msg key="Day">Dia</msg>
   <msg key="day">dia</msg>
+  <msg key="DefaultSummary">Dados para %list_name%</msg>
+  <msg key="descending_order">ordenação decrescente</msg>
   <msg key="Element_is_required">%label% é requerido</msg>
   <msg key="Element_is_too_long_Plural">%label% tem %excess_no_bytes% caracteres além do permitido.</msg>
   <msg key="Element_is_too_long_Singular">%label% tem um caracter além do permitido.</msg>
@@ -72,14 +74,17 @@
   <msg key="Month_must_be_between_1_and_12">O mês deve estar entre 1 e 12</msg>
   <msg key="Next_with_arrow">Próximo &gt;&gt;</msg>
   <msg key="No_row_pretty_plural">Não há %row_pretty_plural%.</msg>
+  <msg key="not_ordered">não ordenado</msg>
   <msg key="Page">Página</msg>
   <msg key="Page_Size">Tamanho da Página</msg>
   <msg key="Previous_with_arrow">&lt;&lt; Anterior</msg>
   <msg key="required">Requerido</msg>
+  <msg key="reverse_sort_order_of_label">Reverter a ordenação de %label%</msg>
   <msg key="Seconds">Segundos</msg>
   <msg key="seconds">segundos</msg>
   <msg key="Seconds_must_be_between_0_and_59">Os segundos devem estar entre 0 e 59</msg>
   <msg key="Sort_order">Organizar</msg>
+  <msg key="sort_the_list_by_label">Ordenar por %label%</msg>
   <msg key="Spellcheck">Verificação ortográfica</msg>
   <msg key="Table">Tabela</msg>
   <msg key="Tag_handler_invalid_number_of_args">Número inválido de argumentos para o tag manipular</msg>

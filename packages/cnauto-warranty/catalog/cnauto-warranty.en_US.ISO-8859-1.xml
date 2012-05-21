@@ -23,6 +23,7 @@
   <msg key="Select">Select</msg>
   <msg key="Service_order">Service order</msg>
   <msg key="Total">Total</msg>
+  <msg key="Warranty">Warranty</msg>
   <msg key="Year">Year
 </msg>
 </message_catalog>

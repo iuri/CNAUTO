@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<message_catalog package_key="cnauto-import" locale="pt_BR" charset="ISO-8859-1">
+
+  <msg key="Add_a_new_order">Adicionar novo pedido</msg>
+  <msg key="Add_note">Nova anotação</msg>
+  <msg key="Add_order">Adicionar Pedido</msg>
+  <msg key="Admin">Admin</msg>
+  <msg key="Airport_Seaport">Aéreo/Marítimo</msg>
+  <msg key="Approval_date">Data de aprovação</msg>
+  <msg key="Arrival_date">Data de chegada</msg>
+  <msg key="AWB_BL_number">AWB-BL</msg>
+  <msg key="CNIMP">CNIMP</msg>
+  <msg key="CNIMP_date">Data CNIMP</msg>
+  <msg key="Delete">Excluir</msg>
+  <msg key="Delete_selected_orders">Excluir pedidos selecionados</msg>
+  <msg key="Delivery_date">Data de entrega</msg>
+  <msg key="Departure">Embarque</msg>
+  <msg key="Departure_date">Data de embarque</msg>
+  <msg key="DI">DI</msg>
+  <msg key="DI_date">Data da DI</msg>
+  <msg key="Edit">Editar</msg>
+  <msg key="Edit_order">Editar pedido</msg>
+  <msg key="Exchange_rate_type">Tipo de taxa cambial</msg>
+  <msg key="Import">Importação</msg>
+  <msg key="LC_number">Número da LC</msg>
+  <msg key="LI_need_p">LI</msg>
+  <msg key="Manufactured_date">Data de fabricação</msg>
+  <msg key="Modal">Frete</msg>
+  <msg key="NF_date">Data da Nota Fiscal</msg>
+  <msg key="Notes">Anotações</msg>
+  <msg key="Numerary_date">Data de numerário</msg>
+  <msg key="Order">Pedido</msg>
+  <msg key="Order_cost">Custo do Pedido</msg>
+  <msg key="Parent">Depedência</msg>
+  <msg key="Payment_date">Data de pagamento</msg>
+  <msg key="Provider">Fornecedor</msg>
+  <msg key="Seaport">Marítimo</msg>
+  <msg key="Search">Busca</msg>
+  <msg key="Select">Selecione</msg>
+  <msg key="Start_date">Data de início</msg>
+  <msg key="Status">Situação</msg>
+  <msg key="y-m-d">YYYY-MM-DD</msg>
+</message_catalog>

@@ -394,6 +394,76 @@ ad_proc -public cn_resources::get_country_code {
 
 
 
+ad_proc -public cn_resources::get_state_options {} {
+    Returns a list of states for an ad_form select widget
+} {
+
+    set states [list]
+    lappend $states [list [_ cnauto-resources.Select] ""]
+
+    db_foreach select_states {
+	SELECT state_name, abbrev FROM br_states ORDER BY state_name 
+    } {
+	lappend $states [list $state_name $abbrev]
+    }
+
+    return $states
+
+}
+
+
+ad_proc -public cn_resources::get_city_options {} {
+    Returns a list of cities for an ad_form select widget
+} {
+
+    set cities [list]
+    lappend $cities [list [_ cnauto-resources.Select] ""]
+
+    db_foreach select_cities {
+	SELECT name, ibge_code FROM br_ibge_municipality ORDER BY name
+    } {
+	lappend $cities [list $name $ibge_code]
+    }
+
+    return $cities
+
+}
+
+
+
+
+namespace eval cn_resources::person {}
+
+ad_proc -public cn_resources::person::get_type_options {} {
+    Returns a list of type for an ad_form select widget
+} {
+    set types [list]
+
+    lappend $types [list [_ cnauto-resources.Select] ""]
+
+    db_foreach select_types {
+	SELECT pretty_name, category_id
+	FROM cn_categories WHERE category_type = 'cn_person' ORDER BY pretty_name
+    } {
+
+        lappend types [list $pretty_name $category_id]
+    }
+
+
+    return $types
+}
+
+
+
+
+
+
+
+
+
+
+
+
 namespace eval cn_resources::categories {}
 
 ad_proc -public  cn_resources::categories::import_csv_file {

@@ -3,7 +3,7 @@
 <queryset>
   <fullquery name="resources_pagination">
     <querytext> 
-        SELECT cr.resource_id, cr.code, cr.pretty_name, cc.pretty_name AS type
+        SELECT cr.resource_id, cr.code, cr.pretty_name, cr.type_id, cc.category_type, cc.pretty_name AS type
     	FROM cn_resources cr 
 	LEFT OUTER JOIN cn_categories cc
 	ON (cr.type_id = cc.category_id)
@@ -16,7 +16,7 @@
 
   <fullquery name="select_resources">
     <querytext> 
-      SELECT cr.resource_id, cr.code, cr.pretty_name, cc.pretty_name AS type
+      SELECT cr.resource_id, cr.code, cr.pretty_name, cr.type_id, cc.category_type, cc.pretty_name AS type
       FROM cn_resources cr
       LEFT OUTER JOIN cn_categories cc
       ON (cr.type_id = cc.category_id)

@@ -24,6 +24,7 @@
   <msg key="Admin">Administrar</msg>
   <msg key="admin">Admin</msg>
   <msg key="Administer_subsite">Administrar %subsite_name%</msg>
+  <msg key="Administration">Administração</msg>
   <msg key="Administrative_options">Opções administrativas para este usuário</msg>
   <msg key="Alert_Type">Tipo de alerta</msg>
   <msg key="another_picture">outra imagem.</msg>
@@ -319,6 +320,7 @@
   <msg key="subcommunities">subcomunidades</msg>
   <msg key="subcommunity">subcomunidade</msg>
   <msg key="subsite">subsite</msg>
+  <msg key="Subsite_Home">Início</msg>
   <msg key="Subsites">Subsites</msg>
   <msg key="subsites">subsites</msg>
   <msg key="Success_but_no_account_yet">Sua autenticação ocorreu com sucesso mas você ainda não possui  ainda uma conta validada em %system_name%.</msg>
@@ -347,9 +349,10 @@
   <msg key="Username">Nome de usuário</msg>
   <msg key="Username_not_found_for_authority">Nenhum usuário com username '%username%' foi encontrado na autoridade %this_authority%</msg>
   <msg key="Username_required">Username é requerido</msg>
-  <msg key="UserSiteMap">User's Site Map</msg>
+  <msg key="UserSiteMap">Mapa do Usuário</msg>
   <msg key="Vacation_Info_Updated">Informação de Férias Atualizada</msg>
   <msg key="Vacation_information_updated">Sua informação de férias foi atualizada em %site_link%</msg>
+  <msg key="view_all_online_members">Ver todos usuários online.</msg>
   <msg key="Welcome_user">Bem-vindo, %user_name%</msg>
   <msg key="When_leaving_checkbox_empty">Deixando de marcar uma permissão, o usuário ou grupo selecionado terá a mesma revogada caso ela tenha sido concedida anteriormente.</msg>
   <msg key="Whos_Online_link_label">Usuários online</msg>

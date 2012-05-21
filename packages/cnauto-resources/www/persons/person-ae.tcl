@@ -17,39 +17,15 @@ if {[exists_and_not_null person_id]} {
 }
 
 
-if {[exists_and_not_null state_code]} {
-    set where_clause1 "WHERE abbrev = :state_code"
-} else {
-    set where_clause1 " "
-}
 
 
+set state_options [cn_resources::get_state_options]
 
-if {[exists_and_not_null state_code]} {
-    set where_clause2 "WHERE state_code = :state_code"
-} else {
-    set where_clause2 " "
-}
+set city_options [cn_resources::get_city_options]
 
-set state_options [db_list_of_lists select_state_info "
-    SELECT state_name, abbrev FROM br_states $where_clause1 ORDER BY state_name 
-"]
-
-lappend state_options {"Selecione" ""}
+set type_options [cn_resources::person::get_type_options]
 
 
-set city_options [db_list_of_lists select_city_info "
-    SELECT name, ibge_code FROM br_ibge_municipality $where_clause2 ORDER BY name
-"]
-
-lappend city_options {"Selecione" "0"}
-
-set type_options [db_list_of_lists select_types {
-	SELECT pretty_name, category_id
-	FROM cn_categories WHERE category_type = 'cn_person' ORDER BY pretty_name
-}]
-    
-lappend type_options {"Selecione" 0}
 
 ad_form -name person_ae -form {
     {person_id:key}
