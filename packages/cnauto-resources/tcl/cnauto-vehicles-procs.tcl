@@ -62,7 +62,9 @@ ad_proc -public cn_resources::vehicles::get_color_options {} {
 	SELECT name, code FROM cn_colors 
     } {
 	lappend colors [list $name $code]
+	
     }
+    
     
     ns_log Notice "$colors"
     return $colors

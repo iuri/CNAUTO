@@ -26,7 +26,7 @@ set bulk_actions [list]
 if { $admin_p } {
     
     set actions {
-	"#cnauto-import.Add_order#" "order-ae?step=1&return_url=/cnauto-order" "#cnauto-import.Add_a_new_order#"
+	"#cnauto-import.Add_order#" "order-ae?step=1&return_url=/cnauto/Import" "#cnauto-import.Add_a_new_order#"
 	"#cnauto-import.Admin#" "admin/index?return_url=/cnauto-order" "#cnauto-import.Admin#"
     }
         
@@ -68,18 +68,22 @@ template::list::create \
 	    
 	}
 	transport_type {
-	    label "[_ cnauto-import.Transport_type]"
+	    label "[_ cnauto-import.Modal]"
 	    display_template {
-		<if @orders.transport_type@ eq 1>
-		 #cnauto-import.Seaport#    
-		</if>	
-		<if @orders.transport_type@ eq 2>
-		 #cnauto-import.Airport#
-		</if>
+		<if @orders.transport_type@ eq 1>[_ cnauto-import.Seaport]</if>	
+		<if @orders.transport_type@ eq 2>[_ cnauto-import.Airport]</if>
 	    }
 	}
+	li {
+	    label "[_ cnauto-import.LI]"
+	    
+	    display_template {
+		<if @orders.li_need_p@ eq t><input type="checkbox" disabled="disabled" name="li" value="@orders.li_need_p@" checked></if>
+		<else><input type="checkbox" disabled="disabled" name="li" value="@orders.li_need_p@"></else>
+	    }
+	}	    
 	order_cost {
-	    label "[_ cnauto-import.Order_cost]"
+	    label "[_ cnauto-import.Total_value]"
 	}
 	comments {
 	    label "[_ cnauto-import.Notes]"
@@ -125,21 +129,9 @@ db_multirow -extend {comments cnimp_url provider_url} orders select_orders {} {
 	set cnimp_date "[lindex $date 2]/[lindex $date 1]/[lindex $date 0]"
     }
     
-    set comments [db_string select_comment {
-	SELECT r.title
-	FROM general_comments g,
-	cr_items i,
-	cr_revisions r,
-	acs_objects o,
-	persons p
-	WHERE g.object_id = :order_id AND
-	i.item_id = g.comment_id AND
-	r.revision_id = i.live_revision AND
-	o.object_id = g.comment_id AND
-	p.person_id = o.creation_user
-	ORDER BY creation_date DESC
-	LIMIT 1
-    } -default ""]
+    ns_log Notice "LI $li_need_p"
+
+    set comments [db_string select_comment { } -default ""]
 }
 
     

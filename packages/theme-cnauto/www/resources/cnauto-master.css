@@ -236,3 +236,11 @@ tr.last td {
     font-family: tahoma,verdana,sans-serif;
     font-weight: normal;      /* Pressing it will take you to the current date */
 }
+
+
+
+
+
+.main .content .list-table {
+    width:auto;
+}
