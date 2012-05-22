@@ -27,10 +27,10 @@
 	  <td>
 	    <b>#cnauto-import.LI_need_p#</b><br> 
 	     <if @li_need_p@ eq t> 
-	       <input type="checkbox" name="li_need_p" checked>
+	       <input type="checkbox" name="li_need_p" disabled="disabled" checked>
 	     </if>
 	     <else>
-	       <input type="checkbox" name="li_need_p" checked>
+	       <input type="checkbox" name="li_need_p" disabled="disabled">
 	     </else>
 	   </td>
 	 </tr>
@@ -68,10 +68,12 @@
 	   </td>
 	 </tr>
 	 <tr>
-	   <td width="45%" align="left" valign="top">&nbsp;</td>
+	   <td width="45%" align="left" valign="top">
+	     <b>#cnauto-import.Order_quantity#</b><br> @order_quantity@
+	   </td>
 	   <td width="10%" align="left" valign="top">&nbsp;</td>
 	   <td width="45%" align="right" valign="top">
-	     <b>#cnauto-import.Arrival_date#</b> @arrival_date@
+	     <b>#cnauto-import.Arrival_date#</b><br> @arrival_date@
 	   </td>
 	 </tr>
          <tr>
@@ -89,7 +91,7 @@
     <td width="30%" align="right" valign="top">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr>
-	  <td width="45%" align="left" valign="top"><h1><u>#cnauto-import.DI#</u></h1></td>
+	  <td width="45%" align="left" valign="top"><h1><u>#cnauto-import.DI#</u>&nbsp;&nbsp;@di_number@</h1></td>
  	  <td width="10%" align="left" valign="top">&nbsp;</td>
     	  <td width="45%" align="right" valign="top">
 	    <div style="width: 20px; height:20px; background: @di_status;noquote@;">&nbsp;</div>
@@ -131,7 +133,7 @@
 	<tr>
 	  <td width="45%" align="left" valign="top">&nbsp;</td>
  	  <td width="10%" align="left" valign="top">&nbsp;</td>
-    	  <td width="45%" align="right" valign="top"><a href="order-ae?order_id=@order_id@&step=4" class="button">#cnauto-import.Edit#</a></td>
+    	  <td width="45%" align="right" valign="top"><a href="order-ae?order_id=@order_id@&step=4&return_url=@return_url@" class="button">#cnauto-import.Edit#</a></td>
 	</tr>
 	 <tr>
 	   <td><hr></td>
@@ -155,9 +157,6 @@
 	</tr>
       </table>
       <table>
-        <tr>
-          <td><b>#cnauto-import.Notes#</b><br> @notes@</td>
-        </tr>
         <tr>
 	 <td><div style="float:right;"><a href="order-ae?order_id=@order_id@&step=4&return_url=@return_url@" class="button">#cnauto-import.Edit#</a></div></td>
 	</tr>

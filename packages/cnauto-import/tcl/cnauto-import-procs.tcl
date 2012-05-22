@@ -46,9 +46,11 @@ ad_proc -public cn_import::order::new {
     {-departure_date null}
     {-arrival_date null}
     {-awb_bl_number ""}
+    {-order_quantity ""}
     {-numerary_date null}
     {-di_date null}
     {-di_status ""}
+    {-di_number ""}
     {-nf_date null}
     {-delivery_date null}
     {-incoterm_id ""}
@@ -126,9 +128,11 @@ ad_proc -public cn_import::order::new {
 					 :departure_date,
 					 :arrival_date,
 					 :awb_bl_number,
+					 :order_quantity,
 					 :numerary_date,
 					 :di_date,
 					 :di_status,
+					 :di_number,
 					 :nf_date,
 					 :delivery_date,
 					 :incoterm_id,
@@ -162,9 +166,11 @@ ad_proc -public cn_import::order::edit {
     {-departure_date null}
     {-arrival_date null}
     {-awb_bl_number ""}
+    {-order_quantity ""}
     {-numerary_date null}
     {-di_date null}
     {-di_status ""}
+    {-di_number ""}
     {-nf_date null}
     {-delivery_date null}
     {-incoterm_id ""}
@@ -268,9 +274,11 @@ ad_proc -public cn_import::order::edit {
 					  :departure_date,
 					  :arrival_date,
 					  :awb_bl_number,
+					  :order_quantity,
 					  :numerary_date,
 					  :di_date,
 					  :di_status,
+					  :di_number,
 					  :nf_date,
 					  :delivery_date,
 					  :incoterm_id,

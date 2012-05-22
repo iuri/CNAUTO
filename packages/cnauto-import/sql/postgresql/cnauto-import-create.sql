@@ -32,10 +32,12 @@ CREATE TABLE cn_import_orders (
        manufactured_date      timestamptz,
        departure_date	      timestamptz,
        arrival_date	      timestamptz,
+       order_quantity	      integer,
        awb_bl_number	      varchar,
        numerary_date	      timestamptz,
        di_date 		      timestamptz,
        di_status	      varchar,
+       di_number	      varchar
        nf_date		      timestamptz,
        delivery_date	      timestamptz,
        incoterm_id 	      integer,
