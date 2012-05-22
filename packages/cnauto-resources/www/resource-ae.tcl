@@ -53,7 +53,7 @@ if {[string equal [cn_categories::get_category_name -category_id $type_id] "veic
 	    {label "[_ cnauto-resources.Renavam]"}
 	    {options $renavam_options}
 	}	
-	{pretty_name:text(hidden)}
+	{pretty_name:text(hidden),optional}
 	{unit:text(select),optional
 	    {label "[_ cnauto-resources.Unit]"}
 	    {options { {"Selecione" ""} {"Un" "Un"} }}
@@ -87,10 +87,22 @@ if {[string equal [cn_categories::get_category_name -category_id $type_id] "veic
 ad_form -extend -name resource_ae -new_request {
     set type_id 0
     
-} -on_submit {
-    
-    
-} -new_data {
+} -validate {
+    {code
+	{ 
+	    if { 
+		[db_0or1row select_code_p { 
+		    SELECT code FROM cn_resources WHERE code = :code
+		}] 
+	    } { 
+		return 1 
+	    } 
+	}
+	"#cnauto-resources.Resource_already_exists#"
+    }
+} -on_submit {} -new_data {
+
+
 
     if {[string equal [cn_categories::get_category_name -category_id $type_id] "veiculos"]} {
     
