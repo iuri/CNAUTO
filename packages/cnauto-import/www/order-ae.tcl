@@ -25,7 +25,7 @@ ad_page_contract {
     {incoterm_id ""}
     {transport_type ""}
     {order_cost:float,optional 0}
-    {order_quantity ""}
+    {order_quantity 0}
     {exchange_rate_type ""}
     {lc_number ""}
     {start_date ""}

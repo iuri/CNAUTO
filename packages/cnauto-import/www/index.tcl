@@ -129,9 +129,8 @@ db_multirow -extend {comments cnimp_url provider_url} orders select_orders {} {
 	set cnimp_date "[lindex $date 2]/[lindex $date 1]/[lindex $date 0]"
     }
     
-    ns_log Notice "LI $li_need_p"
 
-    set comments [db_string select_comment { } -default ""]
+    set comments [db_string select_comment {} -default ""]
 }
 
     

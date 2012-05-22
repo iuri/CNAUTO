@@ -36,8 +36,8 @@ ad_proc -public cn_import::order::delete {
 }
 ad_proc -public cn_import::order::new {
     {-cnimp_number:required}
-    {-parent_id ""}
-    {-provider_id ""}
+    {-parent_id null}
+    {-provider_id null}
     {-cnimp_date null}
     {-approval_date null} 
     {-li_need_p ""}
@@ -46,29 +46,31 @@ ad_proc -public cn_import::order::new {
     {-departure_date null}
     {-arrival_date null}
     {-awb_bl_number ""}
-    {-order_quantity ""}
+    {-order_quantity null}
     {-numerary_date null}
     {-di_date null}
     {-di_status ""}
     {-di_number ""}
     {-nf_date null}
     {-delivery_date null}
-    {-incoterm_id ""}
-    {-transport_type ""}
+    {-incoterm_id null}
+    {-transport_type null}
     {-order_cost  ""}
-    {-exchange_rate_type  ""} 
+    {-exchange_rate_type  null} 
     {-lc_number ""}
     {-start_date null} 
     {-notes ""}
     {-creation_ip ""}
-    {-creation_user ""}
-    {-context_id ""}
+    {-creation_user null}
+    {-context_id null}
 } {
 
     Creates a new order
 } {
-
-
+ 
+    ns_log Notice "ORDER NEW"
+    ns_log Notice "QTY $order_quantity"
+    
     if {$cnimp_date ne ""} {
 	set cnimp_date "[template::util::date::get_property year $cnimp_date] [template::util::date::get_property month $cnimp_date] [template::util::date::get_property day $cnimp_date]"
     }
@@ -156,8 +158,8 @@ ad_proc -public cn_import::order::new {
 ad_proc -public cn_import::order::edit {
     {-order_id:required}
     {-cnimp_number:required}
-    {-parent_id ""}
-    {-provider_id ""}
+    {-parent_id null}
+    {-provider_id null}
     {-cnimp_date null}
     {-approval_date null} 
     {-li_need_p ""}
@@ -166,17 +168,17 @@ ad_proc -public cn_import::order::edit {
     {-departure_date null}
     {-arrival_date null}
     {-awb_bl_number ""}
-    {-order_quantity ""}
+    {-order_quantity 0}
     {-numerary_date null}
     {-di_date null}
     {-di_status ""}
     {-di_number ""}
     {-nf_date null}
     {-delivery_date null}
-    {-incoterm_id ""}
-    {-transport_type ""}
+    {-incoterm_id null}
+    {-transport_type null}
     {-order_cost  ""}
-    {-exchange_rate_type  ""} 
+    {-exchange_rate_type  null} 
     {-lc_number ""}
     {-start_date null} 
     {-notes ""}
@@ -184,6 +186,8 @@ ad_proc -public cn_import::order::edit {
 
     Amends an order
 } {
+
+    ns_log Notice "ORDER $order_quantity"
 
     if {$cnimp_date ne ""} {
 	set cnimp_date "[template::util::date::get_property year $cnimp_date] [template::util::date::get_property month $cnimp_date] [template::util::date::get_property day $cnimp_date]"
