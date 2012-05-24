@@ -40,6 +40,7 @@ if {$untrusted_user_id == 0} {
     set logout_url "[ad_get_logout_url]"
 
     # Site-wide admin link
+	set admin_url ""
     set sw_admin_p [acs_user::site_wide_admin_p -user_id $untrusted_user_id]
     if {$sw_admin_p} {
 	set admin_url "/acs-admin/"
