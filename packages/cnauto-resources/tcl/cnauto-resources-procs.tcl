@@ -535,9 +535,11 @@ ad_proc -public cn_resources::persons::get_type_id {
 }
 
 ad_proc -public  cn_resources::persons::import_csv_file {
+    {-type_id}
+    {-contact_id ""}
     {-input_file}
 } {
-
+    
     Imports CSV files to add assurance requires
 } {
 
@@ -547,109 +549,49 @@ ad_proc -public  cn_resources::persons::import_csv_file {
     set lines [split [read $input_file] \n]
     close $input_file
 
-    
     foreach line $lines {
 	set line [split $line {;}] 
-
-	if {$line != ""} {  
-	    ns_log Notice "LINE $line"
+	ns_log Notice "RAW LINE $line"
+       
 	
-	# 0 codigo
-	# 1 first_name/last_name - corporate_name/legal_name
-	# 2 type concessionarias / CNAUTO / Funcionarios / Diretores / 
-	# 3 pais
-	# 4 CEP
-	# 5 estado
-	# 6 cidade
-	# 7 bairro 8 9 10 11
-	# 12 TELEFONE
-	# 13 Email
-
-
-	    set code [lindex $line 0]
-	    set pretty_name [lindex $line 1]
-	    set legal_name ""
-	    set contact_id ""
-	    set type [lindex $line 2]
+	set code [lindex $line 0]
+	set cpf_cnpj [lindex $line 6]
+	set legal_name [lindex $line 1]
+	set pretty_name $legal_name
+	
+	
+	
+	set exists_p [db_string select_cpf_cnpj {
+	    SELECT cpf_cnpj FROM cn_persons
+	    WHERE cpf_cnpj = :cpf_cnpj
+	} -default null]
+	
+	
+	if {$exists_p eq "null"} {
+	    ns_log Notice "INSERT"   
 	    
-	    set type [util_text_to_url -replacement "" -text $type]
-	    ns_log Notice "TYPE $type"
-	    set type_id [cn_resources::persons::get_type_id -type $type]
-	    
-	    
-	    set country [lindex $line 3]
-	    set country_code [cn_resources::get_country_code -country $country]
-	    
-	    set postal_code [lindex $line 4]
-	    
-	    set state [lindex $line 5]
-	    set state_code [cn_resources::get_state_code -state $state]
-	    
-	    set city [lindex $line 6]
-	    set city_code [cn_resources::get_city_code -city $city]
-	    
-	    set postal_address "[lindex $line 8] [lindex $line 9] [lindex $line 10] [lindex $line 7]"
-	    set postal_address2 [lindex $line 11]
-	    set phone [lindex $line 12]
-	    set email [lindex $line 13]
-	    
-	    
-	    set cpf_cnpj [lindex $line 14]
-	    if {[string equal $cpf_cnpj "000.000.000-00"] || [string equal $cpf_cnpj "000.000.000/0000-00"]} {
-		set cpf_cnpj ""
-	    }
-	    
-	    ns_log Notice "
-	-cpf_cnpj $cpf_cnpj \n
-        -pretty_name $pretty_name \n
-        -legal_name $legal_name \n
-        -code $code \n
-	-type_id $type_id \n
-        -contact_id $contact_id \n
-	-email $email \n
-	-phone $phone \n
-	-postal_address $postal_address \n
-	-postal_address2 $postal_address2 \n
-	-postal_code $postal_code \n
-	-state_code $state_code \n
-	-city_code $city_code \n
-	-country_code $country_code \n
-    "
-	    
-	    set exists_p [db_string select_cpf_cnpj {
-		SELECT cpf_cnpj FROM cn_persons
-		WHERE cpf_cnpj = :cpf_cnpj
-	    } -default null]
-	    
-	    ns_log Notice "TEST $exists_p | CNPJ $cpf_cnpj"
-	    
-	    if {$exists_p == "null"} {
-		ns_log Notice "INSERT"
-		
-
-		cn_resources::person::new \
-		    -cpf_cnpj $cpf_cnpj \
-		    -legal_name $legal_name \
-		    -pretty_name $pretty_name \
-		    -code $code \
-		    -type_id $type_id \
-		    -contact_id $contact_id \
-		    -email $email \
-		    -phone $phone \
-		    -postal_address $postal_address \
-		    -postal_address2 $postal_address2 \
-		    -postal_code $postal_code \
-		    -state_code $state_code \
-		    -city_code $city_code \
-		    -country_code $country_code \
-		    -creation_ip [ad_conn peeraddr] \
-		    -creation_user [ad_conn user_id] \
+	    cn_resources::person::new \
+		-cpf_cnpj $cpf_cnpj \
+		-legal_name $legal_name \
+		-pretty_name $pretty_name \
+		-code $code \
+		-type_id $type_id \
+		-contact_id "" \
+		-email "" \
+		-phone "" \
+		-postal_address "" \
+		-postal_address2 "" \
+		-postal_code "" \
+		-state_code "" \
+		-city_code "" \
+		-country_code "" \
+		-creation_ip [ad_conn peeraddr] \
+		-creation_user [ad_conn user_id] \
 		-context_id [ad_conn package_id]         	
-	    }
 	}
     }	
-
-    return
+    
+     return
 }
 
 namespace eval cn_resources::person {}

@@ -387,7 +387,7 @@ CREATE OR REPLACE FUNCTION cn_part__edit(
 CREATE TABLE cn_persons (
        person_id	integer not null
        			CONSTRAINT cn_persons_person_id_pk PRIMARY KEY,
-       cpf_cnpj		varchar(25),
+       cpf_cnpj		varchar(30),
        legal_name	varchar(100),
        pretty_name	varchar(100),
        code		varchar(100),
