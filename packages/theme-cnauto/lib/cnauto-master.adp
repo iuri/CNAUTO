@@ -62,8 +62,8 @@
     <div class="footer-navigation">
       <ul>
           <li><a href="/cnauto/site-map">#cnauto-core.SiteMap#</a> |</li> 
-      	  <li><a href="/cnauto/content/terms">#cnauto-core.Terms_of_Use#</a> |</li>
-          <li><a href="/ivc/site-map">#cnauto-core.Contact_us#</a></li> 
+      	  <li><a href="http://www.cnauto.com.br/materias.php?cd_secao=12">#cnauto-core.Terms_of_Use#</a> |</li>
+          <li><a href="http://www.cnauto.com.br/materias.php?cd_secao=39">#cnauto-core.Contact_us#</a></li> 
       </ul>
     </div>
   </div>
