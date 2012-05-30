@@ -51,19 +51,20 @@ ad_proc -public cn_claim::new {
 				    
     set claim_id [db_exec_plsql insert_claim {
 	SELECT cn_claim__new (
-				  :claim_number,
-				  :claim_date,
-				  :service_order, 
-				  :service_order_date,
-				  :vehicle_id,
-				  :kilometers,
-				  :status,
-				  :owner_id,
-				  :distributor_id,
-				  :creation_ip,
-				  :creation_user,
-				  :context_id
-				  )
+			      null,
+			      :claim_number,
+			      :claim_date,
+			      :service_order, 
+			      :service_order_date,
+			      :vehicle_id,
+			      :kilometers,
+			      :status,
+			      :owner_id,
+			      :distributor_id,
+			      :creation_ip,
+			      :creation_user,
+			      :context_id
+			      )
     }]
     
     return $claim_id
@@ -510,7 +511,7 @@ ad_proc -public cn_claim::distributor_select_widget_html {
     set person_id ""
 
     if {$key == ""} {
-	set html_options "<option value=\"0\">#cnauto-warranty.Select#</option>"
+	set html_options "<option value=\"\">#cnauto-warranty.Select#</option>"
     } else {
 	
 	set count [db_string select_person_id {
@@ -529,16 +530,16 @@ ad_proc -public cn_claim::distributor_select_widget_html {
 	    
 	    set html_options "<option value=\"$person_id\">$pretty_name</option>"
 	} else {
-	    set html_options "<option value=\"0\">#cnauto-warranty.Select#</option>" 
+	    set html_options "<option value=\"\">#cnauto-warranty.Select#</option>" 
 	}
 	ns_log Notice "$html_options"
     }
-
+    
+    
     set element_options [db_list_of_lists select_person_info {
 	SELECT cp.person_id, cp.pretty_name FROM cn_persons cp, cn_categories cc
 	WHERE cp.type_id = cc.category_id
 	AND cc.name = 'concessionarias'
-	AND cp.person_id != :person_id
     }]
     
     foreach element $element_options {
@@ -573,7 +574,7 @@ ad_proc -public cn_claim::owner_select_widget_html {
     set person_id ""
 
     if {$key == ""} {
-	set html_options "<option value=\"0\">#cnauto-warranty.Select#</option>"
+	set html_options "<option value=\"\">#cnauto-warranty.Select#</option>"
     } else {
 	
 	set count [db_string select_person_id {
@@ -592,7 +593,7 @@ ad_proc -public cn_claim::owner_select_widget_html {
 	    
 	    set html_options "<option value=\"${person_id}\">${pretty_name}</option>"
 	} else {
-	    set html_options "<option value=\"0\">#cnauto-warranty.Select#</option>" 
+	    set html_options "<option value=\"\">#cnauto-warranty.Select#</option>" 
 	}
     }
 

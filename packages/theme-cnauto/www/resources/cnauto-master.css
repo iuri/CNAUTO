@@ -1,16 +1,24 @@
-.main {
-    width: 100%;
-    margin: 0px 0px;
- 
+html,body {
+    width:100%;
 }
 
-.main .header {}
+.main {
+    width: 90%;
+    margin: 0px;   
+}
+
+.main .header {
+    margin:20px;
+    width:100%;
+}
 
 .main .header .logo {
     background: url('/resources/theme-cnauto/images/logo-cnauto.jpg');
     background-repeat: no-repeat;
-    width: 100px;
-    height:41px;
+    width: 85%;
+    height:60px;
+    overflow:auto;
+    
     border: 0px;
     margin:0px 0px;
     float:left;
@@ -21,29 +29,71 @@
     float: left;
 }
 .main .header .header-navigation {
-    float: right;
+    width:15%;
+    height:60px;
+    float: left;
 }
 
-.main .header .header-navigation ul {
-}
-
-.main .header .header-navigation ul li {
-    list-style: none;
-    display: inline;
-}
-
-.main .header .header-navigation a:link, a:visited {
-    color: #ec3b45;
+.main .header .header-navigation a:link {
+    color: #FFFFFF;
     text-decoration: none;
     font-family: tahoma,verdana,sans-serif;
-    font-weight: normal;      /* Pressing it will take you to the current date */
+    font-weight: bold;      /* Pressing it will take you to the current date */
+    font-size:10pt;
+
+    background-color: #EC3B45;
+    padding:3px;
+
+    border-style:solid;
+    border-width:thick;
+    border-color: #EC3B45;
+    border-radius: 10px;
+    webkit-boder-radius:10px;
+    khtml-border-radius:10px;
+    moz-border-radius:10px;
+
 
 }
 
-.main .header .header-navigation a:hover {
-    color: #ff7179;
+.main .header .header-navigation  a:visited {
+    color: #FFFFFF;
+    text-decoration: none;
     font-family: tahoma,verdana,sans-serif;
-    font-weight: normal;      /* Pressing it will take you to the current date */
+    font-weight: bold;      /* Pressing it will take you to the current date */
+    font-size:10pt;
+
+    background-color: #EC3B45;
+    padding:3px;
+
+    border-style:solid;
+    border-width:thick;
+    border-color: #EC3B45;
+    border-radius: 10px;
+    webkit-boder-radius:10px;
+    khtml-border-radius:10px;
+    moz-border-radius:10px;
+
+
+}
+
+.main .header .header-navigation a:hover { 
+
+    color: #FFFFFF;
+    text-decoration:none;
+    font-family: tahoma,verdana,sans-serif;
+    font-weight: bold;      /* Pressing it will take you to the current date */
+    font-size:9.5pt;
+    
+    padding:2px;
+    background-color: #EC3B45;
+    border-style:ridge;
+    border-width:thick;
+    border-color: #EC3B45;
+    border-radius: 10px;
+    webkit-boder-radius:10px;
+    khtml-border-radius:10px;
+    moz-border-radius:10px;
+
 }
 
 

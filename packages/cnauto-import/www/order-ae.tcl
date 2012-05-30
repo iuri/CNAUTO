@@ -7,6 +7,7 @@ ad_page_contract {
     {cnimp_number ""}
     {parent_id ""}
     {provider_id ""}
+    {fabricant_id ""}
     {cnimp_date ""}
     {approval_date ""}
     {li_need_p ""}
@@ -33,13 +34,6 @@ ad_page_contract {
     {return_url ""}
 }
 
-set myform [ns_getform]
-if {[string equal "" $myform]} {
-    ns_log Notice "No Form was submited"
-} else {
-    ns_log Notice "FORM"
-    ns_set print $myform
-}
 
 if { [exists_and_not_null order_id] } {
     set page_title [_ cnauto-import.Edit_order]
@@ -50,7 +44,11 @@ if { [exists_and_not_null order_id] } {
 }
 
 
-set provider_options [cn_import::get_provider_options]
+set fabricant_options [cn_categories::get_category_options -category_type "cn_person" -name "fabricantes"]
+
+set provider_options [cn_categories::get_category_options -category_type "cn_person" -name "fornecedores"]
+
+
 set incoterm_options [cn_import::get_incoterm_options]
 set parent_options [cn_import::get_parent_options]
 set transport_options ""
@@ -77,6 +75,10 @@ switch $step {
 	    {provider_id:integer(select),optional
 		{label "[_ cnauto-import.Provider]"}
 		{options $provider_options}
+	    }
+	    {fabricant_id:integer(select),optional
+		{label "[_ cnauto-import.Fabricant]"}
+		{options $fabricant_options}
 	    }
 	    {cnimp_date:date,optional
 		{label "[_ cnauto-import.CNIMP]"}
@@ -123,6 +125,7 @@ switch $step {
 	    {cnimp_number:text(hidden) {value $cnimp_number}}
 	    {parent_id:integer(hidden),optional {value $parent_id}}
 	    {provider_id:integer(hidden),optional {value $provider_id}}
+	    {fabricant_id:integer(hidden),optional {value $fabricant_id}}
 	    {cnimp_date:date(hidden),optional {value $cnimp_date}}
 	    {approval_date:date(hidden),optional {value $approval_date}}
 	    {li_need_p:boolean(hidden),optional {value $li_need_p}}
@@ -183,6 +186,7 @@ switch $step {
 	    {cnimp_number:text(hidden) {value $cnimp_number}}
 	    {parent_id:integer(hidden),optional {value $parent_id}}
 	    {provider_id:integer(hidden),optional {value $provider_id}}
+	    {fabricant_id:integer(hidden),optional {value $fabricant_id}}
 	    {cnimp_date:date(hidden),optional {value $cnimp_date}}
 	    {approval_date:date(hidden),optional {value $approval_date}}
 	    {li_need_p:boolean(hidden),optional {value $li_need_p}}
@@ -242,6 +246,7 @@ switch $step {
 	    {cnimp_number:text(hidden) {value $cnimp_number}}
 	    {parent_id:integer(hidden),optional {value $parent_id}}
 	    {provider_id:integer(hidden),optional {value $provider_id}}
+	    {fabricant_id:integer(hidden),optional {value $fabricant_id}}
 	    {cnimp_date:date(hidden),optional {value $cnimp_date}}
 	    {approval_date:date(hidden),optional {value $approval_date}}
 	    {li_need_p:boolean(hidden),optional {value $li_need_p}}
@@ -305,6 +310,10 @@ switch $step {
 	    {provider_id:integer(select),optional
 		{label "[_ cnauto-import.Provider]"}
 		{options $provider_options}
+	    }
+	    {fabricant_id:integer(select),optional
+		{label "[_ cnauto-import.Fabricant]"}
+		{options $fabricant_options}
 	    }
 	    {cnimp_date:date,optional
 		{label "[_ cnauto-import.CNIMP]"}
@@ -431,9 +440,10 @@ switch $step {
 ad_form -extend -name order_ae -on_submit {} -edit_request {
 
     db_1row select_order_info {
-	SELECT cio.parent_id, cio.cnimp_number, cio.provider_id, cp.pretty_name AS provider, cio,cnimp_date, cio.approval_date, cio.li_need_p, cio.payment_date, cio.manufactured_date, cio.departure_date, cio.awb_bl_number, cio.arrival_date, cio.order_quantity, cio.numerary_date, cio.di_date, cio.di_status, cio.di_number, cio.nf_date, cio.delivery_date, cio.incoterm_id, cio.transport_type, cio.order_cost, cio.exchange_rate_type, cio.lc_number, cio.start_date 
+	SELECT cio.parent_id, cio.cnimp_number, cio.provider_id, cp.pretty_name AS provider,  cio.provider_id, cio.fabricant_id, cp1.pretty_name AS fabricant, cio,cnimp_date, cio.approval_date, cio.li_need_p, cio.payment_date, cio.manufactured_date, cio.departure_date, cio.awb_bl_number, cio.arrival_date, cio.order_quantity, cio.numerary_date, cio.di_date, cio.di_status, cio.di_number, cio.nf_date, cio.delivery_date, cio.incoterm_id, cio.transport_type, cio.order_cost, cio.exchange_rate_type, cio.lc_number, cio.start_date 
 	FROM cn_import_orders cio
 	LEFT OUTER JOIN cn_persons cp ON (cp.person_id = cio.provider_id)
+	LEFT OUTER JOIN cn_persons cp1 ON (cp1.person_id = cio.fabricant_id)
 	WHERE order_id = :order_id
 	
     }
@@ -494,6 +504,7 @@ ad_form -extend -name order_ae -on_submit {} -edit_request {
 		      -cnimp_number $cnimp_number \
 		      -parent_id $parent_id \
 		      -provider_id $provider_id \
+		      -fabricant_id $fabricant_id \
 		      -cnimp_date $cnimp_date \
 		      -approval_date $approval_date \
 		      -li_need_p $li_need_p \
@@ -527,6 +538,7 @@ ad_form -extend -name order_ae -on_submit {} -edit_request {
 	-cnimp_number $cnimp_number \
 	-parent_id $parent_id \
 	-provider_id $provider_id \
+	-fabricant_id $fabricant_id \
 	-cnimp_date $cnimp_date \
 	-approval_date $approval_date \
 	-li_need_p $li_need_p \

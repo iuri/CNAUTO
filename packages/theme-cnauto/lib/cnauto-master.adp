@@ -4,18 +4,17 @@
   <div class="header">
     <div class="logo">&nbsp;</div>
     <div class="header-navigation">
-      <ul>
-          <if @login_url@ not nil> 
-            <li><a href="@login_url@">#cnauto-core.Log_in# </a> </li> 
-          </if>
-          <if @logout_url@ not nil>
-            <li><a href="@pvt_home_url@">@pvt_home_name;noquote@</a> | </li>
+        <if @login_url@ not nil> 
+          <a href="@login_url@">#cnauto-core.Log_in# </a>
+        </if>
+        <if @logout_url@ not nil>
+            <a href="@pvt_home_url@">@pvt_home_name;noquote@</a> 
        	    <if @admin_url@>
-              <li><a href="@admin_url@">#cnauto-core.Admin#</a> |</li>
+              <a href="@admin_url@">#cnauto-core.Admin#</a> 
             </if>
-	    <li><a href="@logout_url@">#cnauto-core.Log_out#</a></li>
-          </if>
-      </ul>
+	    <a href="@logout_url@">#cnauto-core.Log_out#</a>
+        </if>
+     
     </div>
     <div class="breadcumbs"> 
       <br>

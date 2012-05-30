@@ -4,6 +4,7 @@ ad_page_contract {
     
 } {
     {claim_id ""}
+    {chassis ""}
     {vehicle_id ""}
     {distributor_id ""}
     {owner_id ""}
@@ -15,10 +16,10 @@ ad_page_contract {
     {new.x:optional}
     {edit.x:optional}
     {return_url ""}
+    {search ""}
 }
 	
 
-ns_log Notice "VEHI $vehicle_id"
 if { [exists_and_not_null claim_id] } {
     set page_title [_ cnauto-warranty.Edit_claim]
     #set ad_form_mode display
@@ -48,11 +49,7 @@ if {[info exists new.x]} {
     
     ad_returnredirect [export_vars -base "claim-ae-2" {return_url claim_id}]
     
-}
-
-
-
-if {[info exists edit.x]} { 
+} elseif {[info exists edit.x]} { 
 
     set date "$claim_date(year) $claim_date(month) $claim_date(day)"
 
@@ -74,6 +71,14 @@ if {[info exists edit.x]} {
 
 
 
+if {$chassis != ""} {
+
+    set vehicle_id [db_string select_vehicle_id {
+	SELECT vehicle_id FROM cn_vehicles WHERE vin = :chassis
+    } -default ""]
+}
+
+
 
 if {$claim_id != ""} {
     set submit_name "edit"
@@ -88,6 +93,7 @@ if {$claim_id != ""} {
 
     if {$vehicle_id != ""} {
 	set claim_number [cn_claim::generate_claim_number -vehicle_id $vehicle_id] 
+	
     }
 
     set submit_name "new"
@@ -95,7 +101,45 @@ if {$claim_id != ""} {
 }
 
 
-set vehicle_select_html [cn_claim::vehicle_select_widget_html -name "vehicle_id" -key $vehicle_id]
+
+
+
+
+########
+# Begin Formulary
+########
+
+if {$search ne ""} {
+    set chassis_list [db_list select_chassis "
+        SELECT vin FROM cn_vehicles WHERE vin LIKE '%$search%'
+    "]
+
+
+    ns_log Notice "PAGE Autocomplete1 $chassis_list"
+
+
+    set html "<ul>"
+
+    foreach element $chassis_list {
+        append html "<li>$element</li>"
+    }
+
+
+    append html "</ul>"
+
+
+#    ad_return_template  -string $html
+#    doc_return $html
+
+    ns_return 200 "$html" "$html"
+}
+
+
+
+
+
+
+
 
 set resource_select_html [cn_claim::resource_select_widget_html -name "resource_id" -key $vehicle_id] 
 
@@ -129,20 +173,27 @@ set code [db_string select_code {
 set claim_date_html [cn_claim::input_date_html -name "claim_date"]
 
 
+template::head::add_javascript -src "/resources/cnauto-warranty/js/autocomplete/prototype.js"
+
+template::head::add_javascript -src "/resources/cnauto-warranty/js/autocomplete/effects.js"
+
+template::head::add_javascript -src "/resources/cnauto-warranty/js/autocomplete/controls.js"
+
 
 template::head::add_javascript -script {
     
     function FillFieldsOnChange() {
-	var vehicleID = document.getElementById("vehicle_id");
+	var chassis = document.getElementById("chassis").value;
 	var claimID = document.getElementById("claim_id").value;
 	
 	// get selected continent from dropdown list
-	var selectedVehicle = vehicleID.options[vehicleID.selectedIndex].value;
-	
+	// var selectedVehicle = vehicleID.options[vehicleID.selectedIndex].value;
+
+	alert (chassis);
 	// url of page that will send xml data back to client browser
 	var requestUrl;
 	// use the following line if using asp
-	requestUrl = "claim-ae" + "?vehicle_id=" + encodeURIComponent(selectedVehicle) + "&claim_id=" + encodeURIComponent(claimID);
+	requestUrl = "claim-ae" + "?chassis=" + encodeURIComponent(chassis) + "&claim_id=" + encodeURIComponent(claimID);
 
 	window.location.href = requestUrl;
     }

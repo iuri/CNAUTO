@@ -37,6 +37,7 @@ ad_proc -public cn_import::order::delete {
 ad_proc -public cn_import::order::new {
     {-cnimp_number:required}
     {-parent_id null}
+    {-fabricant_id null}
     {-provider_id null}
     {-cnimp_date null}
     {-approval_date null} 
@@ -122,6 +123,7 @@ ad_proc -public cn_import::order::new {
 					 :cnimp_number,
 					 :parent_id,
 					 :provider_id,
+					 :fabricant_id,
 					 :cnimp_date,
 					 :approval_date, 
 					 :li_need_p,
@@ -160,6 +162,7 @@ ad_proc -public cn_import::order::edit {
     {-cnimp_number:required}
     {-parent_id null}
     {-provider_id null}
+    {-fabricant_id null}
     {-cnimp_date null}
     {-approval_date null} 
     {-li_need_p ""}
@@ -235,33 +238,6 @@ ad_proc -public cn_import::order::edit {
     }
 
 
-    ns_log Notice "
-	-order_id $order_id \n
-	-cnimp_number $cnimp_number \n
-	-parent_id $parent_id \n
-	-provider_id $provider_id \n
-	-cnimp_date $cnimp_date \n
-	-approval_date $approval_date \n
-	-li_need_p $li_need_p \n
-	-payment_date $payment_date \n
-	-manufactured_date $manufactured_date \n
-	-departure_date $departure_date \n
-	-arrival_date $arrival_date \n
-	-awb_bl_number $awb_bl_number \n
-	-numerary_date $numerary_date \n
-	-di_date $di_date \n
-	-di_status $di_status \n
-	-nf_date $nf_date \n
-	-delivery_date $delivery_date \n
-	-incoterm_id $incoterm_id \n
-	-transport_type $transport_type \n
-	-order_cost $order_cost \n
-	-exchange_rate_type $exchange_rate_type \n
-	-lc_number $lc_number \n
-	-start_date343 $start_date \n
-	-notes $notes "
-       
-
     
     db_transaction {
 	db_exec_plsql update_order {
@@ -270,6 +246,7 @@ ad_proc -public cn_import::order::edit {
 					  :cnimp_number,
 					  :parent_id,
 					  :provider_id,
+					  :fabricant_id,
 					  :cnimp_date,
 					  :approval_date, 
 					  :li_need_p,
@@ -513,24 +490,4 @@ ad_proc -public cn_import::get_parent_options {} {
     }
     
     return $orders
-}
-
-ad_proc -public cn_import::get_provider_options {} {
-    Returns a list of providers for a seletc widget
-} {
-   
-    set providers [list]
-    
-    lappend providers [list [_ cnauto-import.Select] ""]
-
-    db_foreach select_provider {
-	SELECT cp.pretty_name, cp.person_id 
-	FROM cn_persons cp, cn_categories cc 
-	WHERE cp.type_id = cc.category_id AND cc.category_type = 'cn_person';
-    } {
-	lappend providers [list $pretty_name $person_id]
-    }
-
-    
-    return $providers
 }

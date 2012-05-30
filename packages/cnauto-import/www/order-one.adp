@@ -22,8 +22,8 @@
 	  <td width="45%" align="left" valign="top"><b>#cnauto-import.Provider#</b><br> @provider@<br><br></td>
 	</tr>
 	<tr>
-	  <td><b>#cnauto-import.Approval_date#</b><br> @approval_date@</td>
-	  <td>&nbsp;&nbsp;&nbsp;</td>
+	  <td><b>#cnauto-import.Approval_date#</b><br> @approval_date@<br><br></td>
+	  <td>&nbsp; &nbsp;</td>
 	  <td>
 	    <b>#cnauto-import.LI_need_p#</b><br> 
 	     <if @li_need_p@ eq t> 
@@ -35,9 +35,15 @@
 	   </td>
 	 </tr>
          <tr>
- 	   <td>&nbsp;</td>
+ 	   <td><b>#cnauto-import.Fabricant#</b><br> @fabricant@</td>
+	   <td>&nbsp;</td>
+	   <td>&nbsp;</td>
+	 </tr>
+	 <tr>
+	   <td>&nbsp;</td>
 	   <td>&nbsp;</td>
 	   <td align="right"><a href="order-ae?order_id=@order_id@&step=1&return_url=@return_url@" class="button">#cnauto-import.Edit#</a></td>
+
 	 </tr>
 	 <tr>
 	   <td><hr></td>

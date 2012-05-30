@@ -63,6 +63,12 @@ template::list::create \
 		<a href="@orders.provider_url@">@orders.provider_pretty;noquote@</a>
 	    }
 	}
+	fabricant_pretty {
+	    label "[_ cnauto-import.Fabricant]"
+	    display_template {
+		<a href="@orders.fabricant_url@">@orders.fabricant_pretty;noquote@</a>
+	    }
+	}
 	cnimp_date {
 	    label "[_ cnauto-import.CNIMP_date]"
 	    
@@ -107,6 +113,10 @@ template::list::create \
 	    label "[_ cnauto-import.Provider]"
 	    orderby "cp.pretty_name"
 	}
+	fabricant_pretty {
+	    label "[_ cnauto-import.Fabricant]"
+	    orderby "cp1.pretty_name"
+	}
 	cnimp_date {
 	    label "[_ cnauto-import.CNIMP_date]"
 	    orderby "cio.cnimp_date"
@@ -116,11 +126,12 @@ template::list::create \
 
 
 
-db_multirow -extend {comments cnimp_url provider_url} orders select_orders {} {
+db_multirow -extend {comments cnimp_url fabricant_url provider_url} orders select_orders {} {
     
     set cnimp_url [export_vars -base "order-one" {order_id return_url}]
     set provider_url [export_vars -base "/cnauto/cnauto-resources/persons/person-one" {person_id return_url}]
 
+    set fabricant_url [export_vars -base "/cnauto/cnauto-resources/persons/person-one" {{person_id $fabricant_id} return_url}]
 
 
     if {$cnimp_date ne ""} {

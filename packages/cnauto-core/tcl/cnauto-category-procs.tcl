@@ -174,3 +174,30 @@ ad_proc -public cn_categories::get_category_name {
     } -default null]
 
 }
+
+
+
+
+ad_proc -public cn_categories::get_category_options {
+    {-category_type}
+    {-name}
+} {
+    Returns a list categories for a seletc widget
+} {
+    
+    set categories [list]
+    
+    lappend categories [list [_ cnauto-import.Select] ""]
+    
+    db_foreach select_category {
+	SELECT cp.pretty_name, cp.person_id 
+	FROM cn_persons cp, cn_categories cc 
+	WHERE cp.type_id = cc.category_id AND cc.category_type = :category_type AND cc.name = :name;
+    } {
+	lappend categories [list $pretty_name $person_id]
+    }
+    
+    return $categories
+}
+
+

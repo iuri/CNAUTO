@@ -3,7 +3,7 @@ ad_page_contract {
 } {
     upload_file:trim,optional
     upload_file.tmpfile:tmpfile,optional
-    {assurance_id}
+    {claim_id}
     {part_code:array,optional}
     {part_name:array,optional}
     {part_cost:array,optional}
@@ -35,17 +35,17 @@ if {[info exists submit.file]} {
 		      -tmp_filename $tmp_filename \
 		      -filename $filename 
     } errmsg]} {
-	ad_return_complaint 1 "[_ cnauto-assurance.Attach_file_failed]"
+	ad_return_complaint 1 "[_ cnauto-warranty.Attach_file_failed]"
     }
 
-    ad_returnredirect [export_vars -base "assurance-ae-2" {assurance_id return_url}]
+    ad_returnredirect [export_vars -base "clam-ae-2" {claim_id return_url}]
 
 }
 
 if {[info exists submit.x]} {
 
-    if { [catch { cn_assurance::detach_parts -assurance_id $assurance_id } errmsg]} {
-	ad_return_complaint 1 "[_ cnauto-assurance.Detach_part_failed]"
+    if { [catch { cn_claim::detach_parts -claim_id $claim_id } errmsg]} {
+	ad_return_complaint 1 "[_ cnauto-warranty.Detach_part_failed]"
     }
 
 
@@ -65,12 +65,12 @@ if {[info exists submit.x]} {
 		ad_return_complaint 1 "The part insert does not exist on the database $part_code($i) - $part_name($i) <br /> Please <a href='javascript:history.go(-1)'><b>go back</b></a> and fix the error."
 	    }
 	    
-	    cn_assurance::attach_parts \
-		-assurance_id $assurance_id \
+	    cn_claim::attach_parts \
+		-claim_id $assurance_id \
 		-part_id $part_id \
 		-cost  $part_cost($i) \
 		-quantity $part_quantity($i) \
-		-assurance $assurance_cost($i) \
+		-warranty_cost $warranty_cost($i) \
 		-income $part_incomes($i) \
 		-mo_code $mo_code($i) \
 		-mo_time $mo_time($i) \
@@ -79,7 +79,7 @@ if {[info exists submit.x]} {
 	}
     }
     
-    cn_assurance::update_costs \
+    cn_claim::update_costs \
 	-assurance_id $assurance_id \
 	-status "unapproved" \
 	-description $description \

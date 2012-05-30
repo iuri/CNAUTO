@@ -8,10 +8,15 @@
 <form name="claim_ae" action="claim-ae" method="post">
 <input type="hidden" id="claim_id" name="claim_id" value="@claim_id@">
  
-<table>
+<table width="100%">
   <tr>
-    <td>#cnauto-warranty.Chassis#</td>
-    <td>@vehicle_select_html;noquote@</td>
+    <td><label>#cnauto-warranty.Chassis#</label></td>
+    <td>
+	<div><input type="text" id="chassis" name="chassis" onchange="return FillFieldsOnChange();"/></div>
+        <div id="hint"></div>
+        <script type="text/javascript"> new Ajax.Autocompleter("chassis","hint","autocomplete-chassis"); </script>
+    </td>
+    <td width="2%">&nbsp;</td>
     <td>#cnauto-warranty.Model#</td>
     <td>@resource_select_html;noquote@</td>
     <td>&nbsp;</td>
@@ -21,6 +26,7 @@
     <td>
          <input type="text" readonly="readonly" name="yom" id="yom" value="@year;noquote@">  
     </td>
+    <td>&nbsp;</td>
     <td>#cnauto-warranty.Purchase_date#</td>
     <td>@purchase_date_html;noquote@</td>
     <td>&nbsp;</td>
@@ -29,6 +35,7 @@
   <tr>
     <td>#cnauto-warranty.Owner#</td>
     <td>@owner_select_html;noquote@</td>
+    <td>&nbsp;</td>
     <td>#cnauto-warranty.Distributor#</td>
     <td>@distributor_select_html;noquote@</td>
     <td>#cnauto-warranty.Code#</td>
@@ -39,6 +46,7 @@
   <tr>
     <td>#cnauto-warranty.Claim_number#</td>
     <td><input type="text" readonly="readonly" name="claim_number" id="claim_number" value="@claim_number@"></td>
+    <td>&nbsp;</td>
     <td>#cnauto-warranty.Claim_date#</td>
     <td width="50%">
         <!-- date purchase_date begin -->
