@@ -182,7 +182,7 @@ template::head::add_javascript -src "/resources/cnauto-warranty/js/autocomplete/
 
 template::head::add_javascript -script {
     
-    function FillFieldsOnChange() {
+    function FillFieldsOnChange(chassis) {
 	var chassis = document.getElementById("chassis").value;
 	var claimID = document.getElementById("claim_id").value;
 	
