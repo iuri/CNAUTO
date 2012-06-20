@@ -58,12 +58,6 @@ template::list::create \
 		<a href="@parts.part_url@">@parts.resource;noquote@</a>
 	    }
 	}
- 	model {
-	    label "[_ cnauto-resources.Model]"
-	    display_template {
-		<a href="@parts.part_url@">@parts.model;noquote@</a>
-	    }
-	}
     } -orderby {
 	model {
 	    label "[_ cnauto-resources.Model]"

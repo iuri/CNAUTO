@@ -80,7 +80,7 @@ ad_proc -public cn_resources::vehicles::import_csv_abeiva {
     Import CSV file from ABEIVA
 } {
 
-    ns_log Notice "Running ad_proc cn_resources::vehicles::import_csv_file"
+    ns_log Notice "Running ad_proc cn_resources::vehicles::import_csv_abeiva"
 
     set input_file [open "${input_file}" r]
     set lines [split [read $input_file] \n]
@@ -125,124 +125,53 @@ ad_proc -public  cn_resources::vehicles::import_csv_file {
     set lines [split [read $input_file] \n]
     close $input_file
 
+    set creation_ip [ad_conn peeraddr]
+    set creation_user [ad_conn user_id]
+    set context_id [ad_conn package_id]
+
     foreach line $lines {
-	set line [split $line {;}] 
-	ns_log Notice "LINE $line"
-	
 
-	set vin [lindex $line 0]
-	set model [lindex $line 1]
-	set purchase_date [lindex $line 2]
-	if {[exists_and_not_null purchase_date]} {
-	    set purchase_date [split $purchase_date {/}]
-	    set purchase_date "[lindex $purchase_date 2]-[lindex $purchase_date 1]-[lindex $purchase_date 0]"
-	} else {
-	    set purchase_date ""
-	}
+	if {$line ne ""} {
+	    set line [split $line {;}] 
+	    ns_log Notice "LINE $line"
 	    
-
-
-	set duration [lindex $line 3]
-	set color ""
-	set distributor [lindex $line 5]
-	set owner [lindex $line 6]
-	
-	set postal_address [lindex $line 7]
-	set city [lindex $line 8]
-	set state [lindex $line 9]
-	set postal_code [lindex $line 10]
-	set phone [lindex $line 11]
-	set yof [lindex $line 12]
-	set yom [lindex $line 13]
-	set engine [lindex $line 14]
-
-	set arrival_date [lindex $line 15]
-	if {[exists_and_not_null arrival_date]} {
-	    set arrival_date [split $arrival_date {/}]
-	    set arrival_date "[lindex $arrival_date 2]-[lindex $arrival_date 1]-[lindex $arrival_date 0]"
-	} else {
-	    set arrival_date ""
-	}
- 
-
-	set billing_date [lindex $line 16]
-	if {[exists_and_not_null billing_date]} {
-	    set billing_date [split $billing_date {/}]
-	    set billing_date "[lindex $billing_date 2]-[lindex $billing_date 1]-[lindex $billing_date 0]"
-	} else {
-	    set billing_date ""
-	}
-
-	set notes [lindex $line 17]
-
-	
-	
-	set resource_id ""
-	set person_id ""
-	set creation_ip [ad_conn peeraddr]
-	set creation_user [ad_conn user_id]
-	set context_id [ad_conn package_id]
-
-	#ns_log notice "[llength $name] - $name"
-
-
-	ns_log Notice "
-	    vin $vin \n 
-	    model $model \n
-	    purchase_date $purchase_date \n
-	    duration $duration \n
-	    color $color \n
-	    distributor $distributor \n
-	    owner  $owner \n
-	    postal_address \n 
-	    city $color \n
-	    state $state \n
-	    postal_code $postal_code \n
-	    phone $phone \n
-	    yof $yof \
-	    yom $yom \n
-	    engine  $engine \n
-	    arrival_date $arrival_date \n
-	    billing_date $billing_date
-	    notes $notes \n
-        "
-
-
-
-	set exists_p [db_string select_code {
-	    SELECT vin FROM cn_vehicles WHERE vin = :vin
-	} -default null]
-
-	if {$exists_p == "null" && $vin != ""} {
-
 	    
-	    db_transaction {
-		db_exec_plsql insert_vehicle {
-		    SELECT cn_vehicle__new (
-					    :vin,
-					    :model,
-					    :engine,
-					    :yom,
-					    :yof,
-					    :color,
-					    :purchase_date,
-					    :arrival_date,
-					    :billing_date,
-					    :duration,
-					    :resource_id,
-					    :person_id,
-					    :notes,
-					    :creation_ip,
-					    :creation_user,
-					    :context_id
-					    )
+	    set vin [lindex $line 0]
+	    
+	    
+	    set exists_p [db_string select_code {
+		SELECT vin FROM cn_vehicles WHERE vin = :vin
+	    } -default null]
+	    
+	    if {$exists_p == "null" && $vin != ""} {
+		ns_log Notice "CHASSIS $vin" 
+		
+		db_transaction {
+		    db_exec_plsql insert_vehicle {
+			SELECT cn_vehicle__new (
+						:vin,
+						null,
+						null,
+						null,
+						null,
+						null,
+						null,
+						null,
+						null,
+						null,
+						null,
+						null,
+						null,
+						:creation_ip,
+						:creation_user,
+						:context_id
+						)
+		    }
 		}
 	    }
-	    
-	}
+	}	
     }
-    
-    
+
     return
 }
 

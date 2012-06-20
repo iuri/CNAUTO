@@ -4,21 +4,22 @@ ad_page_contract {
     upload_file:trim,optional
     upload_file.tmpfile:tmpfile,optional
     {claim_id}
-    {part_code:array,optional}
-    {part_name:array,optional}
-    {part_cost:array,optional}
-    {part_quantity:array,optional}
-    {assurance_cost:array,optional}
-    {part_incomes:array,optional}
-    {mo_code:array,optional}
-    {mo_time:array,optional}
-    {third_cost:array,optional}
-    {description:optional}
-    {parts_total_cost:optional}
-    {assurance_total_cost:optional}
-    {third_total_cost:optional}
-    {mo_total_cost:optional}
-    {total_cost:optional}
+    {claim_number ""}
+    {code ""}
+    {pretty_name ""}
+    {part_cost ""}
+    {quantity ""}
+    {incomes ""}
+    {claim_cost ""}
+    {mo_code ""}
+    {mo_time ""}
+    {third_cost ""}
+    {description ""}
+    {parts_total_cost ""}
+    {claim_total_cost ""}
+    {third_total_cost ""}
+    {mo_total_cost ""}
+    {total_cost ""}
     {return_url ""}
     {submit.x:optional}
     {submit.file:optional}
@@ -31,14 +32,14 @@ if {[info exists submit.file]} {
     set tmp_filename ${upload_file.tmpfile}
     set filename [template::util::file::get_property filename $upload_file] 
     if { [catch { cn_core::attach_file \
-		      -parent_id $assurance_id \
+		      -parent_id $claim_id \
 		      -tmp_filename $tmp_filename \
 		      -filename $filename 
     } errmsg]} {
 	ad_return_complaint 1 "[_ cnauto-warranty.Attach_file_failed]"
     }
 
-    ad_returnredirect [export_vars -base "clam-ae-2" {claim_id return_url}]
+    ad_returnredirect [export_vars -base "claim-ae-2" {claim_id return_url}]
 
 }
 
@@ -66,11 +67,11 @@ if {[info exists submit.x]} {
 	    }
 	    
 	    cn_claim::attach_parts \
-		-claim_id $assurance_id \
+		-claim_id $claim_id \
 		-part_id $part_id \
 		-cost  $part_cost($i) \
 		-quantity $part_quantity($i) \
-		-warranty_cost $warranty_cost($i) \
+		-claim_cost $claim_cost($i) \
 		-income $part_incomes($i) \
 		-mo_code $mo_code($i) \
 		-mo_time $mo_time($i) \
@@ -80,28 +81,28 @@ if {[info exists submit.x]} {
     }
     
     cn_claim::update_costs \
-	-assurance_id $assurance_id \
+	-claim_id $claim_id \
 	-status "unapproved" \
 	-description $description \
 	-parts_total_cost $parts_total_cost \
-	-assurance_total_cost $assurance_total_cost \
+	-claim_total_cost $claim_total_cost \
 	-third_total_cost $third_total_cost \
 	-mo_total_cost $mo_total_cost \
 	-total_cost $total_cost
 
-    set send_email_p [parameter::get -package_id [ad_conn package_id] -parameter "AssuranceEmailAlert" -default 0]
+    set send_email_p [parameter::get -package_id [ad_conn package_id] -parameter "WarrantyEmailAlert" -default 0]
     
     if {$send_email_p} {
 	
 	ns_log Notice "SEND EMAIL"
 	set from_address "iuri.sampaio@cnauto.com.br"
-	set to_address [parameter::get -package_id [ad_conn package_id] -parameter "AssuranceEmailReceiver" -default ""]
+	set to_address [parameter::get -package_id [ad_conn package_id] -parameter "WarrantyEmailReceiver" -default ""]
 	ns_log Notice "$to_address | $from_address"
 	set date [clock format [clock seconds]]
-	set body "Click here to analyze the  <a href=\"iurix.com/cnauto/assurance/assurance-one?assurance_id=$assurance_id\">assurance</a>"
+	set body "Click here to analyze the  <a href=\"/cnauto/warranty/claim-one?claim_id=$claim_id\">Claim</a>"
 	
 	#acs_mail_lite::send \
-	    -subject "New assurance required $date" \
+	    -subject "New Claim required $date" \
 	    -body $body \
 	    -to_addr $to_address \
 	    -from_addr $from_address \
@@ -110,85 +111,79 @@ if {[info exists submit.x]} {
     }
 
     ns_log Notice "REDIRECT"
-    ad_returnredirect [export_vars -base "/cnauto/assurances/" {}]
+    ad_returnredirect [export_vars -base "/cnauto/warranty/" {}]
 }
 
 
 
-set title [_ cnauto-assurance.Add_parts]
+set title [_ cnauto-warranty.Add_parts]
 
-db_1row select_assurance_number {
-    SELECT assurance_number,parts_total_cost, assurance_total_cost, third_total_cost, mo_total_cost, total_cost, description FROM cn_assurances WHERE assurance_id = :assurance_id
+db_1row select_claim_number {
+    SELECT claim_number, parts_total_cost, claim_total_cost, third_total_cost, mo_total_cost, total_cost, description FROM cn_claims WHERE claim_id = :claim_id
 }
 
 set parts_html ""
 
-template::multirow create parts i code pretty_name part_cost quantity assurance_cost incomes mo_code mo_time third_cost
-
-set part_list [db_list_of_lists select_parts {
-    SELECT cp.code, cp.pretty_name, apr.cost, apr.quantity, apr.assurance_cost, apr.incomes, apr.mo_code, apr.mo_time, apr.third_services_cost
-    FROM cn_parts cp, cn_assurance_part_requests apr
-    WHERE apr.assurance_id = :assurance_id
-    AND cp.part_id = apr.part_id
-}]
 
 
-for {set i 0} {$i < $lines} {incr i} {
-
-    if {$i < [llength $part_list]} {
-	
-	set code [lindex [lindex $part_list $i] 0]
-	set pretty_name [lindex [lindex $part_list $i] 1] 
-	set part_cost [lindex [lindex $part_list $i] 2]
-	set quantity [lindex [lindex $part_list $i] 3]
-	set assurance_cost [lindex [lindex $part_list $i] 4]
-	set incomes [lindex [lindex $part_list $i] 5]
-	set mo_code [lindex [lindex $part_list $i] 6]
-	set mo_time [lindex [lindex $part_list $i] 7]
-	set third_cost [lindex [lindex $part_list $i] 8]
-	
-	template::multirow append parts $i $code $pretty_name $part_cost $quantity $assurance_cost $incomes $mo_code $mo_time $third_cost
-	ns_log Notice "TTTT $code"
-    } else {
-	template::multirow append parts $i "" "" ""
-    }
-
+db_multirow -extend {} parts select_parts {
+    SELECT cp.code, cp.pretty_name, cpr.cost, cpr.quantity, cpr.claim_cost, cpr.incomes, cpr.mo_code, cpr.mo_time, cpr.third_services_cost
+    FROM cn_parts cp, cn_claim_part_requests cpr
+    WHERE cpr.claim_id = :claim_id
+    AND cp.part_id = cpr.part_id
 }
 
-set lines [expr $lines + 5]
-set add_more_lines [export_vars -base "assurance-ae-2" {assurance_id vehicle_id lines}]
 
-template::head::add_javascript -src "/resources/cnauto-assurance/js/js-library.js" -order 0
 
-  
-  
 
-template::head::add_javascript -src "/resources/cnauto-assurance/js/jquery.js" -order 1
+# Attach files chunk
+
+template::head::add_javascript -src "/resources/cnauto-warranty/js/js-library.js" -order 0
+
+template::head::add_javascript -src "/resources/cnauto-warranty/js/jquery.js" -order 1
+
 
 set javascript_attach_files {
 <script type="text/javascript">
-    $(document).ready(function(){
+    //alert($);
+    (function($) {
+	$(document).ready(function(){
 	
-	$(".slidingDiv").hide();
-	$(".show_hide").show();
-	
-	$('.show_hide').click(function(){
-	    $(".slidingDiv").slideToggle();
+	    $(".slidingDiv").hide();
+	    $(".show_hide").show();
+	    
+	    $('.show_hide').click(function(){
+		$(".slidingDiv").slideToggle();
+	    });   
 	});
-	
-    });
+    }) ( jQuery );
+    
 </script>
 }
 
-template::head::add_css -href "/resources/cnauto-assurance/assurance.css"
+
+
+
+template::head::add_css -href "/resources/cnauto-warranty/warranty.css"
 
 
 template::multirow create files img filename
 
 db_foreach file_attached {
-    SELECT cr.description FROM cr_revisions cr, cr_items ci WHERE ci.parent_id = :assurance_id AND cr.item_id = ci.item_id
+    SELECT cr.description FROM cr_revisions cr, cr_items ci WHERE ci.parent_id = :claim_id AND cr.item_id = ci.item_id
 } {
     set img "/resources/file-storage/file.gif"
     template::multirow append files $img $description
 
 }
+
+
+
+
+# Autocomplete's Javascript
+template::head::add_javascript -src "/resources/cnauto-warranty/js/autocomplete/prototype.js"
+
+template::head::add_javascript -src "/resources/cnauto-warranty/js/autocomplete/effects.js"
+
+template::head::add_javascript -src "/resources/cnauto-warranty/js/autocomplete/controls.js"
+

@@ -455,7 +455,7 @@ ad_proc -public cn_claim::resource_select_widget_html {
 } {
     
     
-    set html_select "<select name=\"${name}\" id=\"${name}\">"
+    set html_select "<select name=\"${name}\" id=\"${name}\" onfocus=\"return FillFieldsOnChange();\">"
     
     set category_id ""
 
@@ -522,7 +522,7 @@ ad_proc -public cn_claim::distributor_select_widget_html {
 
 	if {$count == 1 } {
 	    db_1row select_info {
-		SELECT cp.person_id, cp.pretty_name FROM cn_persons cp, cn_vehicles cv 
+		SELECT cp.person_id, cp.pretty_name || ' ' || cp.cpf_cnpj AS pretty_name FROM cn_persons cp, cn_vehicles cv 
 		WHERE cp.person_id = cv.distributor_id 
 		AND cv.vehicle_id = :key
 		

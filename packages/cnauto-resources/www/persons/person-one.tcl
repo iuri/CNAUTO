@@ -7,7 +7,7 @@ ad_page_contract {
     {return_url ""}
 }
 
-set page_title [_ cnauto-assurance.Person_info]
+set page_title [_ cnauto-resources.Person_info]
 
 if {[info exists person_id]} {
     set type_id [db_string select_type_id {
@@ -67,7 +67,7 @@ ad_form -extend -name person_one -form {
 	{label "[_ cnauto-resources.Postal_address]"}
     } 
     {postal_address2:text(text)
-	{label "[_ cnauto-resources.Postal_address]"}
+	{label "[_ cnauto-resources.Postal_address_compl]"}
     } 
     {postal_code:text(text)
 	{label "[_ cnauto-resources.Postal_code]"}

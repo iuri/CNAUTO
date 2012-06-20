@@ -17,7 +17,7 @@ ns_log Notice "PAGE $chassis"
 if {$chassis ne ""} {
 
     set chassis_list [db_list select_chassis "
-	SELECT vin FROM cn_vehicles WHERE vin LIKE '%$chassis%' 
+	SELECT vin FROM cn_vehicles WHERE vin LIKE '%$chassis%' LIMIT 100
     "]
 
 

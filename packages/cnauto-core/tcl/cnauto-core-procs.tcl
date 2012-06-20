@@ -324,34 +324,33 @@ ad_proc -public cn_core::abeiva::mount_output_line {
 		set desc $element
 		lappend output_line $desc
             }	    
-	    4 {
-		# Contrato
-		if {[regexp -all "LSY" $chassi]} {
-		    #ns_log Notice "Topic" 
-		    set contrato 40000162449
-		    #ns_log Notice "$contrato"
-		    lappend output_line $contrato
-		} else {
-		    #ns_log Notice "Towner" 
-		    set contrato 40000162448
-		    #ns_log Notice "$contrato"
-		    lappend output_line $contrato
-		}
-	    }
-	    5 {
-		# Numero
-		set numero [ns_rand 1000000]
-		lappend output_line $numero
-	    }
 	}
+	
 	incr i
     }
-   
- #   ns_log Notice "Output: $output_line"
-    return $output_line
+    
+    # Contrato
+    if {[regexp -all "LSY" $chassi]} {
+	#ns_log Notice "Topic" 
+	set contrato 40000162449
+	#ns_log Notice "$contrato"
+	lappend output_line $contrato
+    } else {
+	#ns_log Notice "Towner" 
+	set contrato 40000162448
+	#ns_log Notice "$contrato"
+	lappend output_line $contrato
+    }
+    
+    # Numero
+    set numero [ns_rand 1000000]
+    lappend output_line $numero
+    
+    
+    
+    #   ns_log Notice "Output: $output_line"
+    return $output_line    
 }
-
-
 
 
 
@@ -397,6 +396,7 @@ ad_proc -public cn_core::abeiva::import_csv_file {
 	22012 0
 	32012 0
 	42012 0
+	52012 0
     }
     
     #Array
@@ -421,6 +421,7 @@ ad_proc -public cn_core::abeiva::import_csv_file {
 	22012 0
 	32012 0
 	42012 0
+	52012 0
     } 
     
     # Output file

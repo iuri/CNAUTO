@@ -26,11 +26,7 @@ set distributor_options [cn_resources::vehicles::get_distributor_options]
 
 set vehicle_type_id [cn_categories::get_category_id -name "veiculos" -type "cn_resource"] 
 
-set resource_options [db_list_of_lists select_resources {
-    SELECT cr.pretty_name, cr.resource_id FROM cn_resources cr WHERE cr.type_id = :vehicle_type_id
-}]
-
-lappend resource_options {"Selecione" ""}
+set resource_options [cn_resources::get_resource_options -type "veiculo"]
 
 set person_ae_url [export_vars -base "person-ae" {return_url}] 
 
