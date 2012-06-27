@@ -12,7 +12,7 @@
   <tr>
     <td><label>#cnauto-warranty.Chassis#</label></td>
     <td>
-	<div><input type="text" id="chassis" name="chassis" value="@chassis;noquote@"/></div>
+	<div><input type="text" id="chassis" name="chassis" value="@chassis@" onchange="return FillFieldsOnChange(document.getElementById("chassis").value;);"/></div>
         <div id="hint"></div>
         <script type="text/javascript"> new Ajax.Autocompleter("chassis","hint","autocomplete-chassis"); </script>
     </td>
