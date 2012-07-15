@@ -29,6 +29,10 @@ if { [exists_and_not_null claim_id] } {
 }
 
 
+
+set user_id [ad_conn user_id]
+
+
 if {[info exists new.x]} { 
 
     set date "$claim_date(year) $claim_date(month) $claim_date(day)"
@@ -76,6 +80,11 @@ if {$chassis != ""} {
     set vehicle_id [db_string select_vehicle_id {
 	SELECT vehicle_id FROM cn_vehicles WHERE vin = :chassis
     } -default ""]
+   
+
+    if {$vehicle_id eq ""} {
+	
+    }
 }
 
 
@@ -103,6 +112,41 @@ if {$claim_id != ""} {
 
 
 
+    
+set resource [db_string select_pretty_name {
+    SELECT cr.pretty_name AS resource FROM cn_resources cr, cn_vehicles cv
+    WHERE cr.resource_id = cv.resource_id AND cv.vehicle_id = :vehicle_id
+} -default ""]
+    
+    
+    
+    set purchase_date [db_string select_purchase_date {
+	SELECT cv.purchase_date FROM cn_vehicles cv WHERE vehicle_id = :vehicle_id
+    } -default ""]
+    
+    set purchase_date_html [cn_claim::input_date_html -name "purchase_date" -date $purchase_date]
+    
+    
+    set distributor_select_html [cn_claim::distributor_select_widget_html -name "distributor_id" -key $vehicle_id]
+    
+    
+    set owner_select_html [cn_claim::owner_select_widget_html -name "owner_id" -key $vehicle_id]
+    
+    
+    set year [db_string select_year {
+	SELECT year_of_fabrication || '/' || year_of_model AS year FROM cn_vehicles WHERE vehicle_id = :vehicle_id
+    } -default ""]
+    
+    
+    set code [db_string select_code {
+	SELECT cp.code 
+	FROM cn_persons cp, cn_vehicles cv 
+	WHERE cp.person_id = cv.distributor_id
+	AND cv.vehicle_id = :vehicle_id
+    } -default ""]
+    
+    set claim_date_html [cn_claim::input_date_html -name "claim_date"]
+    
 
 
 ########
@@ -139,40 +183,6 @@ if {$search ne ""} {
 
 
 
-
-
-set resource_select_html [cn_claim::resource_select_widget_html -name "resource_id" -key $vehicle_id] 
-
-set purchase_date [db_string select_purchase_date {
-    SELECT cv.purchase_date FROM cn_vehicles cv WHERE vehicle_id = :vehicle_id
-} -default ""]
-
-set purchase_date_html [cn_claim::input_date_html -name "purchase_date" -date $purchase_date]
-
-
-set distributor_select_html [cn_claim::distributor_select_widget_html -name "distributor_id" -key $vehicle_id]
-
-
-set owner_select_html [cn_claim::owner_select_widget_html -name "owner_id" -key $vehicle_id]
-
-
-set year [db_string select_year {
-    SELECT year_of_fabrication || '/' || year_of_model AS year FROM cn_vehicles WHERE vehicle_id = :vehicle_id
-} -default ""]
-
-
-set code [db_string select_code {
-    SELECT cp.code 
-    FROM cn_persons cp, cn_vehicles cv 
-    WHERE cp.person_id = cv.distributor_id
-    AND cv.vehicle_id = :vehicle_id
-} -default ""]
-
-
-
-set claim_date_html [cn_claim::input_date_html -name "claim_date"]
-
-
 template::head::add_javascript -src "/resources/cnauto-warranty/js/autocomplete/prototype.js"
 
 template::head::add_javascript -src "/resources/cnauto-warranty/js/autocomplete/effects.js"
@@ -189,7 +199,6 @@ template::head::add_javascript -script {
 	// get selected continent from dropdown list
 	// var selectedVehicle = vehicleID.options[vehicleID.selectedIndex].value;
 
-	alert (chassis);
 	// url of page that will send xml data back to client browser
 	var requestUrl;
 	// use the following line if using asp

@@ -238,7 +238,6 @@ CREATE OR REPLACE FUNCTION cn_part__new(
        varchar, -- name
        varchar, -- pretty_name
        integer, -- resource_id
-       integer, -- model_id
        integer, -- quantity
        varchar, -- price
        varchar, -- width
@@ -256,18 +255,17 @@ CREATE OR REPLACE FUNCTION cn_part__new(
        p_name		ALIAS FOR $2;
        p_pretty_name	ALIAS FOR $3;
        p_resource_id	ALIAS FOR $4;
-       p_model_id	ALIAS FOR $5;
-       p_quantity	ALIAS FOR $6;
-       p_price		ALIAS FOR $7;
-       p_width		ALIAS FOR $8;
-       p_height 	ALIAS FOR $9;
-       p_depth		ALIAS FOR $10;
-       p_weight	   	ALIAS FOR $11;
-       p_volume	   	ALIAS FOR $12;
-       p_dimensions	ALIAS FOR $13;
-       p_context_id	ALIAS FOR $14;
-       p_creation_user  ALIAS FOR $15;
-       p_creation_ip	ALIAS FOR $16;
+       p_quantity	ALIAS FOR $5;
+       p_price		ALIAS FOR $6;
+       p_width		ALIAS FOR $7;
+       p_height 	ALIAS FOR $8;
+       p_depth		ALIAS FOR $9;
+       p_weight	   	ALIAS FOR $10;
+       p_volume	   	ALIAS FOR $11;
+       p_dimensions	ALIAS FOR $12;
+       p_context_id	ALIAS FOR $13;
+       p_creation_user  ALIAS FOR $14;
+       p_creation_ip	ALIAS FOR $15;
      
        v_id	integer;
        
@@ -290,7 +288,6 @@ CREATE OR REPLACE FUNCTION cn_part__new(
 	      name,
 	      pretty_name,
 	      resource_id,
-	      model_id,
 	      quantity,
 	      price,
 	      width,
@@ -305,7 +302,6 @@ CREATE OR REPLACE FUNCTION cn_part__new(
 	      p_name,
 	      p_pretty_name,
 	      p_resource_id,
-	      p_model_id,
 	      p_quantity,
 	      p_price,
 	      p_width,
@@ -322,13 +318,16 @@ CREATE OR REPLACE FUNCTION cn_part__new(
 
 
 
+
+
+
+
 CREATE OR REPLACE FUNCTION cn_part__edit(
        integer,	  -- part_id	  
        varchar,   -- code
        varchar,   -- name
        varchar,   -- pretty_name
        integer,   -- resource_id
-       integer,   -- model_id
        integer,   -- quantity
        varchar,   -- price
        varchar,   -- width
@@ -344,15 +343,14 @@ CREATE OR REPLACE FUNCTION cn_part__edit(
        	p_name		ALIAS FOR $3;
        	p_pretty_name	ALIAS FOR $4;
        	p_resource_id	ALIAS FOR $5;
-       	p_model_id	ALIAS FOR $6;
-       	p_quantity	ALIAS FOR $7;
-       	p_price		ALIAS FOR $8;
-       	p_width		ALIAS FOR $9;
-       	p_height 	ALIAS FOR $10;
-       	p_depth		ALIAS FOR $11;
-       	p_weight	ALIAS FOR $12;
-       	p_volume	ALIAS FOR $13;
-       	p_dimensions	ALIAS FOR $14;  
+       	p_quantity	ALIAS FOR $6;
+       	p_price		ALIAS FOR $7;
+       	p_width		ALIAS FOR $8;
+       	p_height 	ALIAS FOR $9;
+       	p_depth		ALIAS FOR $10;
+       	p_weight	ALIAS FOR $11;
+       	p_volume	ALIAS FOR $12;
+       	p_dimensions	ALIAS FOR $13;  
 
   BEGIN
 
@@ -361,7 +359,6 @@ CREATE OR REPLACE FUNCTION cn_part__edit(
 	      name = p_name,
 	      pretty_name = p_pretty_name,
 	      resource_id = p_resource_id,
-	      model_id = p_model_id,
 	      quantity = p_quantity,
 	      price = p_price,
 	      width = p_width,
@@ -375,7 +372,6 @@ CREATE OR REPLACE FUNCTION cn_part__edit(
        RETURN 0;
 
   END;' LANGUAGE 'plpgsql';
-
 
 
 
@@ -780,7 +776,7 @@ CREATE OR REPLACE FUNCTION cn_vehicle__edit (
        	p_distributor_id	ALIAS FOR $12;
        	p_owner_id		ALIAS FOR $13;
        	p_notes			ALIAS FOR $14;
-       
+
   BEGIN
 
        UPDATE cn_vehicles SET 

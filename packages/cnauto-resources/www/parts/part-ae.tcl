@@ -14,20 +14,7 @@ if {[exists_and_not_null part_id]} {
     set context [list $title]
 }
 
-
-set model_options [db_list_of_lists select_model {
-	SELECT pretty_name, category_id
-	FROM cn_categories WHERE category_type = 'cn_part' ORDER BY pretty_name
-}]
-    
-lappend model_options {"Selecione" ""}
-
-
-set resource_options [db_list_of_lists select_resources {
-    SELECT cr.pretty_name, cr.resource_id FROM cn_resources cr, cn_categories cc WHERE cr.class_id = cc.category_id AND cc.name = 'part'
-}]
-
-lappend resource_options {"Selecione" ""}
+set resource_options [cn_resources::get_resource_options -type "pecas"]
 
 ad_form -name part_ae -form {
     {part_id:key}

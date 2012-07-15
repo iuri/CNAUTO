@@ -3,7 +3,6 @@
 
 SELECT acs_log__debug('/packages/cnauto-resources/sql/postgresql/upgrade/upgrade-0.27d-0.28d.sql', '');
 
-
 ALTER TABLE cn_vehicles DROP COLUMN engine;
 ALTER TABLE cn_vehicles ADD COLUMN license_date timestamptz;
 
@@ -115,9 +114,6 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
   END;' language 'plpgsql';
 
 
-
-
-
 DROP FUNCTION cn_vehicle__edit (
        integer,	  	   -- vehicle_id
        varchar,		   -- chassis vin - vehicle identification number
@@ -188,4 +184,77 @@ CREATE OR REPLACE FUNCTION cn_vehicle__edit (
        RETURN 0;
 
   END;' language 'plpgsql';
+
+
+
+
+DROP FUNCTION cn_part__edit(
+       integer,	  -- part_id	  
+       varchar,   -- code
+       varchar,   -- name
+       varchar,   -- pretty_name
+       integer,   -- resource_id
+       integer,   -- model_id
+       integer,   -- quantity
+       varchar,   -- price
+       varchar,   -- width
+       varchar,   -- height
+       varchar,	  -- depth
+       varchar,	  -- weight
+       varchar,	  -- volume
+       varchar	  -- dimensions
+);
+
+
+CREATE OR REPLACE FUNCTION cn_part__edit(
+       integer,	  -- part_id	  
+       varchar,   -- code
+       varchar,   -- name
+       varchar,   -- pretty_name
+       integer,   -- resource_id
+       integer,   -- quantity
+       varchar,   -- price
+       varchar,   -- width
+       varchar,   -- height
+       varchar,	  -- depth
+       varchar,	  -- weight
+       varchar,	  -- volume
+       varchar	  -- dimensions
+) RETURNS integer AS '
+  DECLARE
+	p_part_id	ALIAS FOR $1;	
+       	p_code		ALIAS FOR $2;
+       	p_name		ALIAS FOR $3;
+       	p_pretty_name	ALIAS FOR $4;
+       	p_resource_id	ALIAS FOR $5;
+       	p_quantity	ALIAS FOR $6;
+       	p_price		ALIAS FOR $7;
+       	p_width		ALIAS FOR $8;
+       	p_height 	ALIAS FOR $9;
+       	p_depth		ALIAS FOR $10;
+       	p_weight	ALIAS FOR $11;
+       	p_volume	ALIAS FOR $12;
+       	p_dimensions	ALIAS FOR $13;  
+
+  BEGIN
+
+       UPDATE cn_parts SET     	      
+ 	      code = p_code,
+	      name = p_name,
+	      pretty_name = p_pretty_name,
+	      resource_id = p_resource_id,
+	      quantity = p_quantity,
+	      price = p_price,
+	      width = p_width,
+	      height = p_height,
+	      depth = p_depth,
+	      weight = p_weight,
+	      volume = p_volume,
+	      dimensions = p_dimensions
+       WHERE part_id = p_part_id;
+       
+       RETURN 0;
+
+  END;' LANGUAGE 'plpgsql';
+
 

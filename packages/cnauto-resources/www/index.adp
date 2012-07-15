@@ -26,7 +26,7 @@
   </tr>
 </table>
 
-<h1>#cnauto-resources.Resources#</h1>
+<h1>#cnauto-resources.Resources#  @resources:rowcount;noquote@</h1>
 <if @resources:rowcount@ gt 0>
   <listtemplate name="resources"></listtemplate> 
 </if>

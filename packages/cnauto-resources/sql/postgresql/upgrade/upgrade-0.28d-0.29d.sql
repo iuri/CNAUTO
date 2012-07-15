@@ -6,7 +6,6 @@ SELECT acs_log__debug('/packages/cnauto-resources/sql/postgresql/upgrade/upgrade
 
 
 
-
 ------------------------------------
 -- Table cn_assets
 ------------------------------------

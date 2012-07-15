@@ -18,7 +18,7 @@
     </td>
     <td width="2%">&nbsp;</td>
     <td>#cnauto-warranty.Model#</td>
-    <td>@resource_select_html;noquote@</td>
+    <td><input type="text" readonly="readonly" id="resource" name="resoruce" size="30" value="@resource;noquote@" onfocus="return FillFieldsOnChange();" /></td>
     <td>&nbsp;</td>
     <td>&nbsp;</td>
   <tr>
