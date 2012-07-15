@@ -9,6 +9,7 @@
         <li style="list-style:none; display:inline;"><a href="persons/">#cnauto-resources.Persons#</a> </li>
         <li style="list-style:none; display:inline;">  <a href="vehicles/">#cnauto-resources.Vehicles#</a> </li>
         <li style="list-style:none; display:inline;">  <a href="parts/">#cnauto-resources.Parts#</a> </li>
+        <li style="list-style:none; display:inline;">  <a href="assets/">#cnauto-resources.Assets#</a> </li>
         <li  style="list-style:none; display:inline;">  <a href="resource-ae">#cnauto-resources.Add_resource#</a> </li>
         <if @admin_p@>
           <li  style="list-style:none; display:inline;"><a href="@admin_url@">#cnauto-resources.Admin#</a> </li>

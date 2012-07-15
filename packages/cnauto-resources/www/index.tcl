@@ -23,7 +23,7 @@ if {$admin_p} {
 
 set where_clause ""
 if {[info exists keyword]} {
-    set where_clause "WHERE (
+    set where_clause " AND  (
       cr.code = :keyword 
       OR cr.name = lower(:keyword) 
       OR cr.pretty_name = :keyword)"
@@ -70,7 +70,7 @@ template::list::create \
 
 
 db_multirow -extend {resource_url category_url} resources select_resources {
-    
+    ns_log Notice "TYPE $type | "
 } {
 
     set resource_url [export_vars -base "resource-one" {return_url resource_id}]

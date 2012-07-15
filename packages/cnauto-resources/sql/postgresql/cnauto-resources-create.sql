@@ -25,6 +25,7 @@ CREATE TABLE cn_resources (
 );
 
 
+
 ------------------------------------
 -- Object Type: cn_resource
 ------------------------------------
@@ -618,15 +619,15 @@ CREATE TABLE cn_vehicles (
        resource_id		integer
        				CONSTRAINT cn_vehicles_resource_id_fk
 				REFERENCES cn_resources (resource_id),
-       engine			varchar(100),
        year_of_model		integer,
        year_of_fabrication 	integer,
        color			varchar(10)
        				CONSTRAINT cn_vehicles_color_fk
 				REFERENCES cn_colors,
-       purchase_date	   	timestamptz,
        arrival_date	   	timestamptz,
        billing_date	   	timestamptz,
+       license_date	   	timestamptz,
+       purchase_date	   	timestamptz,
        warranty_time   	   	varchar(10),
        distributor_id	   	integer
        			   	CONSTRAINT cn_vehicles_distributor_id_fk
@@ -665,14 +666,13 @@ SELECT acs_object_type__create_type (
 CREATE OR REPLACE FUNCTION cn_vehicle__new (
       varchar,		   -- chassis vin - vehicle identification number
       integer,		   -- resource_id
-      integer,		   -- model_id
-      varchar, 		   -- engine
       integer, 	   	   -- year of model
       integer,	   	   -- year of fabrication
       varchar,		   -- color
-      timestamptz,	   -- purchase_date
       timestamptz,	   -- arrival_date
       timestamptz,	   -- billing_date
+      timestamptz,	   -- license_date
+      timestamptz,	   -- purchase_date
       varchar,		   -- warranty_time
       integer,		   -- distributor_id
       integer,		   -- owner_id
@@ -684,13 +684,13 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
   DECLARE
        p_vin			ALIAS FOR $1; 
        p_resource_id		ALIAS FOR $2;
-       p_engine		      	ALIAS FOR $3;
-       p_year_of_model	      	ALIAS FOR $4;		
-       p_year_of_fabrication 	ALIAS FOR $5;
-       p_color			ALIAS FOR $6;
-       p_purchase_date		ALIAS FOR $7;
-       p_arrival_date		ALIAS FOR $8;
-       p_billing_date		ALIAS FOR $9;
+       p_year_of_model	      	ALIAS FOR $3;		
+       p_year_of_fabrication 	ALIAS FOR $4;
+       p_color			ALIAS FOR $5;
+       p_arrival_date		ALIAS FOR $6;
+       p_billing_date		ALIAS FOR $7;
+       p_license_date		ALIAS FOR $8;
+       p_purchase_date		ALIAS FOR $9;
        p_warranty_time		ALIAS FOR $10;
        p_distributor_id		ALIAS FOR $11;
        p_owner_id		ALIAS FOR $12;
@@ -717,13 +717,13 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
        	      vehicle_id,
 	      vin,
 	      resource_id,
-	      engine,
 	      year_of_model,
 	      year_of_fabrication,
 	      color,
-	      purchase_date, 
 	      arrival_date, 
 	      billing_date, 
+	      license_date, 
+	      purchase_date, 
 	      warranty_time, 
 	      distributor_id, 
 	      owner_id,
@@ -732,13 +732,13 @@ CREATE OR REPLACE FUNCTION cn_vehicle__new (
        	      v_id,
 	      p_vin,
 	      p_resource_id,
-	      p_engine,
 	      p_year_of_model,
 	      p_year_of_fabrication,
 	      p_color,
-	      p_purchase_date,
               p_arrival_date,
 	      p_billing_date,
+	      p_license_date,
+	      p_purchase_date,
        	      p_warranty_time,
 	      p_distributor_id, 
 	      p_owner_id,
@@ -753,13 +753,13 @@ CREATE OR REPLACE FUNCTION cn_vehicle__edit (
        integer,	  	   -- vehicle_id
        varchar,		   -- chassis vin - vehicle identification number
        integer,		   -- resource_id
-       varchar, 	   -- engine
        integer, 	   -- year of model
        integer,	   	   -- year of fabrication
        varchar,		   -- color
-       timestamptz,	   -- purchase_date
        timestamptz,	   -- arrival_date
        timestamptz,	   -- billing_date
+       timestamptz,	   -- license_date
+       timestamptz,	   -- purchase_date
        varchar,		   -- warranty_time
        integer,		   -- distributor_id
        integer,		   -- owner_id
@@ -769,13 +769,13 @@ CREATE OR REPLACE FUNCTION cn_vehicle__edit (
 	p_vehicle_id		ALIAS FOR $1;	
 	p_vin			ALIAS FOR $2; 
        	p_resource_id		ALIAS FOR $3;
-       	p_engine		ALIAS FOR $4;
-       	p_year_of_model	      	ALIAS FOR $5;		
-       	p_year_of_fabrication 	ALIAS FOR $6;
-       	p_color			ALIAS FOR $7;
-       	p_purchase_date		ALIAS FOR $8;
-       	p_arrival_date		ALIAS FOR $9;
-       	p_billing_date		ALIAS FOR $10;
+       	p_year_of_model	      	ALIAS FOR $4;		
+       	p_year_of_fabrication 	ALIAS FOR $5;
+       	p_color			ALIAS FOR $6;
+       	p_arrival_date		ALIAS FOR $7;
+       	p_billing_date		ALIAS FOR $8;
+       	p_license_date		ALIAS FOR $9;
+       	p_purchase_date		ALIAS FOR $10;
        	p_duration		ALIAS FOR $11;
        	p_distributor_id	ALIAS FOR $12;
        	p_owner_id		ALIAS FOR $13;
@@ -786,14 +786,13 @@ CREATE OR REPLACE FUNCTION cn_vehicle__edit (
        UPDATE cn_vehicles SET 
 	      vin = p_vin,
 	      resource_id = p_resource_id,
-	      model_id = p_model_id,
-	      engine = p_engine,
 	      year_of_model = p_year_of_model,
 	      year_of_fabrication = p_year_of_fabrication,
 	      color = p_color,
-	      purchase_date = p_purchase_date, 
 	      arrival_date = p_arrival_date, 
 	      billing_date = p_billing_date, 
+	      license_date = p_license_date, 
+	      purchase_date = p_purchase_date, 
 	      warranty_time = p_warranty_time, 
 	      distributor_id = p_distributor_id, 
 	      owner_id = p_owner_id,
@@ -924,7 +923,106 @@ CREATE OR REPLACE FUNCTION cn_vehicle_renavam__delete (
 
 
 
+------------------------------------
+-- Table cn_assets
+------------------------------------
+
+CREATE TABLE cn_assets (
+       asset_id	       integer
+       		       CONSTRAINT cn_assets_asset_id_pk PRIMARY KEY,
+       resource_id     integer
+       		       CONTRAINT cn_assets_resource_id_fk
+		       REFERENCES cn_resources (resource_id),
+       asset_code      varchar(255),
+       serial_number   varchar(255),
+       location	       varchar(255),
+       quantity	       integer
+);
 
 
+      
+
+------------------------------------
+-- Object Type: cn_asset
+------------------------------------
+
+SELECT acs_object_type__create_type (
+    'cn_asset',            -- object_type
+    'CN Asset',            -- pretty_name
+    'CN Assets',    	   -- pretty_plural
+    'acs_object',     	   -- supertype
+    'cn_assets',           -- table_name
+    'asset_id',     	   -- id_column
+    null,		   -- name_method
+    'f',
+    null,
+    null
+);
+
+CREATE OR REPLACE FUNCTION cn_asset__delete(integer) 
+RETURNS integer AS '
+  DECLARE
+	p_asset_id	ALIAS FOR $1;
+  BEGIN
+
+	DELETE FROM cn_asset WHERE asset_id = p_asset_id;
+
+	RETURN 0;
+  END;' LANGUAGE 'plpgsql';
 
 
+CREATE OR REPLACE FUNCTION cn_asset__new(
+       integer, -- resource_id
+       varchar,	-- asset_code
+       varchar,	-- serial_number
+       varchar,	-- location
+       integer,	-- quantity
+       varchar, -- creation_ip
+       integer, -- creation_user
+       integer	-- context_id
+) RETURNS integer AS '
+  DECLARE
+	p_resource_id	ALIAS FOR $1;
+	p_asset_code	ALIAS FOR $2;
+	p_serial_number	ALIAS FOR $3;
+	p_location	ALIAS FOR $4;
+	p_quantity	ALIAS FOR $5;
+	p_creation_ip 	ALIAS FOR $6;
+	p_creation_user ALIAS FOR $7;
+	p_context_id	ALIAS FOR $8;
+
+	v_id		integer;
+
+  BEGIN
+
+	v_id := acs_object__new (
+       		  null,			-- object_id
+		  ''cn_asset'',		-- object_type
+		  now(),		-- creation_date
+		  p_creation_user,	-- creation_user
+		  p_creation_ip,	-- cretion_ip
+		  p_context_id,		-- context_id
+		  true			-- 
+       );
+
+	INSERT INTO cn_assets (
+	       asset_id
+	       resource_id,
+	       asset_code,
+	       serial_number,
+	       location,
+	       quantity
+	 ) VALUES (
+	       v_id,
+	       p_resource_id,
+	       p_asset_code,
+	       p_serial_number,
+	       p_location,
+	       p_quantity
+	);
+
+	RETURN 0;
+
+  END;' LANGUAGE 'plpgsql';
+
+      

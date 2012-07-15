@@ -144,6 +144,53 @@ ad_form -extend -name person_ae -form {
     
 } -edit_data {
     
+    #Insert User
+    if {[exists_and_not_null email] && $first_names ne "" && $last_name ne ""} { 
+	set user_exists_p [cc_email_user $email]
+
+	if {![exists_and_not_null user_exists_p]} {
+	    
+	    set contact_id [db_nextval acs_object_id_seq]
+	    
+	    array set creation_info [auth::create_user \
+					 -user_id $contact_id \
+					 -email $email \
+					 -first_names $first_names \
+					 -last_name $last_name \
+					]
+	    
+	    if { $creation_info(creation_status) ne "ok"} {
+		ad_return_complaint 1 " The email: <b> $email </b> already exists on our database!"
+	    }
+	    
+	    
+	} else {
+	    
+	    
+	    catch {
+		email_image::edit_email_image \
+		    -user_id $contact_id \
+		    -new_email $email
+	    } errmsg
+	    
+	    acs_user::get -user_id $contact_id -array user
+	    
+	    set user_info(authority_id) $user(authority_id)
+	    set user_info(email) $email
+	    set user_info(first_names) $first_names
+	    set user_info(last_name) $last_name
+	    set user_info(username) [util_text_to_url  -replacement "" -text "${first_names} ${last_name}"]
+	    
+	    
+	    auth::update_local_account \
+		-authority_id $user_info(authority_id) \
+		-username $user_info(username) \
+		-array user_info
+	    
+	}
+	
+    }
+   
     set type [db_string select_type {
 	SELECT name FROM cn_categories WHERE category_id = :type_id
     } -default null]
@@ -154,9 +201,10 @@ ad_form -extend -name person_ae -form {
 	set code [util_text_to_url -replacement "" -text $cpf_cnpj]
 	set pretty_name "$first_names $last_name"
 	set legal_name "$first_names $last_name"
-
+	
     } 
-   
+    
+
     cn_resources::person::edit \
 	-person_id $person_id \
 	-cpf_cnpj $cpf_cnpj \
@@ -178,28 +226,6 @@ ad_form -extend -name person_ae -form {
 	-context_id [ad_conn package_id]         	
 
     
-    if {$email ne ""} { 
-	catch {
-	    email_image::edit_email_image \
-		-user_id $contact_id \
-		-new_email $email
-	} errmsg
-	
-	acs_user::get -user_id $contact_id -array user
-	
-	set user_info(authority_id) $user(authority_id)
-	set user_info(email) $email
-	set user_info(first_names) $first_names
-	set user_info(last_name) $last_name
-	set user_info(username) [util_text_to_url  -replacement "" -text "${first_names} ${last_name}"]
-	
-	
-	auth::update_local_account \
-	    -authority_id $user_info(authority_id) \
-	    -username $user_info(username) \
-	    -array user_info
-	
-    }
     
 } -new_data {
 

@@ -1,4 +1,3 @@
-
 ad_library {
     CN Auto Resources API
 }
@@ -7,6 +6,38 @@ ad_library {
 namespace eval cn_resources {}
 
 namespace eval cn_resources::resource {}
+
+
+ad_proc -public cn_resources::get_options {
+    {-type_id:required}
+} {
+
+    Returns resources to a ad_form option's list
+
+} {
+
+    set resources [list]
+    lappend resources [list [_ cnauto-resources.Select] ""]
+
+    db_foreach select_resources {
+
+
+	SELECT cr.pretty_name, cr.resource_id, cr.type_id 
+	FROM cn_resources cr 
+	WHERE cr.type_id = :type_id 
+	UNION ALL
+	SELECT cr.pretty_name, cr.resource_id, cr.type_id
+	FROM cn_resources cr, cn_categories cc
+	WHERE cr.type_id = cc.category_id 
+	AND cc.parent_id = :type_id
+	ORDER BY pretty_name
+
+    } {
+	lappend resources [list $pretty_name $resource_id]
+    }
+    
+    return $resources 
+}
 
 
 ad_proc -public cn_resources::get_resource_id {
@@ -399,12 +430,12 @@ ad_proc -public cn_resources::get_state_options {} {
 } {
 
     set states [list]
-    lappend $states [list [_ cnauto-resources.Select] ""]
+    lappend states [list [_ cnauto-resources.Select] ""]
 
     db_foreach select_states {
 	SELECT state_name, abbrev FROM br_states ORDER BY state_name 
     } {
-	lappend $states [list $state_name $abbrev]
+	lappend states [list $state_name $abbrev]
     }
 
     return $states
@@ -417,12 +448,12 @@ ad_proc -public cn_resources::get_city_options {} {
 } {
 
     set cities [list]
-    lappend $cities [list [_ cnauto-resources.Select] ""]
+    lappend cities [list [_ cnauto-resources.Select] ""]
 
     db_foreach select_cities {
 	SELECT name, ibge_code FROM br_ibge_municipality ORDER BY name
     } {
-	lappend $cities [list $name $ibge_code]
+	lappend cities [list $name $ibge_code]
     }
 
     return $cities
@@ -439,7 +470,7 @@ ad_proc -public cn_resources::person::get_type_options {} {
 } {
     set types [list]
 
-    lappend $types [list [_ cnauto-resources.Select] ""]
+    lappend types [list [_ cnauto-resources.Select] ""]
 
     db_foreach select_types {
 	SELECT pretty_name, category_id

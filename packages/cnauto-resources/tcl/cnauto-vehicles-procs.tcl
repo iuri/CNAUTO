@@ -310,20 +310,20 @@ ad_proc -public cn_resources::vehicle::edit {
 ad_proc -public cn_resources::vehicle::new { 
     {-vin:required}
     {-resource_id:required}
-    {-engine ""}
-    {-year_of_model ""}
-    {-year_of_fabrication ""}
+    {-year_of_model null}
+    {-year_of_fabrication null}
     {-color ""}
-    {-arrival_date ""}
-    {-billing_date ""}
-    {-purchase_date ""}
+    {-arrival_date null}
+    {-billing_date null}
+    {-license_date null}
+    {-purchase_date null}
     {-warranty_time ""}
-    {-distributor_id ""}
-    {-owner_id ""}
+    {-distributor_id null}
+    {-owner_id null}
     {-notes ""}
     {-creation_ip ""}
-    {-creation_user ""}
-    {-context_id ""}
+    {-creation_user null}
+    {-context_id null}
 } {
     Adds a new vehicle 
 } {
@@ -348,13 +348,13 @@ ad_proc -public cn_resources::vehicle::new {
 	    SELECT cn_vehicle__new (
 				    :vin,
 				    :resource_id,
-				    :engine,
 				    :year_of_model,
 				    :year_of_fabrication,
 				    :color,
-				    :purchase_date,
 				    :arrival_date,	
 				    :billing_date,
+				    :license_date,
+				    :purchase_date,
 				    :warranty_time,
 				    :distributor_id,
 				    :owner_id,

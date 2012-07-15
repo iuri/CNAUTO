@@ -20,7 +20,6 @@ set type_options [db_list_of_lists select_classes {
     SELECT cc.pretty_name, cc.category_id
     FROM cn_categories cc 
     WHERE category_type = 'cn_resource' 
-    AND parent_id IS NULL
 }]
 
 lappend type_options {"Selecione" 0}
@@ -87,23 +86,17 @@ if {[string equal [cn_categories::get_category_name -category_id $type_id] "veic
 ad_form -extend -name resource_ae -new_request {
     set type_id 0
     
-} -validate {
-    {code
-	{ 
-	    if { 
-		[db_0or1row select_code_p { 
-		    SELECT code FROM cn_resources WHERE code = :code
-		}] 
-	    } { 
-		return 1 
-	    } 
-	}
-	"#cnauto-resources.Resource_already_exists#"
-    }
 } -on_submit {} -new_data {
-
-
-
+    
+    # Check if resource already exists
+    if {[db_0or1row select_resource_id {
+	SELECT resource_id FROM cn_resources WHERE code = :code
+    }]} {
+	ad_return_complaint 1 "The resource already exists on the system
+ <b>$code</b>. Please <a href=\"javascript:history.go(-1);\">go back and fix it!</a> "
+	ad_script_abort
+    }
+	
     if {[string equal [cn_categories::get_category_name -category_id $type_id] "veiculos"]} {
     
 	set pretty_name [db_string select_mmv {

@@ -4,11 +4,9 @@
   <fullquery name="resources_pagination">
     <querytext> 
         SELECT cr.resource_id, cr.code, cr.pretty_name, cr.type_id, cc.category_type, cc.pretty_name AS type
-    	FROM cn_resources cr 
-	LEFT OUTER JOIN cn_categories cc
-	ON (cr.type_id = cc.category_id)
+    	FROM cn_resources cr, cn_categories cc
+	WHERE cr.type_id = cc.category_id
 	$where_clause
-	[template::list::filter_where_clauses -and -name "resources"]
     	[template::list::orderby_clause -orderby -name "resources"]
 
     </querytext>
@@ -17,11 +15,9 @@
   <fullquery name="select_resources">
     <querytext> 
       SELECT cr.resource_id, cr.code, cr.pretty_name, cr.type_id, cc.category_type, cc.pretty_name AS type
-      FROM cn_resources cr
-      LEFT OUTER JOIN cn_categories cc
-      ON (cr.type_id = cc.category_id)
+      FROM cn_resources cr, cn_categories cc
+      WHERE cr.type_id = cc.category_id
       $where_clause  
-      [template::list::filter_where_clauses -and -name "resources"]
       [template::list::page_where_clause -and -name "resources" -key "cr.resource_id"]
       [template::list::orderby_clause -orderby -name "resources"]
 
