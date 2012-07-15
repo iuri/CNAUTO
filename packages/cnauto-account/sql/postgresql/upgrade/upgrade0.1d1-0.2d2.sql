@@ -1,54 +1,32 @@
--- /packages/cnauto-account/sql/postgresql/cnauto-account-create.sql
+-- /packages/cnauto-account/sql/postgresql/upgrade/upgrade-0.1d1-0.1d2..sql
 
 --
 -- The CN Auto Account Package
 --
 -- @author Iuri Sampaio (iuri.sampaio@iurix.com)
--- @creation-date 2012-06-21
+-- @creation-date 2012-06-23
 --
+SELECT acs_log__debug ('/packages/cnauto-account/sql/postgresql/upgrade/upgrade-0.1d1-0.2d2.sql','');
 
-------------------------------------
--- Table: cn_nfes
-------------------------------------
-CREATE TABLE cn_nfes (
-    nfe_id		integer
-    		     	CONSTRAINT cn_nfes_nfe_id_pk PRIMARY KEY,
-    key 	     	varchar(255) NOT NULL,
-    prot 	     	varchar(255),
-    date	     	timestamptz
-    number	     	varchar(255),
-    serie	     	varchar(255),
-    status	     	varchar(255),
-    motive		varchar(255),
-    total	     	varchar(255),
-    nat_op 		varchar(255),
-    remitter_cnpj    	varchar(255),
-    remitter_name	varchar(255),
-    remitter_state_reg 	varchar(255),
-    remittee_cnpj	varchar(255),
-    remittee_name	varchar(255),
-    remittee_state_reg  varchar(255)        
-);
+ALTER TABLE cn_nfes RENAME COLUMN nfe_key TO key;
+ALTER TABLE cn_nfes RENAME COLUMN nfe_prot TO prot;
+ALTER TABLE cn_nfes RENAME COLUMN nfe_date TO date;
+ALTER TABLE cn_nfes ADD COLUMN number varchar(255);
+ALTER TABLE cn_nfes ADD COLUMN serie varchar(255);
+ALTER TABLE cn_nfes ADD COLUMN status varchar(255);
+ALTER TABLE cn_nfes ADD COLUMN motive varchar(255);
+ALTER TABLE cn_nfes ADD COLUMN total varchar(255);
+ALTER TABLE cn_nfes ADD COLUMN nat_op varchar(255);
+ALTER TABLE cn_nfes ADD COLUMN remitter_cnpj varchar(255);
+ALTER TABLE cn_nfes ADD COLUMN remitter_name varchar(255);
+ALTER TABLE cn_nfes ADD COLUMN remitter_state_reg varchar(255);
+ALTER TABLE cn_nfes ADD COLUMN remittee_cnpj varchar(255);
+ALTER TABLE cn_nfes ADD COLUMN remittee_name varchar(255);
+ALTER TABLE cn_nfes ADD COLUMN remittee_state_reg varchar(255);
 
 
-------------------------------------
--- Object Type: cn_nfe
-------------------------------------
 
-SELECT acs_object_type__create_type (
-    'cn_nfe',         -- object_type
-    'CN NFE',         -- pretty_name
-    'CN NFEs', 	      -- pretty_plural
-    'acs_object',     -- supertype
-    'cn_nfes',        -- table_name
-    'nfe_id',         -- id_column
-    null,	      -- name_method
-    'f',
-    null,
-    null
-);
-
-
+DROP FUNCTION cn_acoount_nfe__delete (integer) ;
 
 CREATE OR REPLACE FUNCTION cn_account_nfe__delete (integer) 
 RETURNS integer AS '
@@ -64,11 +42,18 @@ RETURNS integer AS '
   END;' LANGUAGE 'plpgsql';
 
 
+DROP FUNCTION cn_account_nfe__new (
+       varchar,	  	   -- nfe_key
+       varchar,	   	   -- nfe_prot
+       timestamptz, 	   -- nfe_date
+       integer,		   -- creation_user
+       varchar, 	   -- creation_ip
+       integer		   -- context_id
+);
 
 
--------------------
--- Authorized NFes
--------------------
+
+
 CREATE OR REPLACE FUNCTION cn_account_nfe__new (
        varchar,	  	   -- key
        varchar,	   	   -- prot
@@ -144,6 +129,7 @@ CREATE OR REPLACE FUNCTION cn_account_nfe__new (
   END;' LANGUAGE 'plpgsql';
 
 
+
 -------------------
 -- Canceled NFes
 -------------------
@@ -190,5 +176,32 @@ CREATE OR REPLACE FUNCTION cn_account_nfe__new (
 	);
 
 	RETURN v_id;
+	
+  END;' LANGUAGE 'plpgsql';
+
+
+
+CREATE OR REPLACE FUNCTION cn_account_nfe__cancel_nfe (
+       varchar,	  	   -- key
+       varchar,	   	   -- prot
+       timestamptz, 	   -- date
+       varchar,		   -- status
+       varchar,		   -- motive
+       integer,		   -- creation_user
+       varchar, 	   -- creation_ip
+       integer		   -- context_id
+) RETURNS integer AS '
+  DECLARE
+  	v_id		integer;
+  BEGIN
+
+	UPDATE cn_nfes SET 
+	       prot = $2,
+	       date = $3,
+	       status = $4,
+	       motive = $5
+	WHERE key = $1;
+
+	RETURN 0;
 	
   END;' LANGUAGE 'plpgsql';

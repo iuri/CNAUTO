@@ -12,16 +12,27 @@
 
 DROP FUNCTION cn_acoount_nfe__delete (integer);
 
+
 DROP FUNCTION cn_account_nfe__new (
-       varchar,	  	   -- nfe_key
-       varchar,	   	   -- nfe_prot
-       timestamptz, 	   -- nfe_date
+       varchar,	  	   -- key
+       varchar,	   	   -- prot
+       timestamptz, 	   -- date
+       varchar, 	   -- number
+       varchar,		   -- serie
+       varchar,		   -- status
+       varchar,		   -- motive
+       varchar,		   -- total
+       varchar,		   -- nat_op
+       varchar,		   -- remitter_cnpj
+       varchar,		   -- remitter_name
+       varchar,		   -- remitter_state_reg
+       varchar,		   -- remittee_cnpj
+       varchar,		   -- remittee_name
+       varchar,		   -- remittee_state_reg
        integer,		   -- creation_user
        varchar, 	   -- creation_ip
        integer		   -- context_id
 );
-
-
 
 ------------------------------------
 -- Object Type: cn_nfe
