@@ -141,6 +141,7 @@ if { [parameter::get -parameter CategoriesP -package_id $package_id -default 0] 
 }
 
 ad_form -extend -form {} -select_query_name {get_file} -new_data {
+    ns_log notice "ORIGIN $upload_file"
     
   if {![exists_and_not_null unpack_p]} {
       set unpack_p f
@@ -224,7 +225,7 @@ ad_form -extend -form {} -select_query_name {get_file} -new_data {
                 set upload_file $new_name
             }
 	}
-
+	ns_log Notice "$upload_file | $tmpfile FILES"
 	fs::add_file \
 	    -name $upload_file \
 	    -item_id $this_file_id \

@@ -357,8 +357,9 @@ ad_proc -public cn_core::abeiva::mount_output_line {
 
 
 ad_proc -public cn_core::abeiva::import_csv_file {
-    {-input_file}
+    {-input_file:required}
     {-output_file}
+    {-insert_vehicles_p}
 } {
     Import Abeiva's spreadsheet
 
@@ -426,13 +427,95 @@ ad_proc -public cn_core::abeiva::import_csv_file {
     # Output file
     set filename "[acs_root_dir]/www/${output_file}"
     set output_file [open "${filename}" w]
-
+    
     foreach line $lines {
 	set line [split $line ";"]
 	
 	if {$line ne ""} {	    
-	    set output_line [cn_core::abeiva::mount_output_line -line $line]
 	    
+
+	    ##############
+	    # Insert vehicle into the database
+	    ##############
+
+	    ## This code needs to be improve. To create abeiva library and create new ad_procs to improve legibility  and maintainace 
+	    if {$insert_vehicles_p} {
+		ns_log Notice "Insert vehicle"
+		ns_log Notice "LINE $line"
+
+		set vin [string trim [lindex $line 1]]
+		set renavam_code [lindex $line 2]
+
+		# Check Renavam Code
+		set resource_id [db_string select_resource_id {
+		    SELECT resource_id FROM cn_vehicle_renavam cvr WHERE cvr.code = :renavam_code
+		} -default "" ]
+		
+
+		ns_log Notice "RENAVAM CODE $renavam_code "
+		if {![exists_and_not_null resource_id]} {
+		  #  ad_return_complaint 1 "The renavam code does not exists for this vehicle: <b>$vin</b>! Please <a href=\"javascript:history.go(-1);\">go back and fix it!</a> "
+		    
+		} 
+
+		# Check VIN (chassis)
+		set vehicle_exists_p [db_0or1row select_vehicle_id {
+		    SELECT vehicle_id FROM cn_vehicles WHERE vin = :vin
+		}]
+		
+
+		if {$vehicle_exists_p}  {
+		   # ad_return_complaint 1 "The chassis already exists on the database! Please <a href=\"javascript:history.go(-1);\">go back and fix it!</a> "
+		} else {
+		    ns_log Notice "FLAG1"
+		    set license_date [string trim [lindex $line 0]]
+		    set license_date [string map {/ -} $license_date]
+
+		    if {$license_date ne ""} {
+			set license_date "[template::util::date::get_property year $license_date] [template::util::date::get_property month $license_date] [template::util::date::get_property day $license_date]"
+		    }
+		    ns_log Notice "FLAG2"
+		    set license_date [string trim $license_date]
+		    
+		    set distributor_code [lindex $line 7]
+		    set distributor_id [db_string select_distributor_id {
+			SELECT person_id FROM cn_persons WHERE code = :distributor_code
+		    } -default ""]
+
+		    if {$distributor_id eq ""}  {
+		#	ad_return_complaint 1 "The distributor does not exists on the database: <b>$distributor_code</b>. Please <a href=\"javascript:history.go(-1);\">go back and fix it!</a> "
+		    } 
+			
+		    # this ad_proc needs to be fixed/redesigned. With renavam info into cd_resources most of info became unnecessary now.
+
+
+		    ns_log Notice "NEW $vin | $resource_id | $license_date | $distributor_id"
+		    cn_resources::vehicle::new \
+			-vin $vin \
+			-resource_id $resource_id \
+			-license_date $license_date \
+			-distributor_id $distributor_id \
+			-creation_ip [ad_conn peeraddr] \
+			-creation_user [ad_conn user_id] \
+			-context_id [ad_conn package_id]
+		}
+		
+		
+		
+		
+		
+
+
+
+
+
+
+
+
+	    }
+
+	    set output_line [cn_core::abeiva::mount_output_line -line $line]
+	        
 	    set exists_p [cn_core::item_exists -items $items -chassi [lindex $output_line 1]]
 	    
 	    if {$exists_p == 1} {
@@ -475,9 +558,6 @@ ad_proc -public cn_core::abeiva::import_csv_file {
 		incr i
 		
 	    }
-	    
-
-	    
 	}
     }
     

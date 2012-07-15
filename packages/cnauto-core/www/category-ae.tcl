@@ -45,7 +45,7 @@ ad_form -name category_ae -cancel_url $return_url -form {
     }
     {category_type:text(select)
 	{label "[_ cnauto-core.Type]"}
-	{options {{"Selecione" ""} {"Part" cn_part} {"Person" cn_person} {"Order" cn_order}  {"Resource" cn_resource} {"Vehicle" cn_vehicle}}}
+	{options {{"Selecione" ""} {"Assets" cn_asset} {"Part" cn_part} {"Person" cn_person} {"Order" cn_order}  {"Resource" cn_resource} {"Vehicle" cn_vehicle}}}
 	{html {onChange "document.category_ae.__refreshing_p.value='1';document.category_ae.submit();"}}
 	
     }
