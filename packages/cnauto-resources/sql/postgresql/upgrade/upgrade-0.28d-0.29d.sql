@@ -109,3 +109,57 @@ CREATE OR REPLACE FUNCTION cn_asset__new(
   END;' LANGUAGE 'plpgsql';
 
       
+
+
+
+CREATE TABLE cn_asset_user_map (
+       map_id		       integer
+       			       CONSTRAINT caum_map_ip_pk PRIMARY KEY,
+       asset_id		       integer
+       			       CONSTRAINT caum_asset_id_fk
+      			       REFERENCES cn_assets (asset_id),
+       user_id		       integer
+       			       CONSTRAINT caum_user_id_fk
+       			       REFERENCES users (user_id)
+);
+
+
+CREATE OR REPLACE FUNCTION cn_asset_user_map__delete (
+       integer
+) RETURNS integer AS '
+  DECLARE
+	p_map_id	ALIAS FOR $1;
+
+
+  BEGIN
+
+	DELETE FROM cn_asset_user_map WHERE map_id = p_map_id;
+
+	RETURN 0;
+  END;' LANGUAGE 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION cn_asset_user_map__new (
+       integer,
+       integer,
+       integer
+) RETURNS integer AS '
+  DECLARE
+	p_map_id	ALIAS FOR $1;
+	p_asset_id	ALIAS FOR $2;
+	p_user_id	ALIAS FOR $3;
+
+  BEGIN
+	INSERT INTO cn_asset_user_map (
+	       map_id,
+	       asset_id,
+	       user_id
+        ) VALUES (
+	  	p_map_id,
+		p_asset_id,
+		p_user_id
+	);
+
+	RETURN 0;
+  END;' LANGUAGE 'plpgsql';
+

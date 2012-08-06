@@ -111,4 +111,35 @@ set login_export_vars "return_url=[ns_urlencode [acs_community_member_url -user_
 
 set login_url [export_vars -base "/register/." { { return_url [ad_return_url]} }]
 
+
+
+template::list::create \
+    -name assets \
+    -multirow assets \
+    -key asset_id \
+    -elements {
+      	pretty_name {
+	    label "[_ cnauto-resources.Name]"
+	    display_template {
+		<a href="@assets.resource_url@">@assets.pretty_name;noquote@</a>
+	    }
+	}
+	asset_code {
+	    label "[_ cnauto-resources.Asset_code]"
+	}
+	serial_number {
+	    label "[_ cnauto-resources.Serial_number]"
+	}
+
+    }
+
+db_multirow -extend {resource_url} assets select_assets {
+    SELECT cr.pretty_name, ca.serial_number, ca.asset_code FROM cn_assets ca, cn_resources  cr, cn_asset_user_map caum
+    WHERE cr.resource_id = ca.resource_id
+    AND caum.user_id = :user_id
+    AND caum.asset_id = ca.asset_id
+} {
+    set resource_url ""
+}
+
 ad_return_template

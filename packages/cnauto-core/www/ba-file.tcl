@@ -26,6 +26,6 @@ ad_form -html { enctype multipart/form-data } -name export_file -form {
     cn_core::abeiva::import_csv_file -input_file $input_file -output_file $output_file -insert_vehicles_p $insert_vehicles_p
 
 } -after_submit {
-    ad_returnredirect /cnauto//cnauto-core
+    ad_returnredirect /cnauto/cnauto-core
     ad_script_abort
 }

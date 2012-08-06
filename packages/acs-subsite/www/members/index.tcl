@@ -18,7 +18,6 @@ ad_page_contract {
 
 set page_title [_ acs-subsite.Members]
 set context [list $page_title]
-
 set group_id [application_group::group_id_from_package_id]
 
 # Is this the main site? In that case, we don't offer to remove users completely,

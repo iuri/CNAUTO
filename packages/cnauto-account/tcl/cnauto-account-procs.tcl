@@ -1,19 +1,70 @@
 ad_library {
+    @author Iuri Sampaio (iuri.sampaio@iurix.com)
+    creation-date 2012-07-31
 }
 
 namespace eval cn_account {}
 
+
+
+ad_proc -public cn_account::find_xml {
+    {-path:required}
+} {
+    Search XML files 
+} {
+
+#    ns_log Notice "Running ad_proc cn_account::find_xml"
+
+    set i 0
+    if {[file isdirectory $path]} {
+	
+	if { [catch { set items [glob ${path}/*] } errorMsg]} {
+	    ns_log Notice "EMPTY FOLDER!!!"
+	    set items [glob ${path}/*]
+	    
+	    return
+	    
+	} else {
+	    ns_log Notice "$items"
+	    foreach file [glob -nocomplain -directory $path *.xml] {
+		incr i
+	   	ns_log Notice "$i"
+		cn_account::import_nfe_xml -input_file $path
+	    }
+	    ns_log Notice "[glob -nocomplain -type d ${path}*]"
+
+	    foreach diretory [glob -nocomplain -type d "$path}/*"] {
+		cn_account::find_xml -path $path
+	    }
+	}
+    } elseif {[file isfile $path] } {
+	
+	if {[string equal [ns_guesstype $path] "text/xml"]} {
+	    ns_log Notice " [ns_guesstype $path]"
+	}
+    }
+    
+    return
+}
+
+
+
+
+
+
+
 ad_proc -public cn_account::import_nfe_xml {
-    {-input_file:required}
+    {-input_file ""}
 } {
-
+    
     Imports NFE XML files
+    
 } {
-
-    ns_log Notice "Running ad_proc cn_core::import_xml"
+    
+    ns_log Notice "Running ad_proc"
     
     set tmpfile $input_file
-
+    
     set input_file [open "$input_file" r]
     set xml [read $input_file]
     close $input_file
@@ -211,7 +262,7 @@ ad_proc -public cn_account::import_nfe_xml {
 		    
 		    ns_log notice  "ADD FILE $input_file"
 		    fs::add_file \
-			-name "NFE-$key.xml" \
+			-name "NFE-${nfe_id}-${key}.xml" \
 			-parent_id $folder_id \
 			-tmp_filename $tmpfile \
 			-creation_user [ad_conn user_id] \
@@ -221,7 +272,7 @@ ad_proc -public cn_account::import_nfe_xml {
 			-mime_type $mime_type
 		} else {
 		    cn_core::attach_file \
-			-parent_id "nfe_id" \
+			-parent_id $nfe_id \
 			-tmp_filename $input_file \
 			-filename "NFE-$key.xml"
 		    
@@ -283,43 +334,35 @@ ad_proc -public cn_account::nfe::new {
 					:context_id
 					)	
 	    
-	"]
-	
+	"]	
     }
 
-
-
-    
     return $nfe_id
 }
 
+
+ad_proc -public cn_account::nfe::delete {
+    {-nfe_id:required}
+} {
+    Deletes a NFE
+} {
+
+    db_exec_plsql delete_nfe {
+	SELECT cn_account_nfe__delete ( :nfe_id );
+    }
+    
+    
+    return
+}
 
 
 
 ad_proc -public cn_account::nfe::cancel {
     {-nfe:required}
-    {-creation_user ""}
-    {-creation_ip ""}
-    {-context_id ""}
 } {
-
-
-    Insert a new NFe
+    Cancel NFe
 } {
     
-    
-    if {$creation_user == ""} {
-	set user_id [ad_conn user_id]
-    }
-    
-    if {$creation_ip == ""} {
-	set creation_ip [ad_conn peeraddr]
-    }
-    
-    if {$context_id == ""} {
-	set context_id [ad_conn package_id]
-    }
-
     foreach elem $nfe {
 	ns_log Notice "$elem"
 	set name [lindex $elem 0]
@@ -327,7 +370,7 @@ ad_proc -public cn_account::nfe::cancel {
 	
 	set $name $value
 	append sql_args ":${name}, "
-	
+	'
     }
     
     ns_log Notice "$sql_args"

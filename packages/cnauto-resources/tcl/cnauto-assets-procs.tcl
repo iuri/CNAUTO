@@ -7,6 +7,52 @@ namespace eval cn_assets {}
 
 namespace eval cn_assets::asset {}
 
+ad_proc -public cn_assets::asset::assign_user {
+    {-asset_id:required}
+    {-user_id:required}
+} {
+
+    Assigns responsability of an asset to a user
+} {
+   
+
+    set map_id [db_nextval acs_object_id_seq]
+
+    db_exec_plsql insert_map {
+	SELECT cn_asset_user_map__new (
+			    :map_id,
+			    :asset_id,
+			    :user_id
+			    )
+    }
+    
+    return 
+
+}
+
+
+ad_proc -public cn_assets::asset::unassign_user {
+    {-asset_id:required}
+} {
+
+    Unassigns responsability of an asset to a user
+} {
+   
+
+    db_1row select_map_id {
+	SELECT map_id FROM cn_asset_user_map WHERE asset_id = :asset_id
+    }
+
+    db_exec_plsql remove_map {
+	SELECT cn_asset_user_map__delete ( :map_id )
+    }
+    
+    return 
+
+}
+
+
+
 
 ad_proc -public cn_assets::asset::get_asset_id {
     {-code:required}
@@ -43,7 +89,6 @@ ad_proc -public cn_assets::asset::new {
     {-serial_number:required}
     {-resource_id:required}
     {-location ""}
-    {-quantity ""}
     {-creation_ip ""}
     {-creation_user ""}
     {-context_id ""}
@@ -70,7 +115,6 @@ ad_proc -public cn_assets::asset::new {
 				  :asset_code,
 				  :serial_number,
 				  :location,
-				  :quantity,
 				  :creation_ip,
 				  :creation_user,
 				  :context_id
@@ -124,7 +168,6 @@ ad_proc -public  cn_assets::import_assets {
 			      -asset_code $asset_code \
 			      -serial_number $serial_number \
 			      -location $location \
-			      -quantity $quantity \
 			     ]
 	}
 

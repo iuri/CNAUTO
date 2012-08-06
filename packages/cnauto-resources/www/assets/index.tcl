@@ -41,14 +41,8 @@ template::list::create \
     -page_size 50 \
     -page_query_name assets_pagination \
     -elements {
-	resource {
-	    label "[_ cnauto-resources.Resource]"
-	    display_template {
-		<a href="@assets.resource_url@">@assets.resource;noquote@
-	    }
-	}
 	asset_code {
-	    label "[_ cnauto-resources.Code]"
+	    label "[_ cnauto-resources.Asset_code]"
 	    display_template {
 		<a href="@assets.asset_url@">@assets.asset_code;noquote@
 	    }
@@ -59,8 +53,11 @@ template::list::create \
 		<a href="@assets.asset_url@">@assets.serial_number;noquote@</a>
 	    }
 	}
-	quantity {
-	    label "[_ cnauto-resources.Quantity]"
+	resource {
+	    label "[_ cnauto-resources.Resource]"
+	    display_template {
+		<a href="@assets.resource_url@">@assets.resource;noquote@
+	    }
 	}
 	location {
 	    label "[_ cnauto-resources.Location]"

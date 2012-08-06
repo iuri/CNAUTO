@@ -21,9 +21,8 @@ CREATE TABLE cn_resources (
     		CONSTRAINT cn_resources_class_id_fk
     		REFERENCES cn_categories (category_id),
     unit 	varchar(50),
-    ncm_class 	varchar(50)
+    ncm_class 	varchar(50),
 );
-
 
 
 ------------------------------------
@@ -931,12 +930,8 @@ CREATE TABLE cn_assets (
 		       REFERENCES cn_resources (resource_id),
        asset_code      varchar(255),
        serial_number   varchar(255),
-       location	       varchar(255),
-       quantity	       integer
+       location	       varchar(255)
 );
-
-
-      
 
 ------------------------------------
 -- Object Type: cn_asset
@@ -972,7 +967,6 @@ CREATE OR REPLACE FUNCTION cn_asset__new(
        varchar,	-- asset_code
        varchar,	-- serial_number
        varchar,	-- location
-       integer,	-- quantity
        varchar, -- creation_ip
        integer, -- creation_user
        integer	-- context_id
@@ -982,10 +976,9 @@ CREATE OR REPLACE FUNCTION cn_asset__new(
 	p_asset_code	ALIAS FOR $2;
 	p_serial_number	ALIAS FOR $3;
 	p_location	ALIAS FOR $4;
-	p_quantity	ALIAS FOR $5;
-	p_creation_ip 	ALIAS FOR $6;
-	p_creation_user ALIAS FOR $7;
-	p_context_id	ALIAS FOR $8;
+	p_creation_ip 	ALIAS FOR $5;
+	p_creation_user ALIAS FOR $6;
+	p_context_id	ALIAS FOR $7;
 
 	v_id		integer;
 
@@ -1006,15 +999,13 @@ CREATE OR REPLACE FUNCTION cn_asset__new(
 	       resource_id,
 	       asset_code,
 	       serial_number,
-	       location,
-	       quantity
+	       location
 	 ) VALUES (
 	       v_id,
 	       p_resource_id,
 	       p_asset_code,
 	       p_serial_number,
-	       p_location,
-	       p_quantity
+	       p_location
 	);
 
 	RETURN 0;
@@ -1022,3 +1013,55 @@ CREATE OR REPLACE FUNCTION cn_asset__new(
   END;' LANGUAGE 'plpgsql';
 
       
+
+CREATE TABLE cn_asset_user_map (
+       map_id		       integer
+       			       CONSTRAINT caum_map_ip_pk PRIMARY KEY,
+       asset_id		       integer
+       			       CONSTRAINT caum_asset_id_fk
+      			       REFERENCES cn_assets (asset_id),
+       user_id		       integer
+       			       CONSTRAINT caum_user_id_fk
+       			       REFERENCES users (user_id)
+);
+
+
+CREATE OR REPLACE FUNCTION cn_asset_user_map__delete (
+       integer
+) RETURNS integer AS '
+  DECLARE
+	p_map_id	ALIAS FOR $1;
+
+
+  BEGIN
+
+	DELETE FROM cn_asset_user_map WHERE map_id = p_map_id;
+
+	RETURN 0;
+  END;' LANGUAGE 'plpgsql';
+
+
+CREATE OR REPLACE FUNCTION cn_asset_user_map__new (
+       integer,
+       integer,
+       integer
+) RETURNS integer AS '
+  DECLARE
+	p_map_id	ALIAS FOR $1;
+	p_asset_id	ALIAS FOR $2;
+	p_user_id	ALIAS FOR $3;
+
+  BEGIN
+	INSERT INTO cn_asset_user_map (
+	       map_id,
+	       asset_id,
+	       user_id
+        ) VALUES (
+	  	p_map_id,
+		p_asset_id,
+		p_user_id
+	);
+
+	RETURN 0;
+  END;' LANGUAGE 'plpgsql';
+

@@ -3,7 +3,7 @@ ad_page_contract {
     Add/Edit asset
 } {
     {asset_id:integer,optional}
-    {type_id:integer 2611}
+    {type_id 2611}
     {return_url ""}
 }
 
@@ -29,10 +29,6 @@ ad_form -name asset_ae -cancel_url $return_url -form {
     {serial_number:text(text),optional
 	{label "[_ cnauto-resources.Serial_number]"}
     }	
-    {quantity:integer(text),optional
-	{label "[_ cnauto-resources.Quantity]"}
-	{html {size 5}}
-    }	
     {location:text(text),optional
 	{label "[_ cnauto-resources.Location]"}
     }	
@@ -42,7 +38,6 @@ ad_form -name asset_ae -cancel_url $return_url -form {
 		      -asset_code $asset_code \
 		      -serial_number $serial_number \
 		      -resource_id $resource_id \
-		      -quantity $quantity \
 		      -location $location \
 		      -creation_ip [ad_conn peeraddr] \
 		      -creation_user [ad_conn user_id] \
@@ -52,7 +47,14 @@ ad_form -name asset_ae -cancel_url $return_url -form {
     
 } -edit_request {
 
-    
+    db_1row select_asset_info {
+	
+	SELECT ca.asset_code, ca.serial_number, cr.resource_id, cr.pretty_name, ca.location
+	FROM cn_assets ca, cn_resources cr
+	WHERE ca.resource_id = cr.resource_id 
+	AND ca.asset_id = :asset_id
+    }
+
 } -edit_data {
     
     

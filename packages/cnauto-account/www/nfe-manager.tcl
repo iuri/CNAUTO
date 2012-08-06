@@ -125,7 +125,7 @@ db_multirow -extend {file_id nfe_url download_url email_url} nfes select_nfes {
     set title "NFE-${key}.xml"
     set file_id [db_string select_file_id {
 	SELECT item_id FROM cr_items WHERE name = :title
-    }]
+    } -default ""]
 
     set download_url [export_vars -base "${fs_url}download/[ad_urlencode $title]" {file_id}]
     #behave like filesystem    set download_url "/file/$file_id/[ad_urlencode $title]"

@@ -11,7 +11,7 @@ set page_title [_ cnauto-resources.Resource_info]
 
 ad_form -name resource_one -action resource-ae -export {{return_url "resource-one"} resource_id} -has_submit 1 -has_edit 1 -mode display -form {
     {inform1:text(inform)
-        {label "<h2>[_ cnauto-resources.Company_info]</h2>"}
+        {label "<h2>[_ cnauto-resources.Resource_info]</h2>"}
     }
     {code:text(text)
 	{label "[_ cnauto-resources.Code]"}

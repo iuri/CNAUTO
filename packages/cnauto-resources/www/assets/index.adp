@@ -8,6 +8,7 @@
       <ul>
         <if @admin_p@>
           <li  style="list-style:none; display:inline;">  <a href="asset-ae">#cnauto-resources.Add_asset#</a> </li>
+          <li  style="list-style:none; display:inline;">  <a href="asset-responsability">#cnauto-resources.Asset_responsability#</a> </li>
         </if>
       </ul>
     </td>

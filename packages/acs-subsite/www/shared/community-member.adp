@@ -67,11 +67,18 @@
   </blockquote>
 </if>
 
+
+<if @assets:rowcount@ gt 0>
+  <h1>#cnauto-resources.Assets#</h1>  
+  <listtemplate name="assets"></listtemplate>
+</if>
+
+
+
 <if @site_wide_admin_p@>
   <h3>#acs-subsite.lt_For_Site-Wide_Adminis#</h3>
   <ul class="action-links">
     <li><a href="@admin_user_url@">#acs-subsite.Administrative_options#</a></li>
   </ul>
 </if>
-
 
