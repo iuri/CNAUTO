@@ -5,52 +5,41 @@ ad_library {
 
 namespace eval cn_account {}
 
-
-
 ad_proc -public cn_account::find_xml {
     {-path:required}
+    {-files 0}
+    {-directories 0}
 } {
-    Search XML files 
+
+    Search xml files
 } {
-
-#    ns_log Notice "Running ad_proc cn_account::find_xml"
-
-    set i 0
-    if {[file isdirectory $path]} {
-	
-	if { [catch { set items [glob ${path}/*] } errorMsg]} {
-	    ns_log Notice "EMPTY FOLDER!!!"
-	    set items [glob ${path}/*]
-	    
-	    return
-	    
-	} else {
-	    ns_log Notice "$items"
-	    foreach file [glob -nocomplain -directory $path *.xml] {
-		incr i
-	   	ns_log Notice "$i"
-		cn_account::import_nfe_xml -input_file $path
-	    }
-	    ns_log Notice "[glob -nocomplain -type d ${path}*]"
-
-	    foreach diretory [glob -nocomplain -type d "$path}/*"] {
-		cn_account::find_xml -path $path
-	    }
-	}
-    } elseif {[file isfile $path] } {
-	
-	if {[string equal [ns_guesstype $path] "text/xml"]} {
-	    ns_log Notice " [ns_guesstype $path]"
-	}
-    }
+    ns_log Notice "Running ad_proc fin_xml"
+    ns_log Notice "PATH $path"
     
+    if { [catch { set items [glob ${path}/*] } errorMsg]} {
+	ns_log Notice "EMPTY FOLDER!!!"
+	return
+	
+    } else {
+	#	    set items [glob ${path}/*]
+	
+	foreach item $items {
+#	    ns_log Notice "ITEM $item"
+	    if {[file isdirectory $item]} {
+		ns_log Notice "IS Directory"
+		incr directories
+		cn_account::find_xml -path $item -files $files -directories $directories
+	    } elseif {[file isfile $item] && [string equal [ns_guesstype $item] "text/xml"]} {
+#		ns_log Notice " [ns_guesstype $item]"
+		incr files
+		#	cn_account::import_nfe_xml -input_file "${path}/*"
+	    }
+	    
+	}		    
+    }	
+    ns_log Notice "$directories | $files"
     return
 }
-
-
-
-
-
 
 
 ad_proc -public cn_account::import_nfe_xml {

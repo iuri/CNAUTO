@@ -395,6 +395,8 @@ ad_proc -public cn_core::abeiva::import_csv_file {
 	42012 0
 	52012 0
 	62012 0
+	72012 0
+	82012 0
     }
     
     #Array
@@ -421,6 +423,8 @@ ad_proc -public cn_core::abeiva::import_csv_file {
 	42012 0
 	52012 0
 	62012 0
+	72012 0
+	82012 0
     } 
     
     # Output file
@@ -501,6 +505,12 @@ ad_proc -public cn_core::abeiva::import_csv_file {
     ns_log Notice "Total $i | Towners: [parray towner_units] | Topics: [parray topic_units]"
     
     close $input_file
+
+    ns_log Notice "OUT $output_file"
+    cn_core::attach_file \
+ 	-parent_id [ad_conn package_id] \
+	-tmp_filename $filename \
+	-filename [file tail $filename]
     
     return 
 }
@@ -583,3 +593,181 @@ ad_proc -public cn_core::import_from_abeiva {
     }
     
 }
+
+
+
+
+##########################################################
+#### FENABRAVE
+##########################################################
+
+namespace eval cn_core::fenabrave {}
+
+ad_proc -public cn_core::fenabrave::mount_output_line {
+    {-line:required}
+} {
+    Format the line to export to a file
+
+} {
+
+    ns_log Notice "FORMAT LINE $line"
+    foreach element $line {
+	ns_log Notice "ELEMENT $element"
+    }
+
+
+    #########################################################################
+    # output line
+    # #######################################################################
+    # TipodeMovimento IN - Incluir, AL - Alterar, EX - Excluir [2]
+    set TipodeMovimento [format "%-2s" "IN"]
+    # Chave (apolice + contrato) [20]
+    set chave [format "%-20s" ""] 
+    # ProdutoEurop 
+    set ProdutoEurop [format "%3s" ""] 
+    # Nome 
+    set Nome [format "%-40s" ""]
+    # Endereco Completo
+    set EndCompl [format "%-40s" ""]
+    # Complemento do Endereco
+    set ComplEnd [format "%-10s" ""]
+    # Cidade
+    set cidade [format "%-30s" ""]
+    # CEP
+    set cep [format "%-8s" ""]
+    # Estado
+    set estado [format "%-2s" ""]
+    # Bairro
+    set bairro [format "%-20s" ""] 
+    # CPF/CNPJ 
+    set cpf_cnpj [format "%-14s" ""]
+    # TipoPessoa(F/J) 
+    set tipo_pessoa [format "%-1s" ""]
+    # Tel1 
+    set tel1 [format "%-10s" ""]
+    # Tel2
+    set tel2 [format "%-10s" ""]
+    # DataEmissaoApolice DDMMAAAA
+    set dt_emi_apol [format "%-8s" ""] 
+    # DataInicioVigencia DDMMAAAA
+    set dt_ini_vig [string map {/ ""} [lindex $line 2]]
+    set dt_ini_vig [format "%-8s" ""]
+
+
+    # DataTerminoVigencia DDMMAAAA
+    set dt_ter_vig [split [lindex $line 2] {/}]
+    set dt_ter_vig "[lindex $dt_ter_vig 2][lindex $dt_ter_vig 1][lindex $dt_ter_vig 0]"
+    set dt_ter_vig [clock format [clock scan "1 year" -base [clock scan $dt_ter_vig]] -format %d%m%Y]
+
+    set dt_ter_vig [format "%-8s" "$dt_ter_vig"]
+    # PessoaContato
+    set pessoa_contato [format "%-40s" ""]
+    # TelContato
+    set tel_contato [format "%-20s" ""]
+    # MarcaAutomovel
+    set marca_auto [format "%-30s" "[lindex $line 4]"]
+    # Modelo 
+    set modelo [format "%-20s" "[lindex $line 4]"]
+    # Ano
+    set ano [format "%-4s" ""]
+    # Combustivel: AL - alcool, GA - gaasolina, DI - diesel, GN - gas NAtural, EL - eltricidade
+    set combustivel [format "%-2s" ""]
+    # Placa
+    set placa [format "%-8s" ""]
+    # Chassi
+    set chassi [format "%-18s" "[lindex $line 5]"]
+    # Versao Europ
+    set versao_europ [format "%-3s" ""]
+    # Numero do Item da Apolice
+    set num_item_apol [format "%-20s" ""]
+    # Data de cancelamento da apolice DDMMAAAA
+    set dt_can_apol [format "%-8s" ""]
+    # Data de nascimento DDMMAAAA
+    set dt_nasc [format "%-8s" ""]
+    # Estado Civil
+    set estado_civil [format "%-1s" ""]
+    # Observacao
+    set obs [format "%-200s" ""]
+    # Flag VIP 
+    set flag_vip [format "%-1s" ""]
+    # Sexo
+    set sexo [format "%-1s" ""]
+    # Tipo seguro
+    set tipo_seg [format "%-30s" ""]
+    # Uso veiculo
+    set uso_veic [format "%-10s" ""]
+    #v_veic
+    set v_veic [format "%-30s" ""]
+    # Tipo Contrato
+    set tipo_contrato [format "%-2s" ""]
+
+
+    set output_line "${TipodeMovimento}${chave}${ProdutoEurop}${Nome}${EndCompl}${ComplEnd}${cidade}${cep}${estado}${bairro}${cpf_cnpj}${tipo_pessoa}${tel1}${tel2}${dt_emi_apol}${dt_ini_vig}${dt_ter_vig}${pessoa_contato}${tel_contato}${marca_auto}${modelo}${ano}${combustivel}${placa}${chassi}${versao_europ}${num_item_apol}${dt_can_apol}${dt_nasc}${estado_civil}${obs}${flag_vip}${sexo}${tipo_seg}${uso_veic}${v_veic}${tipo_contrato}"
+
+    
+   return $output_line
+
+}
+
+
+
+
+ad_proc -public cn_core::fenabrave::import_csv_file {
+    {-input_file:required}
+    {-insert_vehicles_p f} 
+} {
+    Import Abeiva's spreadsheet
+
+} {
+
+    ns_log Notice "Running ad_proc import_csv_to_txt"
+
+    # Input File
+    set input_file [open "${input_file}" r]
+    set lines [split [read $input_file] \n]
+    close $input_file
+
+
+    set date_now [clock format [clock scan "now"] -format "%d%m%Y"]
+
+    set filename "${date_now}.918.AUTO.INC.001.txt"
+    set output_file [open "[acs_root_dir]/www/$filename" w]
+
+    puts $output_file [format "%-1s" "H"][format "%-20s" "918 CNAUTO S.A."][format "%-8s" "$date_now"][format "%-30s" "$filename"][format "%-30s" ""][format "%-1s" "F"][format "%-100s" "jorge@cnauto.com.br"]
+
+
+    set items [list]
+    set count 0
+    foreach line $lines {
+	set line [split $line ";"]
+
+	if {$line ne ""} {
+	    ns_log Notice "$line"
+	    incr count 
+	    set output_line [cn_core::fenabrave::mount_output_line -line $line]
+	    
+	    ns_log Notice "FORMATED LINE: $output_line"
+	    
+	    puts $output_file $output_line
+	    
+	}	
+    }
+   
+    puts $output_file [format "%-1s" "T"][format "%-8s" "${count}"][format "%-8s" "${count}"][format "%-8s" "$count"][format "%-8s" "${count}"]
+
+    close $output_file
+
+
+    
+
+#    cn_core::attach_file \
+ 	-parent_id [ad_conn package_id] \
+	-tmp_filename "[acs_root_dir]/www/$filename" \
+	-filename [file tail $filename]
+    
+
+    return 
+}
+
+
+

@@ -12,7 +12,8 @@ set title [apm_instance_name_from_id [ad_conn package_id]]
 set context [list]
 
 set return_url [ad_conn url]
-set export_url [export_vars -base "ba-file" {return_url}]
+set ba_url [export_vars -base "ba" {return_url}]
+set europ_url [export_vars -base "europ" {return_url}]
 
 set import_cotia_url [export_vars -base "cotia-import-xml" {return_url}]
 

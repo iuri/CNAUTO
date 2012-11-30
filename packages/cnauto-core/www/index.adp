@@ -7,7 +7,7 @@
 
 <ul>
   <li><a href="@categories_url@">#cnauto-resources.Categories#</a></li>
-  <li><a href="@export_url@">B.A. #cnauto.Export_file#</a></li>
-  <li><a href="@import_cotia_url@">Cotia #cnauto.Import_file#</a></li>
-  <li><a href="@import_abeiva_url@">ABEIVA #cnauto.Import_file#</a></li>
-<ul>
+  <li><a href="@ba_url@">B.A. #cnauto-core.Home#</a></li>
+  <li><a href="@import_cotia_url@">Cotia #cnauto-core.Import_file#</a></li>
+  <li><a href="@europ_url@">#cnauto-core.Europ_Assistance#</a></li>
+</ul>

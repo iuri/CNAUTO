@@ -11,7 +11,22 @@ ad_page_contract {
 }
 
 set context_bar [list "[_ cnauto-core.Send_email]"]
+
+ad_form -name email -form {
+    {from:text(text)
+	{label "[_ cnauto-core.From]"}	
+    }
+    {to:text(text)
+	{label "[_ cnauto-core.To]"}	
+    }
+    {subject:text(text)
+	{label "[_ cnauto-core.Subject]"}	
+    }
+    {body:text(textarea)
+	{label "[_ cnauto-core.Subject]"}	
+    }
     
+}
 
 
 ns_log Notice "$action"
